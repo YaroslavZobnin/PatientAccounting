@@ -1,0 +1,7 @@
+﻿<configuration>
+	<connectionStrings>
+		<add name ="DefaultConnection"
+			 connectionString="Host=ur_host;Username=ur_username;Password=ur_password;Database=PatientAccounting"
+			 providerName="Npgsql"/>
+	</connectionStrings>
+</configuration>

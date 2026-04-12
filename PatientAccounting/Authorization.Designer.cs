@@ -28,10 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "Form1";
+            SuspendLayout();
+            // 
+            // Authorization
+            // 
+            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackgroundImage = Properties.Resources.Authorization;
+            BackgroundImageLayout = ImageLayout.Stretch;
+            ClientSize = new Size(700, 400);
+            FormBorderStyle = FormBorderStyle.None;
+            Name = "Authorization";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Authorization";
+            ResumeLayout(false);
         }
 
         #endregion
