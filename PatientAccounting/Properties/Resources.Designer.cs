@@ -69,5 +69,25 @@ namespace PatientAccounting.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap ClosedEyeRemovedBg {
+            get {
+                object obj = ResourceManager.GetObject("ClosedEyeRemovedBg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap OpenEyeWithRemovedBg {
+            get {
+                object obj = ResourceManager.GetObject("OpenEyeWithRemovedBg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
