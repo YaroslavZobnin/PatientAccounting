@@ -36,6 +36,7 @@
             InputPasswordTextBox = new TextBox();
             OpenedEyePictureBox = new PictureBox();
             ClosedEyePictureBox = new PictureBox();
+            LoginAttempt = new Button();
             ((System.ComponentModel.ISupportInitialize)OpenedEyePictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)ClosedEyePictureBox).BeginInit();
             SuspendLayout();
@@ -145,6 +146,21 @@
             ClosedEyePictureBox.TabStop = false;
             ClosedEyePictureBox.Click += SwitchPasswordVisibility;
             // 
+            // LoginAttempt
+            // 
+            LoginAttempt.Anchor = AnchorStyles.None;
+            LoginAttempt.BackColor = Color.Transparent;
+            LoginAttempt.Cursor = Cursors.Hand;
+            LoginAttempt.FlatStyle = FlatStyle.Popup;
+            LoginAttempt.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            LoginAttempt.Location = new Point(264, 273);
+            LoginAttempt.Name = "LoginAttempt";
+            LoginAttempt.Size = new Size(187, 41);
+            LoginAttempt.TabIndex = 8;
+            LoginAttempt.Text = "Авторизироваться";
+            LoginAttempt.UseVisualStyleBackColor = false;
+            LoginAttempt.Click += LoginAttempt_Click;
+            // 
             // Authorization
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -152,6 +168,7 @@
             BackgroundImage = Properties.Resources.Authorization;
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(700, 400);
+            Controls.Add(LoginAttempt);
             Controls.Add(OpenedEyePictureBox);
             Controls.Add(InputPasswordTextBox);
             Controls.Add(InputLoginTextBox);
@@ -180,5 +197,6 @@
         private TextBox InputPasswordTextBox;
         private PictureBox OpenedEyePictureBox;
         private PictureBox ClosedEyePictureBox;
+        private Button LoginAttempt;
     }
 }

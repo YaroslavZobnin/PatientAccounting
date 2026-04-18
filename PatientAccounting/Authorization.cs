@@ -27,5 +27,22 @@ namespace PatientAccounting
             ClosedEyePictureBox.Visible = !ClosedEyePictureBox.Visible;
             ClosedEyePictureBox.Enabled = !ClosedEyePictureBox.Enabled;
         }
+
+        private void LoginAttempt_Click(object sender, EventArgs e)
+        {
+            ClearWhiteSpace();
+            if (string.IsNullOrEmpty(InputLoginTextBox.Text))
+                MessageBox.Show("Логин не введён!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else if (string.IsNullOrEmpty(InputPasswordTextBox.Text))
+                MessageBox.Show("Пароль не введён!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            else
+                DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text);
+        }
+        private void ClearWhiteSpace()
+        {
+            InputLoginTextBox.Text = InputLoginTextBox.Text.Trim();
+            InputPasswordTextBox.Text = InputPasswordTextBox.Text.Trim();
+        }
+    
     }
 }
