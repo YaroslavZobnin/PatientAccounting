@@ -36,13 +36,38 @@ namespace PatientAccounting
             else if (string.IsNullOrEmpty(InputPasswordTextBox.Text))
                 MessageBox.Show("Пароль не введён!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
-                DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text);
+                RoleAllocation(DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text));
+
         }
         private void ClearWhiteSpace()
         {
             InputLoginTextBox.Text = InputLoginTextBox.Text.Trim();
             InputPasswordTextBox.Text = InputPasswordTextBox.Text.Trim();
         }
-    
+        private void RoleAllocation(string? role)
+        {
+            switch(role)
+            {
+                case "Пациент":
+                    MessageBox.Show("Пациент", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "Медицинский регистратор":
+                    MessageBox.Show("Медицинский регистратор", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "Лучащий врач":
+                    MessageBox.Show("Лечащий врач", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "Главврач":
+                    MessageBox.Show("Главврач", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "Системный администратор":
+                    MessageBox.Show("Системный администратор", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    break;
+                case "Неизвестно":
+                    break;
+                default:
+                    throw new Exception("Данной роли не сущесвтует");
+            }
+        }
     }
 }

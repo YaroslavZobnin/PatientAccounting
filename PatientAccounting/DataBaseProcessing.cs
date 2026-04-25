@@ -33,7 +33,7 @@ namespace PatientAccounting
                             else
                             {
                                 MessageBox.Show("Неверный логин или пароль");
-                                return null;
+                                return "Неизвестно";
                             }
                         }
                     }
@@ -42,7 +42,7 @@ namespace PatientAccounting
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Серьёзная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return null;
+                return "Неизвестно";
             }
         }
     }
