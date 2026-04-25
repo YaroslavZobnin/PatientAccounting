@@ -1,6 +1,4 @@
-﻿using Npgsql;
-using System.Data.Common;
-
+﻿using System.Data.Common;
 namespace PatientAccounting
 {
     internal class Patient:User
