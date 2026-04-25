@@ -2,7 +2,7 @@
 {
     internal enum UserRole
     {
-        Patient,
+        Patient = 1,
         MedicalRegistrar,
         AttendingPhysician,
         HeadPhysician,
