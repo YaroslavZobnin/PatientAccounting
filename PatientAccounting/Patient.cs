@@ -3,11 +3,11 @@ namespace PatientAccounting
 {
     internal class Patient:User
     {
-        public int PatientId { get; set; }
+        public int PatientId { get; init; }
         public string Surname { get; set; }
         public string Name { get; set; }
         public string? Patronymic {  get; set; }
-        public DateTime YearOfBirth { get; set; }
+        public DateTime YearOfBirth { get; init; }
         public string Address { get; set; }
         public Patient(DbDataReader reader) 
         {

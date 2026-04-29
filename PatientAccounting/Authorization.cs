@@ -36,7 +36,7 @@ namespace PatientAccounting
             else if (string.IsNullOrEmpty(InputPasswordTextBox.Text))
                 MessageBox.Show("Пароль не введён!", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
             else
-                RoleAllocation(DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text));
+                RoleAllocation();
 
         }
         private void ClearWhiteSpace()

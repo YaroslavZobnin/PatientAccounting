@@ -2,9 +2,9 @@
 {
     internal abstract class User
     {
-        public int Id { get; set; }
+        public required int Id { get; init; }
         public required string Login { get; set; }
-        public required string PassportData { get; set; }
-        public UserRole Role { get; set; }
+        public required string PassportData { get; init; }
+        public required UserRole Role { get; init; }
     }
 }

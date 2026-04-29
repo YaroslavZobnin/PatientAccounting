@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System.Configuration;
+using System.Data.Common;
 namespace PatientAccounting
 {
     internal static class DataBaseProcessing
@@ -11,7 +12,7 @@ namespace PatientAccounting
                 throw new Exception("Ошибка подключения базы данных");
             else return new NpgsqlConnection(connectionString);
         }
-        public static string? SearchUserInDataBase(string userLogin, string userPassword)
+        public static DbDataReader? SearchUserInDataBase(string userLogin, string userPassword)
         {
             try
             {
@@ -28,13 +29,16 @@ namespace PatientAccounting
                         command.Parameters.AddWithValue("password", userPassword);
                         using (var reader = command.ExecuteReader())
                         {
-                            if (reader.Read())
-                                return reader.GetString(0);
-                            else
-                            {
-                                MessageBox.Show("Неверный логин или пароль");
-                                return "Неизвестно";
-                            }
+                            //if (reader.Read())
+                            //    return reader.GetString(0);
+                            //else
+                            //{
+                            //    MessageBox.Show("Неверный логин или пароль");
+                            //    return "Неизвестно";
+                            //}
+                            while (reader.Read()) return reader;
+                            MessageBox.Show("Данный пользователь не найден.\nПовторите попытку", "Пользователь не найден!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            return null;
                         }
                     }
                 }
@@ -42,7 +46,7 @@ namespace PatientAccounting
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Серьёзная ошибка", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return "Неизвестно";
+                return null;
             }
         }
     }
