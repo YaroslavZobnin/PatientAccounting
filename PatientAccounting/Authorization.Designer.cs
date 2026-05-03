@@ -177,6 +177,7 @@
             Controls.Add(ExitButton);
             Controls.Add(AuthorizationLabel);
             Controls.Add(ClosedEyePictureBox);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
             Name = "Authorization";
             StartPosition = FormStartPosition.CenterScreen;

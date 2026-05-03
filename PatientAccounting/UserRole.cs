@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting
 {
-    internal enum UserRole
+    public enum UserRole
     {
         Patient = 1,
         MedicalRegistrar,

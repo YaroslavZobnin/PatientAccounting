@@ -1,7 +1,7 @@
 ﻿using System.Data.Common;
 namespace PatientAccounting
 {
-    internal class Patient:User
+    public class Patient:User
     {
         public int PatientId { get; init; }
         public string Surname { get; set; }

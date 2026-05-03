@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting
 {
-    internal abstract class User
+    public abstract class User
     {
         public int Id { get; init; }
         public string Login { get; set; }

@@ -2,12 +2,13 @@ namespace PatientAccounting
 {
     public partial class Authorization : Form
     {
+        private User _user;
         public Authorization()
         {
             InitializeComponent();
-            
         }
 
+        public User GetUser => _user;
         private void ExitButton_Click(object sender, EventArgs e) => this.Close();
         private void SwitchPasswordVisibility(object sender, EventArgs e)
         {
@@ -50,7 +51,8 @@ namespace PatientAccounting
         }
         private void RoleAllocation(User role)
         {
-            switch(role)
+            DialogResult = DialogResult.OK;
+            switch (role)
             {
                 case Patient:
                     MessageBox.Show("Пациент", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -59,6 +61,7 @@ namespace PatientAccounting
                     MessageBox.Show("Работничек", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 default:
+                    DialogResult = DialogResult.Cancel;
                     throw new Exception("Данной роли не сущесвтует");
             }
         }

@@ -30,7 +30,7 @@
         {
             ButtonsPanel = new Panel();
             ExtraMenuPanel = new Panel();
-            FullScreenButton = new Button();
+            SizeScreenButton = new Button();
             BackToAuthorizationButton = new Button();
             ExtraMenuButton = new Button();
             ExitButton = new Button();
@@ -46,34 +46,35 @@
             ButtonsPanel.Controls.Add(ExtraMenuButton);
             ButtonsPanel.Controls.Add(ExitButton);
             ButtonsPanel.Dock = DockStyle.Right;
-            ButtonsPanel.Location = new Point(774, 0);
+            ButtonsPanel.Location = new Point(775, 0);
             ButtonsPanel.Name = "ButtonsPanel";
-            ButtonsPanel.Size = new Size(126, 550);
+            ButtonsPanel.Size = new Size(125, 550);
             ButtonsPanel.TabIndex = 1;
             // 
             // ExtraMenuPanel
             // 
             ExtraMenuPanel.Anchor = AnchorStyles.Top;
-            ExtraMenuPanel.Controls.Add(FullScreenButton);
+            ExtraMenuPanel.Controls.Add(SizeScreenButton);
             ExtraMenuPanel.Controls.Add(BackToAuthorizationButton);
             ExtraMenuPanel.Enabled = false;
-            ExtraMenuPanel.Location = new Point(6, 54);
+            ExtraMenuPanel.Location = new Point(5, 54);
             ExtraMenuPanel.Name = "ExtraMenuPanel";
             ExtraMenuPanel.Size = new Size(114, 75);
             ExtraMenuPanel.TabIndex = 2;
             ExtraMenuPanel.Visible = false;
             // 
-            // FullScreenButton
+            // SizeScreenButton
             // 
-            FullScreenButton.Anchor = AnchorStyles.Top;
-            FullScreenButton.FlatStyle = FlatStyle.Popup;
-            FullScreenButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            FullScreenButton.Location = new Point(0, 36);
-            FullScreenButton.Name = "FullScreenButton";
-            FullScreenButton.Size = new Size(114, 33);
-            FullScreenButton.TabIndex = 1;
-            FullScreenButton.Text = "На весь экран";
-            FullScreenButton.UseVisualStyleBackColor = true;
+            SizeScreenButton.Anchor = AnchorStyles.Top;
+            SizeScreenButton.FlatStyle = FlatStyle.Popup;
+            SizeScreenButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            SizeScreenButton.Location = new Point(0, 36);
+            SizeScreenButton.Name = "SizeScreenButton";
+            SizeScreenButton.Size = new Size(114, 33);
+            SizeScreenButton.TabIndex = 1;
+            SizeScreenButton.Text = "На весь экран";
+            SizeScreenButton.UseVisualStyleBackColor = true;
+            SizeScreenButton.Click += SizeScreenButton_Click;
             // 
             // BackToAuthorizationButton
             // 
@@ -85,6 +86,7 @@
             BackToAuthorizationButton.TabIndex = 0;
             BackToAuthorizationButton.Text = "Авторизация";
             BackToAuthorizationButton.UseVisualStyleBackColor = true;
+            BackToAuthorizationButton.Click += BackToAuthorizationButton_Click;
             // 
             // ExtraMenuButton
             // 
@@ -93,7 +95,7 @@
             ExtraMenuButton.FlatAppearance.BorderColor = Color.Gray;
             ExtraMenuButton.FlatStyle = FlatStyle.Flat;
             ExtraMenuButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            ExtraMenuButton.Location = new Point(6, 12);
+            ExtraMenuButton.Location = new Point(5, 12);
             ExtraMenuButton.Name = "ExtraMenuButton";
             ExtraMenuButton.Size = new Size(114, 27);
             ExtraMenuButton.TabIndex = 1;
@@ -106,7 +108,7 @@
             ExitButton.Anchor = AnchorStyles.Bottom;
             ExitButton.Cursor = Cursors.Hand;
             ExitButton.FlatStyle = FlatStyle.Popup;
-            ExitButton.Location = new Point(14, 511);
+            ExitButton.Location = new Point(13, 511);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(100, 27);
             ExitButton.TabIndex = 0;
@@ -120,7 +122,7 @@
             UserControlsPanel.Dock = DockStyle.Fill;
             UserControlsPanel.Location = new Point(0, 0);
             UserControlsPanel.Name = "UserControlsPanel";
-            UserControlsPanel.Size = new Size(774, 550);
+            UserControlsPanel.Size = new Size(775, 550);
             UserControlsPanel.TabIndex = 2;
             // 
             // GeneralForm
@@ -132,6 +134,7 @@
             ClientSize = new Size(900, 550);
             Controls.Add(UserControlsPanel);
             Controls.Add(ButtonsPanel);
+            DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
             Name = "GeneralForm";
             ShowIcon = false;
@@ -148,6 +151,6 @@
         private Panel ExtraMenuPanel;
         private Button ExtraMenuButton;
         private Button BackToAuthorizationButton;
-        private Button FullScreenButton;
+        private Button SizeScreenButton;
     }
 }

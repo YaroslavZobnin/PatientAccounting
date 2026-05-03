@@ -38,7 +38,7 @@
             BackgroundImageLayout = ImageLayout.Stretch;
             DoubleBuffered = true;
             Name = "PatientWindow";
-            Size = new Size(900, 550);
+            Size = new Size(774, 550);
             ResumeLayout(false);
         }
 
