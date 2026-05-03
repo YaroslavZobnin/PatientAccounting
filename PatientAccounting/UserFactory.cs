@@ -8,10 +8,10 @@ namespace PatientAccounting
             return roleName switch
             {
                 "Пациент" => new Patient(reader),
-                "Медицинский регистратор" => new MedicalWorker(reader),
-                "Лечащий врач" => new MedicalWorker(reader),
-                "Главврач" => new MedicalWorker(reader),
-                "Системный администратор" => new MedicalWorker(reader),
+                "Медицинский регистратор" => new Staff(reader),
+                "Лечащий врач" => new Staff(reader),
+                "Главврач" => new Staff(reader),
+                "Системный администратор" => new Staff(reader),
                 _ => throw new NotSupportedException($"Роль {roleName} отсутствует в данном приложении.")
             };
         }

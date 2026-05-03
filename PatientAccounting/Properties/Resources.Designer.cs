@@ -73,6 +73,16 @@ namespace PatientAccounting.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap BackgroundForGeneralForm {
+            get {
+                object obj = ResourceManager.GetObject("BackgroundForGeneralForm", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap ClosedEyeRemovedBg {
             get {
                 object obj = ResourceManager.GetObject("ClosedEyeRemovedBg", resourceCulture);

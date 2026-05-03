@@ -6,7 +6,7 @@ namespace PatientAccounting
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            Application.Run(new Authorization());
+            Application.Run(new GeneralForm());
         }
     }
 }

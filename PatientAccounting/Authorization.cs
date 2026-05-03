@@ -55,7 +55,7 @@ namespace PatientAccounting
                 case Patient:
                     MessageBox.Show("Пациент", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
-                case MedicalWorker:
+                case Staff:
                     MessageBox.Show("Работничек", "Внимание!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     break;
                 default:
