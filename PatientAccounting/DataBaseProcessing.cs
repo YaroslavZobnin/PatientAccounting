@@ -59,7 +59,6 @@ namespace PatientAccounting
         }
         public static DataTable GetMedicalHistory(int patientId)
         {
-            var dataTable = new DataTable();
             string sqlQuery = @"SELECT
                 mh.date_of_receipt AS ""Дата поступления"",
                 mh.date_of_discharge AS ""Дата выписки"",
@@ -72,19 +71,42 @@ namespace PatientAccounting
             JOIN Ward w ON mh.ward_id = w.ward_id
             WHERE mh.patient_id=@patientId
             ORDER BY mh.date_of_receipt DESC";
+            var arguments = new Dictionary<string, object> { { "@patientId", patientId} };
+            return ExecuteQuery(sqlQuery, arguments);
+        }
+        public static DataTable GetTreatmentByHistoryId(int historyId)
+        {
+            string sqlQuery = @"SELECT 
+                                 m.name_medicine AS ""Препарат"",
+                                 tm.name_type_of_medicine AS ""Тип"",
+                                 m.medicine_description AS ""Описание""
+                              FROM Treatment t
+                              JOIN Medicine m ON t.medicine_id = m.medicine_id
+                              JOIN Type_of_medicine tm ON m.type_of_medicine_id = tm.type_of_medicine_id
+                              WHERE t.medical_history_id = @historyId";
+            var arguments = new Dictionary<string, object> { { "@historyId", historyId } };
+            return ExecuteQuery(sqlQuery, arguments);
+        }
+        private static DataTable ExecuteQuery(string sql, Dictionary<string, object> parameters)
+        {
+            var dataTable = new DataTable();
             using(var connection = GetConnection())
             {
                 try
                 {
                     connection.Open();
-                    using (var command = new NpgsqlCommand(sqlQuery, connection))
+                    using(var command = new NpgsqlCommand(sql, connection))
                     {
-                        command.Parameters.AddWithValue("@patientId", patientId);
+                        if(parameters != null)
+                        {
+                            foreach (var param in parameters)
+                                command.Parameters.AddWithValue(param.Key, param.Value);
+                        }
                         using (var adapter = new NpgsqlDataAdapter(command))
                             adapter.Fill(dataTable);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     MessageBox.Show($"Ошибка базы данных: {ex.Message}");
                 }

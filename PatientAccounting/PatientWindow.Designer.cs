@@ -57,7 +57,7 @@
             PersonalAccountLabel.AutoSize = true;
             PersonalAccountLabel.BackColor = Color.Transparent;
             PersonalAccountLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PersonalAccountLabel.Location = new Point(309, 10);
+            PersonalAccountLabel.Location = new Point(350, 8);
             PersonalAccountLabel.Name = "PersonalAccountLabel";
             PersonalAccountLabel.Size = new Size(165, 28);
             PersonalAccountLabel.TabIndex = 1;
@@ -65,9 +65,10 @@
             // 
             // FullNameLabel
             // 
+            FullNameLabel.Anchor = AnchorStyles.Top;
             FullNameLabel.BackColor = Color.Transparent;
             FullNameLabel.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            FullNameLabel.Location = new Point(54, 38);
+            FullNameLabel.Location = new Point(99, 35);
             FullNameLabel.Name = "FullNameLabel";
             FullNameLabel.Size = new Size(668, 30);
             FullNameLabel.TabIndex = 2;
@@ -76,9 +77,10 @@
             // 
             // PasswordDataLabel
             // 
+            PasswordDataLabel.Anchor = AnchorStyles.Top;
             PasswordDataLabel.AutoSize = true;
             PasswordDataLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            PasswordDataLabel.Location = new Point(54, 79);
+            PasswordDataLabel.Location = new Point(54, 73);
             PasswordDataLabel.Name = "PasswordDataLabel";
             PasswordDataLabel.Size = new Size(90, 25);
             PasswordDataLabel.TabIndex = 3;
@@ -86,9 +88,10 @@
             // 
             // DateOfBirthLabel
             // 
+            DateOfBirthLabel.Anchor = AnchorStyles.Top;
             DateOfBirthLabel.AutoSize = true;
             DateOfBirthLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            DateOfBirthLabel.Location = new Point(54, 115);
+            DateOfBirthLabel.Location = new Point(54, 96);
             DateOfBirthLabel.Name = "DateOfBirthLabel";
             DateOfBirthLabel.Size = new Size(146, 25);
             DateOfBirthLabel.TabIndex = 4;
@@ -96,9 +99,10 @@
             // 
             // AddressLabel
             // 
+            AddressLabel.Anchor = AnchorStyles.Top;
             AddressLabel.AutoSize = true;
             AddressLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            AddressLabel.Location = new Point(54, 155);
+            AddressLabel.Location = new Point(54, 122);
             AddressLabel.Name = "AddressLabel";
             AddressLabel.Size = new Size(180, 25);
             AddressLabel.TabIndex = 5;
@@ -106,18 +110,20 @@
             // 
             // MedicalHistoryDataGrid
             // 
+            MedicalHistoryDataGrid.Anchor = AnchorStyles.Top;
+            MedicalHistoryDataGrid.BackgroundColor = SystemColors.ControlLight;
             MedicalHistoryDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            MedicalHistoryDataGrid.Location = new Point(201, 196);
+            MedicalHistoryDataGrid.Location = new Point(54, 152);
             MedicalHistoryDataGrid.Name = "MedicalHistoryDataGrid";
             MedicalHistoryDataGrid.RowHeadersWidth = 51;
-            MedicalHistoryDataGrid.Size = new Size(417, 281);
+            MedicalHistoryDataGrid.Size = new Size(679, 237);
             MedicalHistoryDataGrid.TabIndex = 6;
             // 
             // PatientWindow
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Transparent;
+            BackColor = Color.Gainsboro;
             BackgroundImageLayout = ImageLayout.Stretch;
             Controls.Add(MedicalHistoryDataGrid);
             Controls.Add(AddressLabel);
