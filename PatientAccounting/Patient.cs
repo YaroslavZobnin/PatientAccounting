@@ -7,7 +7,7 @@ namespace PatientAccounting
         public string Surname { get; set; }
         public string Name { get; set; }
         public string? Patronymic {  get; set; }
-        public DateTime YearOfBirth { get; init; }
+        public DateTime DateOfBirth { get; init; }
         public string Address { get; set; }
         public Patient(DbDataReader reader) 
         {
@@ -20,7 +20,7 @@ namespace PatientAccounting
             int nameIndex = reader.GetOrdinal("patient_name");
             int patronymicIndex = reader.GetOrdinal("patient_patronymic");
             int birthIndex = reader.GetOrdinal("patient_birth_date");
-            int addressIndex = reader.GetOrdinal("patient_address");
+            int addressIndex = reader.GetOrdinal("patient_adress");
 
             this.Id = reader.GetInt32(idIndex);
             this.Login = reader.GetString(loginIndex);
@@ -30,7 +30,7 @@ namespace PatientAccounting
             this.Surname = reader.GetString(surnameIndex);
             this.Name = reader.GetString(nameIndex);
             this.Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
-            this.YearOfBirth = reader.GetDateTime(birthIndex);
+            this.DateOfBirth = reader.GetDateTime(birthIndex);
             this.Address = reader.GetString(addressIndex);
         }
     }

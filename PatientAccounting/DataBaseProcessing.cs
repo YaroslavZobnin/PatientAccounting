@@ -1,6 +1,7 @@
 ﻿using Npgsql;
 using System.Configuration;
 using BCrypt.Net;
+using System.Data;
 namespace PatientAccounting
 {
     internal static class DataBaseProcessing
@@ -55,6 +56,40 @@ namespace PatientAccounting
                 MessageBox.Show($"Ошибка базы данных: {ex.Message}", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                 return null;
             }           
+        }
+        public static DataTable GetMedicalHistory(int patientId)
+        {
+            var dataTable = new DataTable();
+            string sqlQuery = @"SELECT
+                mh.date_of_receipt AS ""Дата поступления"",
+                mh.date_of_discharge AS ""Дата выписки"",
+                d.disease_name AS ""Диагноз"",
+                mw.medical_worker_surname || ' ' || mw.medical_worker_name AS ""Врач"",
+                w.number_ward AS ""Палата""
+            FROM Medical_history mh
+            JOIN Disease d ON mh.disease_id = d.disease_id
+            JOIN Medical_worker mw ON mh.medical_worker_id = mw.medical_worker_id
+            JOIN Ward w ON mh.ward_id = w.ward_id
+            WHERE mh.patient_id=@patientId
+            ORDER BY mh.date_of_receipt DESC";
+            using(var connection = GetConnection())
+            {
+                try
+                {
+                    connection.Open();
+                    using (var command = new NpgsqlCommand(sqlQuery, connection))
+                    {
+                        command.Parameters.AddWithValue("@patientId", patientId);
+                        using (var adapter = new NpgsqlDataAdapter(command))
+                            adapter.Fill(dataTable);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show($"Ошибка базы данных: {ex.Message}");
+                }
+            }
+            return dataTable;
         }
     }
 }

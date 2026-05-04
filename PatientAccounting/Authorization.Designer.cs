@@ -169,7 +169,6 @@
             BackgroundImageLayout = ImageLayout.Stretch;
             ClientSize = new Size(700, 400);
             Controls.Add(LoginAttempt);
-            Controls.Add(OpenedEyePictureBox);
             Controls.Add(InputPasswordTextBox);
             Controls.Add(InputLoginTextBox);
             Controls.Add(AskPasswordLabel);
@@ -177,6 +176,7 @@
             Controls.Add(ExitButton);
             Controls.Add(AuthorizationLabel);
             Controls.Add(ClosedEyePictureBox);
+            Controls.Add(OpenedEyePictureBox);
             DoubleBuffered = true;
             FormBorderStyle = FormBorderStyle.None;
             Name = "Authorization";

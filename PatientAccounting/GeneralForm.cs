@@ -2,18 +2,24 @@
 {
     public partial class GeneralForm : Form
     {
-        //private User _user;
-        //public GeneralForm(User user)
-        //{
-        //    InitializeComponent();
-        //    _user = user;
-        //}
-        public GeneralForm()
+        private User _user;
+        public GeneralForm(User user)
         {
             InitializeComponent();
+            _user = user;
+            WindowDefinition();
+        }
+        private void WindowDefinition()
+        {
+            if(_user is Patient patient)
+            {
+                UserControlsPanel.Controls.Clear();
+                var patientWindow = new PatientWindow(patient);
+                patientWindow.Dock = DockStyle.Fill;
+                UserControlsPanel.Controls.Add(patientWindow);
+            }
         }
         private void ExitButton_Click(object sender, EventArgs e) => this.Close();
-
         private void ExtraMenuButton_Click(object sender, EventArgs e) => OpenAdditionalButtons();
         private void SizeScreenButton_Click(object sender, EventArgs e)
         {
@@ -22,16 +28,20 @@
         }
         private void BackToAuthorizationButton_Click(object sender, EventArgs e)
         {
-            this.Hide();
-            var auth = new Authorization();
-            if (auth.ShowDialog() == DialogResult.OK)
+            if (Confirmation() == DialogResult.Yes)
             {
-                var generalForm = new GeneralForm();
-                generalForm.Show();
-                this.Close();
+                this.Hide();
+                var auth = new Authorization();
+                if (auth.ShowDialog() == DialogResult.OK)
+                {
+                    var generalForm = new GeneralForm(_user);
+                    generalForm.Show();
+                    this.Close();
+                }
+                else
+                    this.Close();
             }
-            else
-                this.Close();
+            else return;
         }
         private void OpenAdditionalButtons()
         {
@@ -73,5 +83,9 @@
             else
                 WindowState = FormWindowState.Maximized;
         }
+        private DialogResult Confirmation()
+            => MessageBox.Show("Вы уверены, что хотите выйти?\nВсе несохраненные данные пропадут.",
+                              "Подтверждение",MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
     }
 }
