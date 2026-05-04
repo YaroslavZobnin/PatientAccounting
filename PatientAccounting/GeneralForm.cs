@@ -28,20 +28,11 @@
         }
         private void BackToAuthorizationButton_Click(object sender, EventArgs e)
         {
-            if (Confirmation() == DialogResult.Yes)
+            if(Confirmation() == DialogResult.Yes)
             {
-                this.Hide();
-                var auth = new Authorization();
-                if (auth.ShowDialog() == DialogResult.OK)
-                {
-                    var generalForm = new GeneralForm(_user);
-                    generalForm.Show();
-                    this.Close();
-                }
-                else
-                    this.Close();
+                this.DialogResult = DialogResult.Retry;
+                this.Close();
             }
-            else return;
         }
         private void OpenAdditionalButtons()
         {

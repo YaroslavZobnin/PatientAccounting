@@ -34,7 +34,7 @@ namespace PatientAccounting
             ClearWhiteSpace();
             if(string.IsNullOrEmpty(InputLoginTextBox.Text) || string.IsNullOrEmpty(InputPasswordTextBox.Text))
             {
-                MessageBox.Show("Не все поля заполнены!", "Обнаружены пустые поля!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("РќРµ РІСЃРµ РїРѕР»СЏ Р·Р°РїРѕР»РЅРµРЅС‹!", "РћР±РЅР°СЂСѓР¶РµРЅС‹ РїСѓСЃС‚С‹Рµ РїРѕР»СЏ!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
             User? user = DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text);
@@ -45,7 +45,7 @@ namespace PatientAccounting
                 this.Close();
             }
             else
-                MessageBox.Show("Неверный логин или пароль!", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("РќРµРІРµСЂРЅС‹Р№ Р»РѕРіРёРЅ РёР»Рё РїР°СЂРѕР»СЊ!", "РћС€РёР±РєР°!", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void ClearWhiteSpace()
         {

@@ -6,9 +6,19 @@ namespace PatientAccounting
         static void Main()
         {
             ApplicationConfiguration.Initialize();
-            var authorization = new Authorization();
-            if (authorization.ShowDialog() == DialogResult.OK)
-                Application.Run(new GeneralForm(authorization.GetUser));
+            bool needToAuthorize = true;
+            while(needToAuthorize)
+            {
+                needToAuthorize = false;
+                var auth = new Authorization();
+                if(auth.ShowDialog() == DialogResult.OK )
+                {
+                    var generalForm = new GeneralForm(auth.GetUser);
+                    DialogResult res = generalForm.ShowDialog();
+                    if (res == DialogResult.Retry)
+                        needToAuthorize = true;
+                }
+            }
         }
     }
 }
