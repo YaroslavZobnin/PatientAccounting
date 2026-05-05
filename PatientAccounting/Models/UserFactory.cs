@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-namespace PatientAccounting
+namespace PatientAccounting.Services
 {
     internal static class UserFactory
     {

@@ -1,3 +1,5 @@
+using PatientAccounting.Data;
+using PatientAccounting.Services;
 namespace PatientAccounting
 {
     public partial class Authorization : Form

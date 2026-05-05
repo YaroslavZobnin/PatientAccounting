@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-namespace PatientAccounting
+namespace PatientAccounting.Services
 {
     public class Patient:User
     {
@@ -22,16 +22,16 @@ namespace PatientAccounting
             int birthIndex = reader.GetOrdinal("patient_birth_date");
             int addressIndex = reader.GetOrdinal("patient_adress");
 
-            this.Id = reader.GetInt32(idIndex);
-            this.Login = reader.GetString(loginIndex);
-            this.PassportData = reader.GetString(passportIndex);
-            this.Role = (UserRole)reader.GetInt32(roleIndex);
-            this.PatientId = reader.GetInt32(patientIdIndex);
-            this.Surname = reader.GetString(surnameIndex);
-            this.Name = reader.GetString(nameIndex);
-            this.Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
-            this.DateOfBirth = reader.GetDateTime(birthIndex);
-            this.Address = reader.GetString(addressIndex);
+            Id = reader.GetInt32(idIndex);
+            Login = reader.GetString(loginIndex);
+            PassportData = reader.GetString(passportIndex);
+            Role = (UserRole)reader.GetInt32(roleIndex);
+            PatientId = reader.GetInt32(patientIdIndex);
+            Surname = reader.GetString(surnameIndex);
+            Name = reader.GetString(nameIndex);
+            Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
+            DateOfBirth = reader.GetDateTime(birthIndex);
+            Address = reader.GetString(addressIndex);
         }
     }
 }

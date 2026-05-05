@@ -46,9 +46,9 @@
             ButtonsPanel.Controls.Add(ExtraMenuButton);
             ButtonsPanel.Controls.Add(ExitButton);
             ButtonsPanel.Dock = DockStyle.Right;
-            ButtonsPanel.Location = new Point(775, 0);
+            ButtonsPanel.Location = new Point(879, 0);
             ButtonsPanel.Name = "ButtonsPanel";
-            ButtonsPanel.Size = new Size(125, 550);
+            ButtonsPanel.Size = new Size(125, 649);
             ButtonsPanel.TabIndex = 1;
             // 
             // ExtraMenuPanel
@@ -108,7 +108,7 @@
             ExitButton.Anchor = AnchorStyles.Bottom;
             ExitButton.Cursor = Cursors.Hand;
             ExitButton.FlatStyle = FlatStyle.Popup;
-            ExitButton.Location = new Point(13, 511);
+            ExitButton.Location = new Point(13, 610);
             ExitButton.Name = "ExitButton";
             ExitButton.Size = new Size(100, 27);
             ExitButton.TabIndex = 0;
@@ -122,7 +122,7 @@
             UserControlsPanel.Dock = DockStyle.Fill;
             UserControlsPanel.Location = new Point(0, 0);
             UserControlsPanel.Name = "UserControlsPanel";
-            UserControlsPanel.Size = new Size(775, 550);
+            UserControlsPanel.Size = new Size(879, 649);
             UserControlsPanel.TabIndex = 2;
             // 
             // GeneralForm
@@ -131,7 +131,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             BackgroundImage = Properties.Resources.BackgroundForGeneralForm;
             BackgroundImageLayout = ImageLayout.Stretch;
-            ClientSize = new Size(900, 550);
+            ClientSize = new Size(1004, 649);
             Controls.Add(UserControlsPanel);
             Controls.Add(ButtonsPanel);
             DoubleBuffered = true;

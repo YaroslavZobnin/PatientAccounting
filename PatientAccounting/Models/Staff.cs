@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-namespace PatientAccounting
+namespace PatientAccounting.Services
 {
     public class Staff:User
     {
@@ -22,16 +22,16 @@ namespace PatientAccounting
             int specializationIndex = reader.GetOrdinal("specialization_id");
             int workExperienceIndex = reader.GetOrdinal("medical_worker_work_experience");
 
-            this.Id = reader.GetInt32(idIndex);
-            this.Login = reader.GetString(loginIndex);
-            this.PassportData = reader.GetString(passportIndex);
-            this.Role = (UserRole)reader.GetInt32(roleIndex);
-            this.StaffId = reader.GetInt32(staffWorkerIdIdIndex);
-            this.Surname = reader.GetString(surnameIndex);
-            this.Name = reader.GetString(nameIndex);
-            this.Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
-            this.SpecialtyCode = reader.GetInt32(specializationIndex);
-            this.WorkExperience = reader.GetInt32(workExperienceIndex);
+            Id = reader.GetInt32(idIndex);
+            Login = reader.GetString(loginIndex);
+            PassportData = reader.GetString(passportIndex);
+            Role = (UserRole)reader.GetInt32(roleIndex);
+            StaffId = reader.GetInt32(staffWorkerIdIdIndex);
+            Surname = reader.GetString(surnameIndex);
+            Name = reader.GetString(nameIndex);
+            Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
+            SpecialtyCode = reader.GetInt32(specializationIndex);
+            WorkExperience = reader.GetInt32(workExperienceIndex);
         }
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PatientAccounting
+﻿using PatientAccounting.Services;
+
+namespace PatientAccounting
 {
     public partial class GeneralForm : Form
     {

@@ -2,7 +2,8 @@
 using System.Configuration;
 using BCrypt.Net;
 using System.Data;
-namespace PatientAccounting
+using PatientAccounting.Services;
+namespace PatientAccounting.Data
 {
     internal static class DataBaseProcessing
     {
@@ -60,6 +61,7 @@ namespace PatientAccounting
         public static DataTable GetMedicalHistory(int patientId)
         {
             string sqlQuery = @"SELECT
+                mh.medical_history_id,
                 mh.date_of_receipt AS ""Дата поступления"",
                 mh.date_of_discharge AS ""Дата выписки"",
                 d.disease_name AS ""Диагноз"",
@@ -77,13 +79,13 @@ namespace PatientAccounting
         public static DataTable GetTreatmentByHistoryId(int historyId)
         {
             string sqlQuery = @"SELECT 
-                                 m.name_medicine AS ""Препарат"",
-                                 tm.name_type_of_medicine AS ""Тип"",
-                                 m.medicine_description AS ""Описание""
-                              FROM Treatment t
-                              JOIN Medicine m ON t.medicine_id = m.medicine_id
-                              JOIN Type_of_medicine tm ON m.type_of_medicine_id = tm.type_of_medicine_id
-                              WHERE t.medical_history_id = @historyId";
+                m.name_medicine AS ""Препарат"",
+                tm.name_type_of_medicine AS ""Тип"",
+                m.medicine_description AS ""Описание""
+            FROM Treatment t
+            JOIN Medicine m ON t.medicine_id = m.medicine_id
+            JOIN Type_of_medicine tm ON m.type_of_medicine_id = tm.type_of_medicine_id
+            WHERE t.medical_history_id = @historyId";
             var arguments = new Dictionary<string, object> { { "@historyId", historyId } };
             return ExecuteQuery(sqlQuery, arguments);
         }

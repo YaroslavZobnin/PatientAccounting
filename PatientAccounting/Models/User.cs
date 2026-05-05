@@ -1,4 +1,4 @@
-﻿namespace PatientAccounting
+﻿namespace PatientAccounting.Services
 {
     public abstract class User
     {
