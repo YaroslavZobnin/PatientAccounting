@@ -67,11 +67,12 @@
             InputPatientDataLabel = new Label();
             InputStaffPanel = new Panel();
             ChoiceSpecializationTextBox = new TextBox();
+            ChoiceSpecializationContextMenuStrip = new ContextMenuStrip(components);
             InputWorkExperienceTextBox = new TextBox();
             InputExperienceStaffLabel = new Label();
             SpecialityStaffLabel = new Label();
             InputStaffLabel = new Label();
-            ChoiceSpecializationContextMenuStrip = new ContextMenuStrip(components);
+            CancelButton = new Button();
             ChoicePanel.SuspendLayout();
             ChoiceRolePanel.SuspendLayout();
             InputGeneralDataPanel.SuspendLayout();
@@ -485,11 +486,19 @@
             // ChoiceSpecializationTextBox
             // 
             ChoiceSpecializationTextBox.BorderStyle = BorderStyle.None;
+            ChoiceSpecializationTextBox.ContextMenuStrip = ChoiceSpecializationContextMenuStrip;
             ChoiceSpecializationTextBox.Location = new Point(302, 44);
             ChoiceSpecializationTextBox.Name = "ChoiceSpecializationTextBox";
+            ChoiceSpecializationTextBox.ReadOnly = true;
             ChoiceSpecializationTextBox.Size = new Size(350, 20);
             ChoiceSpecializationTextBox.TabIndex = 13;
             ChoiceSpecializationTextBox.Click += ChoiceSpecializationTextBox_Click;
+            // 
+            // ChoiceSpecializationContextMenuStrip
+            // 
+            ChoiceSpecializationContextMenuStrip.ImageScalingSize = new Size(20, 20);
+            ChoiceSpecializationContextMenuStrip.Name = "contextMenuStrip1";
+            ChoiceSpecializationContextMenuStrip.Size = new Size(61, 4);
             // 
             // InputWorkExperienceTextBox
             // 
@@ -528,16 +537,27 @@
             InputStaffLabel.TabIndex = 0;
             InputStaffLabel.Text = "Введите дополнительные данные сотруднику";
             // 
-            // ChoiceSpecializationContextMenuStrip
+            // CancelButton
             // 
-            ChoiceSpecializationContextMenuStrip.ImageScalingSize = new Size(20, 20);
-            ChoiceSpecializationContextMenuStrip.Name = "contextMenuStrip1";
-            ChoiceSpecializationContextMenuStrip.Size = new Size(61, 4);
+            CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            CancelButton.BackColor = Color.Transparent;
+            CancelButton.Enabled = false;
+            CancelButton.FlatStyle = FlatStyle.Popup;
+            CancelButton.Font = new Font("Sylfaen", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            CancelButton.Location = new Point(3, 576);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Size = new Size(150, 32);
+            CancelButton.TabIndex = 13;
+            CancelButton.Text = "Отменить";
+            CancelButton.UseVisualStyleBackColor = false;
+            CancelButton.Visible = false;
+            CancelButton.Click += CancelButton_Click;
             // 
             // SystemAdministrator
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(CancelButton);
             Controls.Add(InputGeneralDataPanel);
             Controls.Add(ChoiceRolePanel);
             Controls.Add(ActionLabel);
@@ -613,5 +633,6 @@
         private TextBox InputWorkExperienceTextBox;
         private TextBox ChoiceSpecializationTextBox;
         private ContextMenuStrip ChoiceSpecializationContextMenuStrip;
+        private Button CancelButton;
     }
 }
