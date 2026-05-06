@@ -6,8 +6,8 @@ namespace PatientAccounting.Services
         public int StaffId { get; init; }
         public string Surname { get; set; }
         public string Name { get; set; }
-        public string Patronymic { get; set; }
-        public int SpecialtyCode { get; set; }
+        public string? Patronymic { get; set; }
+        public int? SpecialityCode { get; set; }
         public int WorkExperience { get; set; }
         public Staff(DbDataReader reader)
         {
@@ -15,12 +15,12 @@ namespace PatientAccounting.Services
             int loginIndex = reader.GetOrdinal("customer_login");
             int passportIndex = reader.GetOrdinal("customer_passport_data");
             int roleIndex = reader.GetOrdinal("role_id");
-            int staffWorkerIdIdIndex = reader.GetOrdinal("medical_worker_id");
-            int surnameIndex = reader.GetOrdinal("medical_worker_surname");
-            int nameIndex = reader.GetOrdinal("medical_worker_name");
-            int patronymicIndex = reader.GetOrdinal("medical_worker_patronymic");
+            int staffWorkerIdIdIndex = reader.GetOrdinal("staff_worker_id");
+            int surnameIndex = reader.GetOrdinal("staff_worker_surname");
+            int nameIndex = reader.GetOrdinal("staff_worker_name");
+            int patronymicIndex = reader.GetOrdinal("staff_worker_patronymic");
             int specializationIndex = reader.GetOrdinal("specialization_id");
-            int workExperienceIndex = reader.GetOrdinal("medical_worker_work_experience");
+            int workExperienceIndex = reader.GetOrdinal("staff_worker_work_experience");
 
             Id = reader.GetInt32(idIndex);
             Login = reader.GetString(loginIndex);
@@ -29,8 +29,8 @@ namespace PatientAccounting.Services
             StaffId = reader.GetInt32(staffWorkerIdIdIndex);
             Surname = reader.GetString(surnameIndex);
             Name = reader.GetString(nameIndex);
-            Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
-            SpecialtyCode = reader.GetInt32(specializationIndex);
+            Patronymic = reader.IsDBNull(patronymicIndex) ? null : reader.GetString(patronymicIndex);
+            SpecialityCode = reader.IsDBNull(specializationIndex) ? null : reader.GetInt32(specializationIndex);
             WorkExperience = reader.GetInt32(workExperienceIndex);
         }
     }

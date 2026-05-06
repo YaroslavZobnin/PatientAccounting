@@ -20,6 +20,16 @@ namespace PatientAccounting
                 patientWindow.Dock = DockStyle.Fill;
                 UserControlsPanel.Controls.Add(patientWindow);
             }
+            else if(_user is Staff staff)
+            {
+                if (staff.Role == (UserRole)5)
+                {
+                    UserControlsPanel.Controls.Clear();
+                    var systemAdminWindow = new SystemAdministrator(staff);
+                    systemAdminWindow.Dock = DockStyle.Fill;
+                    UserControlsPanel.Controls.Add(systemAdminWindow);
+                }
+            }
         }
         private void ExitButton_Click(object sender, EventArgs e) => this.Close();
         private void ExtraMenuButton_Click(object sender, EventArgs e) => OpenAdditionalButtons();

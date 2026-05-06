@@ -20,7 +20,7 @@ namespace PatientAccounting.Services
             int nameIndex = reader.GetOrdinal("patient_name");
             int patronymicIndex = reader.GetOrdinal("patient_patronymic");
             int birthIndex = reader.GetOrdinal("patient_birth_date");
-            int addressIndex = reader.GetOrdinal("patient_adress");
+            int addressIndex = reader.GetOrdinal("patient_address");
 
             Id = reader.GetInt32(idIndex);
             Login = reader.GetString(loginIndex);
@@ -29,7 +29,7 @@ namespace PatientAccounting.Services
             PatientId = reader.GetInt32(patientIdIndex);
             Surname = reader.GetString(surnameIndex);
             Name = reader.GetString(nameIndex);
-            Patronymic = reader.IsDBNull(patronymicIndex) ? "-" : reader.GetString(patronymicIndex);
+            Patronymic = reader.IsDBNull(patronymicIndex) ? null : reader.GetString(patronymicIndex);
             DateOfBirth = reader.GetDateTime(birthIndex);
             Address = reader.GetString(addressIndex);
         }

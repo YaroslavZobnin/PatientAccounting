@@ -24,13 +24,13 @@ namespace PatientAccounting.Data
                     const string sqlQuery = @"
                 SELECT c.customer_id, c.customer_login, c.customer_password, c.customer_passport_data, 
                        ur.role_id, ur.role_name,
-                       p.patient_id, p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_adress,
-                       mw.medical_worker_id, mw.medical_worker_surname, mw.medical_worker_name, mw.medical_worker_patronymic, 
-                       mw.specialization_id, mw.medical_worker_work_experience
+                       p.patient_id, p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_address,
+                       sw.staff_worker_id, sw.staff_worker_surname, sw.staff_worker_name, sw.staff_worker_patronymic, 
+                       sw.specialization_id, sw.staff_worker_work_experience
                 FROM Customer c
                 JOIN User_role ur ON c.customer_role_id = ur.role_id
                 LEFT JOIN Patient p ON c.customer_id = p.customer_id
-                LEFT JOIN Medical_worker mw ON c.customer_id = mw.customer_id
+                LEFT JOIN Staff_worker sw ON c.customer_id = sw.customer_id
                 WHERE c.customer_login = @login";
                     using (var command = new NpgsqlCommand(sqlQuery, connection))
                     {
@@ -65,11 +65,11 @@ namespace PatientAccounting.Data
                 mh.date_of_receipt AS ""Дата поступления"",
                 mh.date_of_discharge AS ""Дата выписки"",
                 d.disease_name AS ""Диагноз"",
-                mw.medical_worker_surname || ' ' || mw.medical_worker_name AS ""Врач"",
+                sw.staff_worker_surname || ' ' || sw.staff_worker_name AS ""Врач"",
                 w.number_ward AS ""Палата""
             FROM Medical_history mh
             JOIN Disease d ON mh.disease_id = d.disease_id
-            JOIN Medical_worker mw ON mh.medical_worker_id = mw.medical_worker_id
+            JOIN Staff_worker mw ON mh.staff_worker_id = sw.staff_worker_id
             JOIN Ward w ON mh.ward_id = w.ward_id
             WHERE mh.patient_id=@patientId
             ORDER BY mh.date_of_receipt DESC";
@@ -89,7 +89,13 @@ namespace PatientAccounting.Data
             var arguments = new Dictionary<string, object> { { "@historyId", historyId } };
             return ExecuteQuery(sqlQuery, arguments);
         }
-        private static DataTable ExecuteQuery(string sql, Dictionary<string, object> parameters)
+        public static DataTable GetSpecializations()
+        {
+            string sqlQuery = "SELECT specialization_id, name_specialization " +
+                "FROM Specialization ORDER BY name_specialization";
+            return ExecuteQuery(sqlQuery, null);
+        }
+        private static DataTable ExecuteQuery(string sql, Dictionary<string, object>? parameters)
         {
             var dataTable = new DataTable();
             using(var connection = GetConnection())
