@@ -1,11 +1,13 @@
 ﻿using PatientAccounting.Data;
+using PatientAccounting.Interfaces;
 using PatientAccounting.Services;
-using System.Data;
+using PatientAccounting.UserInterface;
 namespace PatientAccounting
 {
     public partial class SystemAdministrator : UserControl
     {
         private Staff staff;
+        private IManagementControl? currentActiveControl;
         public SystemAdministrator(Staff staff)
         {
             InitializeComponent();
@@ -18,119 +20,38 @@ namespace PatientAccounting
         private void AddUser_Click(object sender, EventArgs e)
         {
             ActionLabel.Text = "Добавление пользователя";
+            var addUser = new AddNewUser();
+            addUser.OnClosed += ReturnToMainMenu;
+            ShowControl(addUser);
+            currentActiveControl = addUser;
             SwitchVisibilityChoicePanel();
-            SwitchVisibilityChoiceRolePanel();
+            SwitchVisibilityMainPanel();
         }
-        private void RadioButtons_CheckedChanged(object sender, EventArgs e)
+        private void ReturnToMainMenu()
         {
-            var radioButton = sender as RadioButton;
-            if (radioButton == null || !radioButton.Checked) return;
-            SwitchConditionRadioButton();
-            SwitchVisibilityGeneralPanel();
-            SwitchCancelButton();
-            if (radioButton.Text == "Пациент")
-                SwitchVisibilityPatientDataPanel();
-            else
-            {
-                SwitchVisibilityStaffDataPanel();
-                CheckingForDiscChoiceSpec(radioButton);
-                FillSpecialtyMenu();
-            }
+            MainEventPanel.Controls.Clear();
+            currentActiveControl = null;
+            SwitchVisibilityMainPanel();
+            SwitchVisibilityChoicePanel();
+            ActionLabel.Text = "Выберите действие";
         }
-        private void ChoiceSpecializationTextBox_Click(object sender, EventArgs e)
-            => ChoiceSpecializationContextMenuStrip.Show(ChoiceSpecializationTextBox, new Point(0, ChoiceSpecializationTextBox.Height));
+        private void ShowControl(UserControl newControl)
+        {
+            foreach (Control control in MainEventPanel.Controls)
+                control.Dispose();
+            MainEventPanel.Controls.Clear();
+            newControl.Dock = DockStyle.Fill;
+            MainEventPanel.Controls.Add(newControl);
+        }
         private void SwitchVisibilityChoicePanel()
         {
             ChoicePanel.Visible = !ChoicePanel.Visible;
             ChoicePanel.Enabled = !ChoicePanel.Enabled;
         }
-        private void SwitchVisibilityChoiceRolePanel()
+        private void SwitchVisibilityMainPanel()
         {
-            ChoiceRolePanel.Visible = !ChoiceRolePanel.Visible;
-            ChoiceRolePanel.Enabled = !ChoiceRolePanel.Enabled;
-        }
-        private void SwitchVisibilityGeneralPanel()
-        {
-            InputGeneralDataPanel.Visible = !InputGeneralDataPanel.Visible;
-            InputGeneralDataPanel.Enabled = !InputGeneralDataPanel.Enabled;
-        }
-        private void SwitchVisibilityPatientDataPanel()
-        {
-            AddPatientDataPanel.Visible = !AddPatientDataPanel.Visible;
-            AddPatientDataPanel.Enabled |= InputGeneralDataPanel.Enabled;
-        }
-        private void SwitchVisibilityStaffDataPanel()
-        {
-            InputStaffPanel.Visible = !InputStaffPanel.Visible;
-            InputStaffPanel.Enabled = !InputStaffPanel.Enabled;
-        }
-        private void SwitchConditionRadioButton()
-        {
-            foreach (var c in ChoiceRolePanel.Controls)
-                if (c is RadioButton radioButton)
-                    radioButton.Enabled = !radioButton.Enabled;
-        }
-        private void SwitchCancelButton()
-        {
-            CancelButton.Visible = !CancelButton.Visible;
-            CancelButton.Enabled = !CancelButton.Enabled;
-        }
-        private void ResettingTheSelection()
-        {
-            foreach (var c in ChoiceRolePanel.Controls)
-                if (c is RadioButton radioButton)
-                    radioButton.Checked = false;
-        }
-        private void FillSpecialtyMenu()
-        {
-            var dataTable = DataBaseProcessing.GetSpecializations();
-            ChoiceSpecializationContextMenuStrip.Items.Clear();
-            foreach (DataRow row in dataTable.Rows)
-            {
-                string? name = row["name_specialization"].ToString();
-                int id = Convert.ToInt32(row["specialization_id"]);
-                var item = new ToolStripMenuItem(name);
-                item.Tag = id;
-                item.Click += SpecialtyItem_Click;
-                ChoiceSpecializationContextMenuStrip.Items.Add(item);
-            }
-        }
-        private void SpecialtyItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
-            int selectedId = (int)clickedItem.Tag;
-            string? selectedName = clickedItem.Text;
-            ChoiceSpecializationTextBox.Text = selectedName;
-        }
-        private void CheckingForDiscChoiceSpec(RadioButton radioButton)
-        {
-            if (radioButton.Text == "Медицинский регистратор" || radioButton.Text == "Системный администратор")
-                ChoiceSpecializationTextBox.Enabled = false;
-        }
-
-        private void CancelButton_Click(object sender, EventArgs e)
-        {
-            SwitchConditionRadioButton();
-            ResettingTheSelection();
-            if(InputGeneralDataPanel.Visible) SwitchVisibilityGeneralPanel();
-            if(AddPatientDataPanel.Visible) SwitchVisibilityPatientDataPanel();
-            if(InputStaffPanel.Visible) SwitchVisibilityStaffDataPanel();
-            ClearInputPanels(InputGeneralDataPanel);
-            ClearInputPanels(AddPatientDataPanel);
-            ClearInputPanels(InputStaffPanel);
-            ChoiceSpecializationTextBox.Clear();
-            ChoiceSpecializationTextBox.Enabled = true;
-            ActionLabel.Visible = false;
-            SwitchCancelButton();
-        }
-        private void ClearInputPanels(Control container)
-        {
-            foreach(Control control in container.Controls)
-            {
-                if(control is TextBox textBox) textBox.Clear();
-                if(control is DateTimePicker dateTimePicker) dateTimePicker.Value = DateTime.Now;
-                if(control.HasChildren) ClearInputPanels(control);
-            }
+            MainEventPanel.Visible = !MainEventPanel.Visible;
+            MainEventPanel.Enabled = !MainEventPanel.Enabled;
         }
     }
 }
