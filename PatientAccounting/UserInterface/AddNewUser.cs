@@ -1,7 +1,5 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.Data;
 namespace PatientAccounting.UserInterface
 {
@@ -89,10 +87,9 @@ namespace PatientAccounting.UserInterface
         }
         private void SpecialtyItem_Click(object sender, EventArgs e)
         {
-            ToolStripMenuItem clickedItem = (ToolStripMenuItem)sender;
-            int selectedId = (int)clickedItem.Tag;
-            string? selectedName = clickedItem.Text;
-            ChoiceSpecializationTextBox.Text = selectedName;
+            var item = (ToolStripMenuItem)sender;
+            ChoiceSpecializationTextBox.Text = item.Text;
+            ChoiceSpecializationTextBox.Tag = item.Tag;
         }
         private void CheckingForDiscChoiceSpec(RadioButton radioButton)
         {
@@ -101,7 +98,6 @@ namespace PatientAccounting.UserInterface
             else
                 ChoiceSpecializationTextBox.Enabled = true;
         }
-
         private void CancelButton_Click(object sender, EventArgs e) => Cancel();
 
         private void ClearInputPanels(Control container)
@@ -127,12 +123,93 @@ namespace PatientAccounting.UserInterface
         }
         public void Save()
         {
-            MessageBox.Show("QQ");
+            if (!ValidateData()) return;
+            string login = InputUserLoginTextBox.Text;
+            string password = InputUserPasswordTextBox.Text;
+            string passport = InputUserPassportData.Text;
+            string surname = InputUserSurnameTextBox.Text;
+            string name = InputUserNameTextBox.Text;
+            string patronymic = InputUserPatronymicTextBox.Text;
+            bool isSuccess = false;
+            if (PatientRadioButton.Checked)
+            {
+                DateTime birth = PatientDateOfBirthDateTimePicker.Value;
+                string address = InputPatientAddressTextBox.Text;
+
+                isSuccess = DataBaseProcessing.RegisterPatientSimple(login, password, passport,
+                                                                    surname, name, patronymic,
+                                                                    birth, address);
+            }
+            else
+            {
+                int.TryParse(InputWorkExperienceTextBox.Text, out int exp);
+                int? specId = ChoiceSpecializationTextBox.Tag as int?;
+                int roleId = GetSelectedRoleId();
+                isSuccess = DataBaseProcessing.RegisterStaff(login, password, passport, roleId,
+                                                                  surname, name, patronymic,
+                                                                  specId, exp);
+            }
+            if (isSuccess)
+            {
+                MessageBox.Show("Данные успешно сохранены!");
+                ExitToMenu();
+            }
         }
         public bool ValidateData()
         {
+            var commonFields = new Dictionary<string, string>
+            {
+                { "Логин", InputUserLoginTextBox.Text },
+                { "Пароль", InputUserPasswordTextBox.Text },
+                { "Паспортные данные", InputUserPassportData.Text },
+                { "Фамилия", InputUserSurnameTextBox.Text },
+                { "Имя", InputUserNameTextBox.Text }
+            };
+            foreach (var field in commonFields)
+            {
+                if (string.IsNullOrWhiteSpace(field.Value))
+                {
+                    MessageBox.Show($"Поле '{field.Key}' обязательно для заполнения!");
+                    return false;
+                }
+            }
+            if (PatientRadioButton.Checked)
+            {
+                if (PatientDateOfBirthDateTimePicker.Value >= DateTime.Now.Date)
+                {
+                    MessageBox.Show("Введите корректную дату рождения!");
+                    return false;
+                }
+                if (string.IsNullOrWhiteSpace(InputPatientAddressTextBox.Text))
+                {
+                    MessageBox.Show("Поле 'Адрес' обязательно для пациента!");
+                    return false;
+                }
+            }
+            else
+            {
+                int roleId = GetSelectedRoleId();
+                if (roleId == 3 || roleId == 4)
+                {
+                    if (string.IsNullOrEmpty(ChoiceSpecializationTextBox.Text) || ChoiceSpecializationTextBox.Tag == null)
+                    {
+                        MessageBox.Show("Для врачей обязательно указание специализации!");
+                        return false;
+                    }
+                }
+            }
             return true;
         }
+        private int GetSelectedRoleId()
+        {
+            if (MedicalRegistar.Checked) return 2;
+            if (DoctorRadioButton.Checked) return 3;
+            if (HeadDoctorRadioButton.Checked) return 4;
+            if (SystemAdminRadioButton.Checked) return 5;
+            return 1;
+        }
+        private void SaveAddUser_Click(object sender, EventArgs e) => Save();
+
     }
 }
 

@@ -33,9 +33,9 @@
             CancelButton = new Button();
             InputGeneralDataPanel = new Panel();
             InputPatientNameLabel = new Label();
-            InputPatientPatronymicTextBox = new TextBox();
-            InputPatientNameTextBox = new TextBox();
-            InputPatientSurnameTextBox = new TextBox();
+            InputUserPatronymicTextBox = new TextBox();
+            InputUserNameTextBox = new TextBox();
+            InputUserSurnameTextBox = new TextBox();
             InputPatientPatronymic = new Label();
             InputPatientSurnameLabel = new Label();
             InputUserPassportData = new TextBox();
@@ -50,7 +50,7 @@
             MedicalRegistar = new RadioButton();
             HeadDoctorRadioButton = new RadioButton();
             DoctorRadioButton = new RadioButton();
-            PacientRadioButton = new RadioButton();
+            PatientRadioButton = new RadioButton();
             ChoiceRoleLabel = new Label();
             InputStaffPanel = new Panel();
             ChoiceSpecializationTextBox = new TextBox();
@@ -61,10 +61,11 @@
             AddPatientDataPanel = new Panel();
             InputPatientAddressLabel = new Label();
             PatientDateOfBirthDateTimePicker = new DateTimePicker();
-            InputPatientAdressTextBox = new TextBox();
+            InputPatientAddressTextBox = new TextBox();
             InputPatientDateOfBirthLabel = new Label();
             InputPatientDataLabel = new Label();
             ChoiceSpecializationContextMenuStrip = new ContextMenuStrip(components);
+            SaveAddUser = new Button();
             InputGeneralDataPanel.SuspendLayout();
             ChoiceRolePanel.SuspendLayout();
             InputStaffPanel.SuspendLayout();
@@ -108,9 +109,9 @@
             InputGeneralDataPanel.Anchor = AnchorStyles.Top;
             InputGeneralDataPanel.BackColor = Color.Transparent;
             InputGeneralDataPanel.Controls.Add(InputPatientNameLabel);
-            InputGeneralDataPanel.Controls.Add(InputPatientPatronymicTextBox);
-            InputGeneralDataPanel.Controls.Add(InputPatientNameTextBox);
-            InputGeneralDataPanel.Controls.Add(InputPatientSurnameTextBox);
+            InputGeneralDataPanel.Controls.Add(InputUserPatronymicTextBox);
+            InputGeneralDataPanel.Controls.Add(InputUserNameTextBox);
+            InputGeneralDataPanel.Controls.Add(InputUserSurnameTextBox);
             InputGeneralDataPanel.Controls.Add(InputPatientPatronymic);
             InputGeneralDataPanel.Controls.Add(InputPatientSurnameLabel);
             InputGeneralDataPanel.Controls.Add(InputUserPassportData);
@@ -136,29 +137,29 @@
             InputPatientNameLabel.TabIndex = 12;
             InputPatientNameLabel.Text = "Введите имя:";
             // 
-            // InputPatientPatronymicTextBox
+            // InputUserPatronymicTextBox
             // 
-            InputPatientPatronymicTextBox.BorderStyle = BorderStyle.None;
-            InputPatientPatronymicTextBox.Location = new Point(302, 201);
-            InputPatientPatronymicTextBox.Name = "InputPatientPatronymicTextBox";
-            InputPatientPatronymicTextBox.Size = new Size(350, 20);
-            InputPatientPatronymicTextBox.TabIndex = 11;
+            InputUserPatronymicTextBox.BorderStyle = BorderStyle.None;
+            InputUserPatronymicTextBox.Location = new Point(302, 201);
+            InputUserPatronymicTextBox.Name = "InputUserPatronymicTextBox";
+            InputUserPatronymicTextBox.Size = new Size(350, 20);
+            InputUserPatronymicTextBox.TabIndex = 11;
             // 
-            // InputPatientNameTextBox
+            // InputUserNameTextBox
             // 
-            InputPatientNameTextBox.BorderStyle = BorderStyle.None;
-            InputPatientNameTextBox.Location = new Point(302, 171);
-            InputPatientNameTextBox.Name = "InputPatientNameTextBox";
-            InputPatientNameTextBox.Size = new Size(350, 20);
-            InputPatientNameTextBox.TabIndex = 10;
+            InputUserNameTextBox.BorderStyle = BorderStyle.None;
+            InputUserNameTextBox.Location = new Point(302, 171);
+            InputUserNameTextBox.Name = "InputUserNameTextBox";
+            InputUserNameTextBox.Size = new Size(350, 20);
+            InputUserNameTextBox.TabIndex = 10;
             // 
-            // InputPatientSurnameTextBox
+            // InputUserSurnameTextBox
             // 
-            InputPatientSurnameTextBox.BorderStyle = BorderStyle.None;
-            InputPatientSurnameTextBox.Location = new Point(302, 142);
-            InputPatientSurnameTextBox.Name = "InputPatientSurnameTextBox";
-            InputPatientSurnameTextBox.Size = new Size(350, 20);
-            InputPatientSurnameTextBox.TabIndex = 9;
+            InputUserSurnameTextBox.BorderStyle = BorderStyle.None;
+            InputUserSurnameTextBox.Location = new Point(302, 142);
+            InputUserSurnameTextBox.Name = "InputUserSurnameTextBox";
+            InputUserSurnameTextBox.Size = new Size(350, 20);
+            InputUserSurnameTextBox.TabIndex = 9;
             // 
             // InputPatientPatronymic
             // 
@@ -250,7 +251,7 @@
             ChoiceRolePanel.Controls.Add(MedicalRegistar);
             ChoiceRolePanel.Controls.Add(HeadDoctorRadioButton);
             ChoiceRolePanel.Controls.Add(DoctorRadioButton);
-            ChoiceRolePanel.Controls.Add(PacientRadioButton);
+            ChoiceRolePanel.Controls.Add(PatientRadioButton);
             ChoiceRolePanel.Controls.Add(ChoiceRoleLabel);
             ChoiceRolePanel.Location = new Point(19, 6);
             ChoiceRolePanel.Name = "ChoiceRolePanel";
@@ -305,17 +306,17 @@
             DoctorRadioButton.UseVisualStyleBackColor = true;
             DoctorRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
-            // PacientRadioButton
+            // PatientRadioButton
             // 
-            PacientRadioButton.AutoSize = true;
-            PacientRadioButton.Location = new Point(53, 48);
-            PacientRadioButton.Name = "PacientRadioButton";
-            PacientRadioButton.Size = new Size(90, 24);
-            PacientRadioButton.TabIndex = 1;
-            PacientRadioButton.TabStop = true;
-            PacientRadioButton.Text = "Пациент";
-            PacientRadioButton.UseVisualStyleBackColor = true;
-            PacientRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
+            PatientRadioButton.AutoSize = true;
+            PatientRadioButton.Location = new Point(53, 48);
+            PatientRadioButton.Name = "PatientRadioButton";
+            PatientRadioButton.Size = new Size(90, 24);
+            PatientRadioButton.TabIndex = 1;
+            PatientRadioButton.TabStop = true;
+            PatientRadioButton.Text = "Пациент";
+            PatientRadioButton.UseVisualStyleBackColor = true;
+            PatientRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // ChoiceRoleLabel
             // 
@@ -396,7 +397,7 @@
             AddPatientDataPanel.Anchor = AnchorStyles.Top;
             AddPatientDataPanel.Controls.Add(InputPatientAddressLabel);
             AddPatientDataPanel.Controls.Add(PatientDateOfBirthDateTimePicker);
-            AddPatientDataPanel.Controls.Add(InputPatientAdressTextBox);
+            AddPatientDataPanel.Controls.Add(InputPatientAddressTextBox);
             AddPatientDataPanel.Controls.Add(InputPatientDateOfBirthLabel);
             AddPatientDataPanel.Controls.Add(InputPatientDataLabel);
             AddPatientDataPanel.Enabled = false;
@@ -422,13 +423,13 @@
             PatientDateOfBirthDateTimePicker.Size = new Size(350, 27);
             PatientDateOfBirthDateTimePicker.TabIndex = 8;
             // 
-            // InputPatientAdressTextBox
+            // InputPatientAddressTextBox
             // 
-            InputPatientAdressTextBox.BorderStyle = BorderStyle.None;
-            InputPatientAdressTextBox.Location = new Point(302, 43);
-            InputPatientAdressTextBox.Name = "InputPatientAdressTextBox";
-            InputPatientAdressTextBox.Size = new Size(350, 20);
-            InputPatientAdressTextBox.TabIndex = 7;
+            InputPatientAddressTextBox.BorderStyle = BorderStyle.None;
+            InputPatientAddressTextBox.Location = new Point(302, 43);
+            InputPatientAddressTextBox.Name = "InputPatientAddressTextBox";
+            InputPatientAddressTextBox.Size = new Size(350, 20);
+            InputPatientAddressTextBox.TabIndex = 7;
             // 
             // InputPatientDateOfBirthLabel
             // 
@@ -457,10 +458,25 @@
             ChoiceSpecializationContextMenuStrip.Name = "ChoiceSpecializationContextMenuStrip";
             ChoiceSpecializationContextMenuStrip.Size = new Size(61, 4);
             // 
+            // SaveAddUser
+            // 
+            SaveAddUser.BackColor = Color.Transparent;
+            SaveAddUser.FlatStyle = FlatStyle.Popup;
+            SaveAddUser.Font = new Font("Segoe UI Semibold", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            SaveAddUser.ForeColor = Color.YellowGreen;
+            SaveAddUser.Location = new Point(363, 485);
+            SaveAddUser.Name = "SaveAddUser";
+            SaveAddUser.Size = new Size(207, 32);
+            SaveAddUser.TabIndex = 22;
+            SaveAddUser.Text = "Сохранить";
+            SaveAddUser.UseVisualStyleBackColor = false;
+            SaveAddUser.Click += SaveAddUser_Click;
+            // 
             // AddNewUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(SaveAddUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);
             Controls.Add(InputGeneralDataPanel);
@@ -486,9 +502,9 @@
         private Button CancelButton;
         private Panel InputGeneralDataPanel;
         private Label InputPatientNameLabel;
-        private TextBox InputPatientPatronymicTextBox;
-        private TextBox InputPatientNameTextBox;
-        private TextBox InputPatientSurnameTextBox;
+        private TextBox InputUserPatronymicTextBox;
+        private TextBox InputUserNameTextBox;
+        private TextBox InputUserSurnameTextBox;
         private Label InputPatientPatronymic;
         private Label InputPatientSurnameLabel;
         private TextBox InputUserPassportData;
@@ -503,7 +519,7 @@
         private RadioButton MedicalRegistar;
         private RadioButton HeadDoctorRadioButton;
         private RadioButton DoctorRadioButton;
-        private RadioButton PacientRadioButton;
+        private RadioButton PatientRadioButton;
         private Label ChoiceRoleLabel;
         private Panel InputStaffPanel;
         private TextBox ChoiceSpecializationTextBox;
@@ -514,9 +530,10 @@
         private Panel AddPatientDataPanel;
         private Label InputPatientAddressLabel;
         private DateTimePicker PatientDateOfBirthDateTimePicker;
-        private TextBox InputPatientAdressTextBox;
+        private TextBox InputPatientAddressTextBox;
         private Label InputPatientDateOfBirthLabel;
         private Label InputPatientDataLabel;
         private ContextMenuStrip ChoiceSpecializationContextMenuStrip;
+        private Button SaveAddUser;
     }
 }
