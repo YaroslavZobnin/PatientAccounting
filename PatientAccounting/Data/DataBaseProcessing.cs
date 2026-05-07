@@ -232,8 +232,16 @@ namespace PatientAccounting.Data
         }
         private static void DeleteUserDependencies(int customerId, NpgsqlConnection conn)
         {
-            string[] deleteQueries = 
+            string[] deleteQueries =
             {
+            @"DELETE FROM Treatment WHERE medical_history_id IN (
+                SELECT medical_history_id FROM Medical_history 
+                WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
+                OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id)
+            )",
+            @"DELETE FROM Medical_history 
+              WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
+              OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id)",
             "DELETE FROM Staff_worker WHERE customer_id = @id",
             "DELETE FROM Patient WHERE customer_id = @id",
             "DELETE FROM Customer WHERE customer_id = @id"
