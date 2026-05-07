@@ -39,7 +39,7 @@ namespace PatientAccounting
                 MessageBox.Show("Не все поля заполнены!", "Обнаружены пустые поля!", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
-            User? user = DataBaseProcessing.SearchUserInDataBase(InputLoginTextBox.Text, InputPasswordTextBox.Text);
+            User? user = DataBaseProcessing.Authenticate(InputLoginTextBox.Text, InputPasswordTextBox.Text);
             if (user != null)
             {
                 _user = user;

@@ -1,7 +1,8 @@
 ﻿using Npgsql;
+using PatientAccounting.Services;
 using System.Configuration;
 using System.Data;
-using PatientAccounting.Services;
+using System.Data.Common;
 namespace PatientAccounting.Data
 {
     internal static class DataBaseProcessing
@@ -13,14 +14,9 @@ namespace PatientAccounting.Data
                 throw new Exception("Ошибка подключения базы данных");
             else return new NpgsqlConnection(connectionString);
         }
-        public static User? SearchUserInDataBase(string userLogin, string userPassword)
+        private static DbDataReader? GetUserDataReader(string login, NpgsqlConnection connection)
         {
-            try
-            {
-                using (var connection = GetConnection())
-                {
-                    connection.Open();
-                    const string sqlQuery = @"
+            const string sql = @"
                 SELECT c.customer_id, c.customer_login, c.customer_password, c.customer_passport_data, 
                        ur.role_id, ur.role_name,
                        p.patient_id, p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_address,
@@ -30,33 +26,27 @@ namespace PatientAccounting.Data
                 JOIN User_role ur ON c.customer_role_id = ur.role_id
                 LEFT JOIN Patient p ON c.customer_id = p.customer_id
                 LEFT JOIN Staff_worker sw ON c.customer_id = sw.customer_id
-                WHERE c.customer_login = @login";
-                    using (var command = new NpgsqlCommand(sqlQuery, connection))
-                    {
-                        command.Parameters.AddWithValue("login", userLogin);
-                        using (var reader = command.ExecuteReader())
-                        {
-                            if (reader.Read())
-                            {
-                                string hashedPass = reader.GetString(reader.GetOrdinal("customer_password"));
-                                if (BCrypt.Net.BCrypt.Verify(userPassword, hashedPass))
-                                {
-                                    string roleName = reader.GetString(reader.GetOrdinal("role_name"));
-                                    return UserFactory.Create(roleName, reader);
-                                }
-                                else return null;
-                            }
-                            else return null;
-                        }
-                    }
-                }
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show($"Ошибка базы данных: {ex.Message}", "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Stop);
-                return null;
-            }           
+                WHERE c.customer_login = @login"; 
+            var command = new NpgsqlCommand(sql, connection);
+            command.Parameters.AddWithValue("login", login);
+            var reader = command.ExecuteReader();
+            return reader.Read() ? reader : null;
         }
+        public static User? Authenticate(string login, string password)
+        {
+            using (var conn = GetConnection())
+            {
+                conn.Open();
+                var reader = GetUserDataReader(login, conn);
+                if (reader == null)
+                    return null;
+                if (!VerifyPassword(password, reader.GetString(reader.GetOrdinal("customer_password"))))
+                    return null;
+                return UserFactory.Create(reader.GetString(reader.GetOrdinal("role_name")), reader);
+            }
+        }
+        private static bool VerifyPassword(string raw, string hashed) =>
+            BCrypt.Net.BCrypt.Verify(raw, hashed);
         public static DataTable GetMedicalHistory(int patientId)
         {
             string sqlQuery = @"SELECT
@@ -94,75 +84,65 @@ namespace PatientAccounting.Data
                 "FROM Specialization ORDER BY name_specialization";
             return ExecuteQuery(sqlQuery, null);
         }
-        public static bool RegisterStaff(string login, string password, string passport, int roleId,
-            string surname, string name, string patronymic, int? specId, int experience)
+        private static int CreateCustomer(NpgsqlConnection connection, string login, string password, string passport, int roleId)
         {
-            using(var connection = GetConnection())
+            const string sql = @"
+                INSERT INTO Customer (customer_login, customer_password, customer_passport_data, customer_role_id) 
+                VALUES (@login, @pass, @passport, @role) 
+                RETURNING customer_id";
+            using (var cmd = new NpgsqlCommand(sql, connection))
             {
-                try
+                cmd.Parameters.AddWithValue("login", login);
+                cmd.Parameters.AddWithValue("pass", BCrypt.Net.BCrypt.HashPassword(password));
+                cmd.Parameters.AddWithValue("passport", passport);
+                cmd.Parameters.AddWithValue("role", roleId);
+                return Convert.ToInt32(cmd.ExecuteScalar());
+            }
+        }
+        public static bool RegisterStaff(string login, string password, string passport, int roleId,
+    string surname, string name, string patronymic, int? specId, int experience)
+        {
+            try
+            {
+                using (var connection = GetConnection())
                 {
                     connection.Open();
-                    const string sqlCustomer = @"INSERT INTO Customer (customer_login, customer_password, customer_passport_data,
-                    customer_role_id) VALUES(@login, @pass, @passport, @role)
-                    RETURNING customer_id";
-                    int newCustomerId;
-                    using (var command = new NpgsqlCommand(sqlCustomer, connection))
-                    {
-                        command.Parameters.AddWithValue("login", login);
-                        command.Parameters.AddWithValue("pass", BCrypt.Net.BCrypt.HashPassword(password));
-                        command.Parameters.AddWithValue("passport", passport);
-                        command.Parameters.AddWithValue("role", roleId);
-                        newCustomerId = Convert.ToInt32(command.ExecuteScalar());
-                    }
+                    int customerId = CreateCustomer(connection, login, password, passport, roleId);
                     const string sqlStaff = @"
-                INSERT INTO Staff_worker (staff_worker_surname, staff_worker_name, staff_worker_patronymic, 
-                                        specialization_id, staff_worker_work_experience, customer_id) 
-                VALUES (@surname, @name, @patronymic, @specId, @exp, @customerId)";
+                        INSERT INTO Staff_worker (staff_worker_surname, staff_worker_name, staff_worker_patronymic, 
+                                                specialization_id, staff_worker_work_experience, customer_id) 
+                        VALUES (@surname, @name, @patronymic, @specId, @exp, @customerId)";
                     using (var cmd = new NpgsqlCommand(sqlStaff, connection))
                     {
                         cmd.Parameters.AddWithValue("surname", surname);
                         cmd.Parameters.AddWithValue("name", name);
                         cmd.Parameters.AddWithValue("patronymic", patronymic);
-                        cmd.Parameters.AddWithValue("specId", specId.HasValue ? (object)specId.Value : DBNull.Value);
+                        cmd.Parameters.AddWithValue("specId", specId.HasValue ? specId.Value : DBNull.Value);
                         cmd.Parameters.AddWithValue("exp", experience);
-                        cmd.Parameters.AddWithValue("customerId", newCustomerId);
+                        cmd.Parameters.AddWithValue("customerId", customerId);
                         cmd.ExecuteNonQuery();
                     }
                     return true;
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка базы данных: {ex.Message}");
-                    return false;
                 }
             }
-        }
-        public static bool RegisterPatientSimple(string login, string password, string passport,
-            string surname, string name, string patronymic, DateTime birthDate, string address)
-        {
-            using (var connection = GetConnection())
+            catch (Exception ex)
             {
-                try
+                throw new Exception("Не удалось зарегистрировать сотрудника. Проверьте уникальность логина или паспорта.", ex);
+            }
+        }
+        public static bool RegisterPatient(string login, string password, string passport,
+    string surname, string name, string patronymic, DateTime birthDate, string address)
+        {
+            try
+            {
+                using (var connection = GetConnection())
                 {
                     connection.Open();
-                    const string sqlCustomer = @"
-                INSERT INTO Customer (customer_login, customer_password, customer_passport_data, customer_role_id) 
-                VALUES (@login, @pass, @passport, 1) 
-                RETURNING customer_id";
-                    int newCustomerId;
-                    using (var cmd = new NpgsqlCommand(sqlCustomer, connection))
-                    {
-                        cmd.Parameters.AddWithValue("login", login);
-                        cmd.Parameters.AddWithValue("pass", BCrypt.Net.BCrypt.HashPassword(password));
-                        cmd.Parameters.AddWithValue("passport", passport);
-                        newCustomerId = Convert.ToInt32(cmd.ExecuteScalar());
-                    }
+                    int customerId = CreateCustomer(connection, login, password, passport, 1);
                     const string sqlPatient = @"
-                INSERT INTO Patient (patient_surname, patient_name, patient_patronymic, 
-                                   patient_birth_date, patient_address, customer_id) 
-                VALUES (@surname, @name, @patronymic, @birth, @address, @customerId)";
-
+                        INSERT INTO Patient (patient_surname, patient_name, patient_patronymic, 
+                                           patient_birth_date, patient_address, customer_id) 
+                        VALUES (@surname, @name, @patronymic, @birth, @address, @customerId)";
                     using (var cmd = new NpgsqlCommand(sqlPatient, connection))
                     {
                         cmd.Parameters.AddWithValue("surname", surname);
@@ -170,17 +150,15 @@ namespace PatientAccounting.Data
                         cmd.Parameters.AddWithValue("patronymic", patronymic);
                         cmd.Parameters.AddWithValue("birth", birthDate);
                         cmd.Parameters.AddWithValue("address", address);
-                        cmd.Parameters.AddWithValue("customerId", newCustomerId);
-
+                        cmd.Parameters.AddWithValue("customerId", customerId);
                         cmd.ExecuteNonQuery();
                     }
                     return true;
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ошибка при регистрации пациента: {ex.Message}");
-                    return false;
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Не удалось зарегистрировать пациента. Перепроверьте все данные", ex);
             }
         }
         public static void DeleteUserByPassport(string passportData)
@@ -215,7 +193,7 @@ namespace PatientAccounting.Data
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Ошибка базы данных: {ex.Message}");
+                    throw new Exception("Ошибка базы данных!", ex);
                 }
             }
             return dataTable;

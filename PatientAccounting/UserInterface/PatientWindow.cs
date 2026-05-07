@@ -25,9 +25,17 @@ namespace PatientAccounting
             => AddressLabel.Text = GeneralMethods.GetAnyInfo("Место проживания: ", patient.Address);
         private void InitializeMedicalHistory()
         {
-            MedicalHistoryDataGrid.DataSource = DataBaseProcessing.GetMedicalHistory(patient.PatientId);
-            if (MedicalHistoryDataGrid.Columns.Contains("medical_history_id"))
-                MedicalHistoryDataGrid.Columns["medical_history_id"].Visible = false;
+            try
+            {
+                MedicalHistoryDataGrid.DataSource = DataBaseProcessing.GetMedicalHistory(patient.PatientId);
+                if (MedicalHistoryDataGrid.Columns.Contains("medical_history_id"))
+                    MedicalHistoryDataGrid.Columns["medical_history_id"].Visible = false;
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Не удалось загрузить историю болезни: {ex.Message}",
+                        "Ошибка данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         private void MedicalHistoryDataGrid_SelectionChanged(object sender, EventArgs e)
         {
@@ -38,6 +46,16 @@ namespace PatientAccounting
             }
         }
         private void UpdateTreatmentTable(int historyId)
-            => TreatmentDataGrid.DataSource = DataBaseProcessing.GetTreatmentByHistoryId(historyId);
+        {
+            try
+            {
+                TreatmentDataGrid.DataSource = DataBaseProcessing.GetTreatmentByHistoryId(historyId);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось загрузить таблицу лечения: {ex.Message}",
+                        "Ошибка данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }

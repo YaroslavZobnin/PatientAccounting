@@ -73,16 +73,24 @@ namespace PatientAccounting.UserInterface
         }
         private void FillSpecialtyMenu()
         {
-            var dataTable = DataBaseProcessing.GetSpecializations();
-            ChoiceSpecializationContextMenuStrip.Items.Clear();
-            foreach (DataRow row in dataTable.Rows)
+            try
             {
-                string? name = row["name_specialization"].ToString();
-                int id = Convert.ToInt32(row["specialization_id"]);
-                var item = new ToolStripMenuItem(name);
-                item.Tag = id;
-                item.Click += SpecialtyItem_Click;
-                ChoiceSpecializationContextMenuStrip.Items.Add(item);
+                var dataTable = DataBaseProcessing.GetSpecializations();
+                ChoiceSpecializationContextMenuStrip.Items.Clear();
+                foreach (DataRow row in dataTable.Rows)
+                {
+                    string? name = row["name_specialization"].ToString();
+                    int id = Convert.ToInt32(row["specialization_id"]);
+                    var item = new ToolStripMenuItem(name);
+                    item.Tag = id;
+                    item.Click += SpecialtyItem_Click;
+                    ChoiceSpecializationContextMenuStrip.Items.Add(item);
+                }
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Не удалось загрузить специализации: {ex.Message}",
+                        "Ошибка данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         private void SpecialtyItem_Click(object sender, EventArgs e)
@@ -131,28 +139,35 @@ namespace PatientAccounting.UserInterface
             string name = InputUserNameTextBox.Text;
             string patronymic = InputUserPatronymicTextBox.Text;
             bool isSuccess = false;
-            if (PatientRadioButton.Checked)
+            try
             {
-                DateTime birth = PatientDateOfBirthDateTimePicker.Value;
-                string address = InputPatientAddressTextBox.Text;
+                if (PatientRadioButton.Checked)
+                {
+                    DateTime birth = PatientDateOfBirthDateTimePicker.Value;
+                    string address = InputPatientAddressTextBox.Text;
 
-                isSuccess = DataBaseProcessing.RegisterPatientSimple(login, password, passport,
-                                                                    surname, name, patronymic,
-                                                                    birth, address);
+                    isSuccess = DataBaseProcessing.RegisterPatient(login, password, passport,
+                                                                        surname, name, patronymic,
+                                                                        birth, address);
+                }
+                else
+                {
+                    int.TryParse(InputWorkExperienceTextBox.Text, out int exp);
+                    int? specId = ChoiceSpecializationTextBox.Tag as int?;
+                    int roleId = GetSelectedRoleId();
+                    isSuccess = DataBaseProcessing.RegisterStaff(login, password, passport, roleId,
+                                                                      surname, name, patronymic,
+                                                                      specId, exp);
+                }
+                if (isSuccess)
+                {
+                    MessageBox.Show("Данные успешно сохранены!");
+                    ExitToMenu();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                int.TryParse(InputWorkExperienceTextBox.Text, out int exp);
-                int? specId = ChoiceSpecializationTextBox.Tag as int?;
-                int roleId = GetSelectedRoleId();
-                isSuccess = DataBaseProcessing.RegisterStaff(login, password, passport, roleId,
-                                                                  surname, name, patronymic,
-                                                                  specId, exp);
-            }
-            if (isSuccess)
-            {
-                MessageBox.Show("Данные успешно сохранены!");
-                ExitToMenu();
+                MessageBox.Show(ex.Message, "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
         public bool ValidateData()
