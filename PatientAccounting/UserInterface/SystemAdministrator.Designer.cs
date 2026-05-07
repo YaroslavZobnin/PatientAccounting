@@ -120,6 +120,7 @@
             DeleteUserButton.TabIndex = 5;
             DeleteUserButton.Text = "Удаление";
             DeleteUserButton.UseVisualStyleBackColor = true;
+            DeleteUserButton.Click += DeleteUserButton_Click;
             // 
             // AddUser
             // 
@@ -157,12 +158,12 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(MainEventPanel);
             Controls.Add(ActionLabel);
             Controls.Add(ChoicePanel);
             Controls.Add(FullNameLabel);
             Controls.Add(PersonalAccountLabel);
             Controls.Add(SystemAdminLabel);
+            Controls.Add(MainEventPanel);
             DoubleBuffered = true;
             Name = "SystemAdministrator";
             Size = new Size(879, 649);

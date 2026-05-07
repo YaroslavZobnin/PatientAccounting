@@ -1,9 +1,7 @@
 ﻿using Npgsql;
 using System.Configuration;
-using BCrypt.Net;
 using System.Data;
 using PatientAccounting.Services;
-using System.Security.Cryptography;
 namespace PatientAccounting.Data
 {
     internal static class DataBaseProcessing
@@ -70,7 +68,7 @@ namespace PatientAccounting.Data
                 w.number_ward AS ""Палата""
             FROM Medical_history mh
             JOIN Disease d ON mh.disease_id = d.disease_id
-            JOIN Staff_worker mw ON mh.staff_worker_id = sw.staff_worker_id
+            JOIN Staff_worker sw ON mh.staff_worker_id = sw.staff_worker_id
             JOIN Ward w ON mh.ward_id = w.ward_id
             WHERE mh.patient_id=@patientId
             ORDER BY mh.date_of_receipt DESC";
@@ -185,6 +183,17 @@ namespace PatientAccounting.Data
                 }
             }
         }
+        public static void DeleteUserByPassport(string passportData)
+        {
+            using (var connection = GetConnection())
+            {
+                connection.Open();
+                int? id = GetCustomerIdByPassport(passportData, connection);
+                if (id == null)
+                    throw new Exception("Пользователь с таким паспортом не зарегистрирован в системе.");
+                DeleteUserDependencies(id.Value, connection);
+            }
+        }
         private static DataTable ExecuteQuery(string sql, Dictionary<string, object>? parameters)
         {
             var dataTable = new DataTable();
@@ -210,6 +219,33 @@ namespace PatientAccounting.Data
                 }
             }
             return dataTable;
+        }
+        private static int? GetCustomerIdByPassport(string passport, NpgsqlConnection conn)
+        {
+            const string sql = "SELECT customer_id FROM Customer WHERE customer_passport_data = @p";
+            using (var cmd = new NpgsqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("p", passport);
+                var result = cmd.ExecuteScalar();
+                return result != null ? Convert.ToInt32(result) : null;
+            }
+        }
+        private static void DeleteUserDependencies(int customerId, NpgsqlConnection conn)
+        {
+            string[] deleteQueries = 
+            {
+            "DELETE FROM Staff_worker WHERE customer_id = @id",
+            "DELETE FROM Patient WHERE customer_id = @id",
+            "DELETE FROM Customer WHERE customer_id = @id"
+            };
+            foreach (var sql in deleteQueries)
+            {
+                using (var cmd = new NpgsqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("id", customerId);
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
     }
 }

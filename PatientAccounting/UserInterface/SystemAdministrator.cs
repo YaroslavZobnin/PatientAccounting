@@ -1,5 +1,4 @@
-﻿using PatientAccounting.Data;
-using PatientAccounting.Interfaces;
+﻿using PatientAccounting.Interfaces;
 using PatientAccounting.Services;
 using PatientAccounting.UserInterface;
 namespace PatientAccounting
@@ -24,6 +23,16 @@ namespace PatientAccounting
             addUser.OnClosed += ReturnToMainMenu;
             ShowControl(addUser);
             currentActiveControl = addUser;
+            SwitchVisibilityChoicePanel();
+            SwitchVisibilityMainPanel();
+        }
+        private void DeleteUserButton_Click(object sender, EventArgs e)
+        {
+            ActionLabel.Text = "Удаление пользователя";
+            var deleteUser = new DeleteUser();
+            deleteUser.OnClosed += ReturnToMainMenu;
+            ShowControl(deleteUser);
+            currentActiveControl = deleteUser;
             SwitchVisibilityChoicePanel();
             SwitchVisibilityMainPanel();
         }
@@ -53,5 +62,7 @@ namespace PatientAccounting
             MainEventPanel.Visible = !MainEventPanel.Visible;
             MainEventPanel.Enabled = !MainEventPanel.Enabled;
         }
+
+        
     }
 }

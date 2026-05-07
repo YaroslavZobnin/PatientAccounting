@@ -2,7 +2,7 @@
 {
     internal interface IManagementControl
     {
-        void Save();
+        void SaveProcess();
         void Cancel();
         void ExitToMenu();
         bool ValidateData();

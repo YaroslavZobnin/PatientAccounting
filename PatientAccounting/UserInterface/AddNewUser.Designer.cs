@@ -476,6 +476,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.DarkGray;
             Controls.Add(SaveAddUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);

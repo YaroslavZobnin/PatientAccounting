@@ -121,7 +121,7 @@ namespace PatientAccounting.UserInterface
             OnClosed?.Invoke();
             ClearInputPanels(this);
         }
-        public void Save()
+        public void SaveProcess()
         {
             if (!ValidateData()) return;
             string login = InputUserLoginTextBox.Text;
@@ -208,7 +208,7 @@ namespace PatientAccounting.UserInterface
             if (SystemAdminRadioButton.Checked) return 5;
             return 1;
         }
-        private void SaveAddUser_Click(object sender, EventArgs e) => Save();
+        private void SaveAddUser_Click(object sender, EventArgs e) => SaveProcess();
 
     }
 }
