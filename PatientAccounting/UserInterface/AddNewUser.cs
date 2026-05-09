@@ -15,34 +15,25 @@ namespace PatientAccounting.UserInterface
             var radioButton = sender as RadioButton;
             if (radioButton == null || !radioButton.Checked) return;
             SwitchConditionRadioButton();
-            SwitchVisibilityGeneralPanel();
+            SetPanelState(InputGeneralDataPanel, true);
             SwitchCancelButton();
             if (radioButton.Text == "Пациент")
-                SwitchVisibilityPatientDataPanel();
+                SetPanelState(AddPatientDataPanel, true);
             else
             {
-                SwitchVisibilityStaffDataPanel();
+                SetPanelState(InputStaffPanel, true);
                 CheckingForDiscChoiceSpec(radioButton);
                 FillSpecialtyMenu();
             }
         }
+        private void SetPanelState(Panel panel, bool visible)
+        {
+            panel.Visible = visible;
+            panel.Enabled = visible;
+        }
         private void ChoiceSpecializationTextBox_Click(object sender, EventArgs e)
             => ChoiceSpecializationContextMenuStrip.Show(ChoiceSpecializationTextBox, new Point(0, ChoiceSpecializationTextBox.Height));
-        private void SwitchVisibilityGeneralPanel()
-        {
-            InputGeneralDataPanel.Visible = !InputGeneralDataPanel.Visible;
-            InputGeneralDataPanel.Enabled = !InputGeneralDataPanel.Enabled;
-        }
-        private void SwitchVisibilityPatientDataPanel()
-        {
-            AddPatientDataPanel.Visible = !AddPatientDataPanel.Visible;
-            AddPatientDataPanel.Enabled |= InputGeneralDataPanel.Enabled;
-        }
-        private void SwitchVisibilityStaffDataPanel()
-        {
-            InputStaffPanel.Visible = !InputStaffPanel.Visible;
-            InputStaffPanel.Enabled = !InputStaffPanel.Enabled;
-        }
+
         private void SwitchConditionRadioButton()
         {
             foreach (var c in ChoiceRolePanel.Controls)
@@ -62,12 +53,9 @@ namespace PatientAccounting.UserInterface
         }
         private void ResetAdding()
         {
-            InputGeneralDataPanel.Visible = false;
-            InputGeneralDataPanel.Enabled = false;
-            AddPatientDataPanel.Visible = false;
-            AddPatientDataPanel.Enabled = false;
-            InputStaffPanel.Visible = false;
-            InputStaffPanel.Enabled = false;
+            SetPanelState(InputGeneralDataPanel, false);
+            SetPanelState(AddPatientDataPanel, false);
+            SetPanelState(InputStaffPanel, false);
             ResettingTheSelection();
             ClearInputPanels(this);
         }
@@ -152,12 +140,11 @@ namespace PatientAccounting.UserInterface
                 }
                 else
                 {
-                    int.TryParse(InputWorkExperienceTextBox.Text, out int exp);
                     int? specId = ChoiceSpecializationTextBox.Tag as int?;
                     int roleId = GetSelectedRoleId();
                     isSuccess = DataBaseProcessing.RegisterStaff(login, password, passport, roleId,
                                                                       surname, name, patronymic,
-                                                                      specId, exp);
+                                                                      specId, (int)WorkExperiencenumericUpDown.Value);
                 }
                 if (isSuccess)
                 {

@@ -54,7 +54,6 @@
             ChoiceRoleLabel = new Label();
             InputStaffPanel = new Panel();
             ChoiceSpecializationTextBox = new TextBox();
-            InputWorkExperienceTextBox = new TextBox();
             InputExperienceStaffLabel = new Label();
             SpecialityStaffLabel = new Label();
             InputStaffLabel = new Label();
@@ -66,10 +65,12 @@
             InputPatientDataLabel = new Label();
             ChoiceSpecializationContextMenuStrip = new ContextMenuStrip(components);
             SaveAddUser = new Button();
+            WorkExperiencenumericUpDown = new NumericUpDown();
             InputGeneralDataPanel.SuspendLayout();
             ChoiceRolePanel.SuspendLayout();
             InputStaffPanel.SuspendLayout();
             AddPatientDataPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)WorkExperiencenumericUpDown).BeginInit();
             SuspendLayout();
             // 
             // BackToMenuButton
@@ -333,8 +334,8 @@
             // 
             InputStaffPanel.Anchor = AnchorStyles.Top;
             InputStaffPanel.BackColor = Color.Transparent;
+            InputStaffPanel.Controls.Add(WorkExperiencenumericUpDown);
             InputStaffPanel.Controls.Add(ChoiceSpecializationTextBox);
-            InputStaffPanel.Controls.Add(InputWorkExperienceTextBox);
             InputStaffPanel.Controls.Add(InputExperienceStaffLabel);
             InputStaffPanel.Controls.Add(SpecialityStaffLabel);
             InputStaffPanel.Controls.Add(InputStaffLabel);
@@ -354,14 +355,6 @@
             ChoiceSpecializationTextBox.Size = new Size(350, 20);
             ChoiceSpecializationTextBox.TabIndex = 13;
             ChoiceSpecializationTextBox.Click += ChoiceSpecializationTextBox_Click;
-            // 
-            // InputWorkExperienceTextBox
-            // 
-            InputWorkExperienceTextBox.BorderStyle = BorderStyle.None;
-            InputWorkExperienceTextBox.Location = new Point(302, 76);
-            InputWorkExperienceTextBox.Name = "InputWorkExperienceTextBox";
-            InputWorkExperienceTextBox.Size = new Size(350, 20);
-            InputWorkExperienceTextBox.TabIndex = 12;
             // 
             // InputExperienceStaffLabel
             // 
@@ -472,6 +465,13 @@
             SaveAddUser.UseVisualStyleBackColor = false;
             SaveAddUser.Click += SaveAddUser_Click;
             // 
+            // WorkExperiencenumericUpDown
+            // 
+            WorkExperiencenumericUpDown.Location = new Point(302, 76);
+            WorkExperiencenumericUpDown.Name = "WorkExperiencenumericUpDown";
+            WorkExperiencenumericUpDown.Size = new Size(350, 27);
+            WorkExperiencenumericUpDown.TabIndex = 14;
+            // 
             // AddNewUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -494,6 +494,7 @@
             InputStaffPanel.PerformLayout();
             AddPatientDataPanel.ResumeLayout(false);
             AddPatientDataPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)WorkExperiencenumericUpDown).EndInit();
             ResumeLayout(false);
         }
 
@@ -524,7 +525,6 @@
         private Label ChoiceRoleLabel;
         private Panel InputStaffPanel;
         private TextBox ChoiceSpecializationTextBox;
-        private TextBox InputWorkExperienceTextBox;
         private Label InputExperienceStaffLabel;
         private Label SpecialityStaffLabel;
         private Label InputStaffLabel;
@@ -536,5 +536,6 @@
         private Label InputPatientDataLabel;
         private ContextMenuStrip ChoiceSpecializationContextMenuStrip;
         private Button SaveAddUser;
+        private NumericUpDown WorkExperiencenumericUpDown;
     }
 }
