@@ -84,6 +84,11 @@ namespace PatientAccounting.Data
                 "FROM Specialization ORDER BY name_specialization";
             return ExecuteQuery(sqlQuery, null);
         }
+        public static DataTable GetRole()
+        {
+            string sqlQuery = "SELECT role_id, role_name FROM User_role";
+            return ExecuteQuery(sqlQuery, null);
+        }
         private static int CreateCustomer(NpgsqlConnection connection, string login, string password, string passport, int roleId)
         {
             const string sql = @"
@@ -172,43 +177,58 @@ namespace PatientAccounting.Data
                 DeleteUserDependencies(id.Value, connection);
             }
         }
+        private static void PrepareParameters(NpgsqlCommand command, Dictionary<string, object>? parameters)
+        {
+            if (parameters == null) return;
+            foreach (var param in parameters)
+            {
+                command.Parameters.AddWithValue(param.Key, param.Value ?? DBNull.Value);
+            }
+        }
         private static DataTable ExecuteQuery(string sql, Dictionary<string, object>? parameters)
         {
-            var dataTable = new DataTable();
-            using(var connection = GetConnection())
+            try
             {
-                try
-                {
-                    connection.Open();
-                    using(var command = new NpgsqlCommand(sql, connection))
-                    {
-                        if(parameters != null)
-                        {
-                            foreach (var param in parameters)
-                                command.Parameters.AddWithValue(param.Key, param.Value);
-                        }
-                        using (var adapter = new NpgsqlDataAdapter(command))
-                            adapter.Fill(dataTable);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception("Ошибка базы данных!", ex);
-                }
+                var dataTable = new DataTable();
+                using var connection = GetConnection();
+                connection.Open();
+                using var command = new NpgsqlCommand(sql, connection);
+                PrepareParameters(command, parameters);
+                using var adapter = new NpgsqlDataAdapter(command);
+                adapter.Fill(dataTable);
+                return dataTable;
             }
-            return dataTable;
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при чтении из БД", ex);
+            }
         }
-        private static int? GetCustomerIdByPassport(string passport, NpgsqlConnection conn)
+        private static void ExecuteNonQuery(string sql, Dictionary<string, object>? parameters)
+        {
+            try
+            {
+                using var connection = GetConnection();
+                connection.Open();
+                using var command = new NpgsqlCommand(sql, connection);
+                PrepareParameters(command, parameters);
+                command.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при записи в БД", ex);
+            }
+        }
+        private static int? GetCustomerIdByPassport(string passport, NpgsqlConnection connection)
         {
             const string sql = "SELECT customer_id FROM Customer WHERE customer_passport_data = @p";
-            using (var cmd = new NpgsqlCommand(sql, conn))
+            using (var cmd = new NpgsqlCommand(sql, connection))
             {
                 cmd.Parameters.AddWithValue("p", passport);
                 var result = cmd.ExecuteScalar();
                 return result != null ? Convert.ToInt32(result) : null;
             }
         }
-        private static void DeleteUserDependencies(int customerId, NpgsqlConnection conn)
+        private static void DeleteUserDependencies(int customerId, NpgsqlConnection connection)
         {
             string[] deleteQueries =
             {
@@ -226,12 +246,44 @@ namespace PatientAccounting.Data
             };
             foreach (var sql in deleteQueries)
             {
-                using (var cmd = new NpgsqlCommand(sql, conn))
+                using (var cmd = new NpgsqlCommand(sql, connection))
                 {
                     cmd.Parameters.AddWithValue("id", customerId);
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+        public static void UpdateCustomerBase(int id, string login, string passport)
+        {
+            const string sql = "UPDATE Customer SET customer_login = @l, customer_passport_data = @p WHERE customer_id = @id";
+            ExecuteNonQuery(sql, new Dictionary<string, object> { { "l", login }, { "p", passport }, { "id", id } });
+        }
+
+        public static void UpdatePatientDetails(int id, string s, string n, string? p, DateTime birth, string addr)
+        {
+            const string sql = "UPDATE Patient SET patient_surname=@s, patient_name=@n, patient_patronymic=@p, patient_birth_date=@b, patient_address=@a WHERE customer_id=@id";
+            ExecuteNonQuery(sql, new Dictionary<string, object> { { "s", s }, { "n", n }, { "p", p }, { "b", birth }, { "a", addr }, { "id", id } });
+        }
+
+        public static void UpdateStaffDetails(int id, string s, string n, string? p, object? spec, int exp)
+        {
+            const string sql = "UPDATE Staff_worker SET staff_worker_surname=@s, staff_worker_name=@n, staff_worker_patronymic=@p, specialization_id=@spec, staff_worker_work_experience=@exp WHERE customer_id=@id";
+            ExecuteNonQuery(sql, new Dictionary<string, object> { { "s", s }, { "n", n }, { "p", p }, { "spec", spec }, { "exp", exp }, { "id", id } });
+        }
+        public static DataTable GetUserByPassport(string passport)
+        {
+            const string sql = @"
+            SELECT c.*, ur.role_name,
+                   p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_address,
+                   sw.staff_worker_surname, sw.staff_worker_name, sw.staff_worker_patronymic, 
+                   sw.specialization_id, sw.staff_worker_work_experience
+            FROM Customer c
+            JOIN User_role ur ON c.customer_role_id = ur.role_id
+            LEFT JOIN Patient p ON c.customer_id = p.customer_id
+            LEFT JOIN Staff_worker sw ON c.customer_id = sw.customer_id
+            WHERE c.customer_passport_data = @p";
+            var args = new Dictionary<string, object> { { "p", passport } };
+            return ExecuteQuery(sql, args);
         }
     }
 }

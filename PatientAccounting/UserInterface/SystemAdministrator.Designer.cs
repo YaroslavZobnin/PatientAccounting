@@ -110,6 +110,7 @@
             EditButton.TabIndex = 6;
             EditButton.Text = "Редактирование";
             EditButton.UseVisualStyleBackColor = true;
+            EditButton.Click += EditButton_Click;
             // 
             // DeleteUserButton
             // 

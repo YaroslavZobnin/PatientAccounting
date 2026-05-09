@@ -36,6 +36,16 @@ namespace PatientAccounting
             SwitchVisibilityChoicePanel();
             SwitchVisibilityMainPanel();
         }
+        private void EditButton_Click(object sender, EventArgs e)
+        {
+            ActionLabel.Text = "Редактирование пользователя";
+            var editingUser = new EditingUser();
+            editingUser.OnClosed += ReturnToMainMenu;
+            ShowControl(editingUser);
+            currentActiveControl = editingUser;
+            SwitchVisibilityChoicePanel();
+            SwitchVisibilityMainPanel();
+        }
         private void ReturnToMainMenu()
         {
             MainEventPanel.Controls.Clear();
@@ -62,7 +72,5 @@ namespace PatientAccounting
             MainEventPanel.Visible = !MainEventPanel.Visible;
             MainEventPanel.Enabled = !MainEventPanel.Enabled;
         }
-
-        
     }
 }
