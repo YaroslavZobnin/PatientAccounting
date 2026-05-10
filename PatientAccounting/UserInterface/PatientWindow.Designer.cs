@@ -167,7 +167,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.WhiteSmoke;
+            BackColor = Color.Transparent;
             BackgroundImageLayout = ImageLayout.Stretch;
             Controls.Add(TreatmentLabel);
             Controls.Add(MedicalHistoryLabel);

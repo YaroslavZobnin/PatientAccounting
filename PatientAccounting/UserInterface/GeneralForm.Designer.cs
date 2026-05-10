@@ -139,6 +139,7 @@
             Name = "GeneralForm";
             ShowIcon = false;
             StartPosition = FormStartPosition.CenterScreen;
+            Text = "Учёт Пациентов";
             ButtonsPanel.ResumeLayout(false);
             ExtraMenuPanel.ResumeLayout(false);
             ResumeLayout(false);

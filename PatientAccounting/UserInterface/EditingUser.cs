@@ -13,7 +13,6 @@ namespace PatientAccounting.UserInterface
         {
             InitializeComponent();
         }
-
         private void AcceptedInputPassportDataButton_Click(object sender, EventArgs e)
         {
             try
@@ -25,6 +24,7 @@ namespace PatientAccounting.UserInterface
                     return;
                 }
                 SetPanelState(InputPassportData, false);
+                SetButtonState(CancelButton, true);
                 _originalRow = dataTable.Rows[0];
                 _currentUserId = Convert.ToInt32(_originalRow["customer_id"]);
                 _currentRole = _originalRow["role_name"].ToString();
@@ -40,6 +40,11 @@ namespace PatientAccounting.UserInterface
         {
             panel.Visible = visible;
             panel.Enabled = visible;
+        }
+        private void SetButtonState(Button button, bool visible)
+        {
+            button.Visible = visible;
+            button.Enabled = visible;
         }
 
         private void MapUserDataToUI(DataRow row)

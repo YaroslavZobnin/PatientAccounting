@@ -13,5 +13,6 @@ namespace PatientAccounting.UserInterface
         }
         private void InitializeFullName() => FullNameLabel.Text = GeneralMethods.GetFullName(_staff);
 
+        //ПРИОРИТЕТ РАБОТЫ СМЕСТИЛСЯ НА ДРУГУЮ РОЛЬ.
     }
 }

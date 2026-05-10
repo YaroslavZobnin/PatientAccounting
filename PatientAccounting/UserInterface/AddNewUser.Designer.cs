@@ -262,61 +262,66 @@
             // SystemAdminRadioButton
             // 
             SystemAdminRadioButton.AutoSize = true;
-            SystemAdminRadioButton.Location = new Point(605, 48);
+            SystemAdminRadioButton.Location = new Point(602, 48);
             SystemAdminRadioButton.Name = "SystemAdminRadioButton";
             SystemAdminRadioButton.Size = new Size(221, 24);
             SystemAdminRadioButton.TabIndex = 5;
             SystemAdminRadioButton.TabStop = true;
             SystemAdminRadioButton.Text = "Системный администратор";
             SystemAdminRadioButton.UseVisualStyleBackColor = true;
+            SystemAdminRadioButton.Visible = false;
             SystemAdminRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // MedicalRegistar
             // 
             MedicalRegistar.AutoSize = true;
-            MedicalRegistar.Location = new Point(386, 48);
+            MedicalRegistar.Location = new Point(344, 48);
             MedicalRegistar.Name = "MedicalRegistar";
             MedicalRegistar.Size = new Size(217, 24);
             MedicalRegistar.TabIndex = 4;
             MedicalRegistar.TabStop = true;
             MedicalRegistar.Text = "Медицинский регистратор";
             MedicalRegistar.UseVisualStyleBackColor = true;
+            MedicalRegistar.Visible = false;
             MedicalRegistar.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // HeadDoctorRadioButton
             // 
             HeadDoctorRadioButton.AutoSize = true;
-            HeadDoctorRadioButton.Location = new Point(286, 48);
+            HeadDoctorRadioButton.Location = new Point(186, 48);
             HeadDoctorRadioButton.Name = "HeadDoctorRadioButton";
             HeadDoctorRadioButton.Size = new Size(94, 24);
             HeadDoctorRadioButton.TabIndex = 3;
             HeadDoctorRadioButton.TabStop = true;
             HeadDoctorRadioButton.Text = "Главврач";
             HeadDoctorRadioButton.UseVisualStyleBackColor = true;
+            HeadDoctorRadioButton.Visible = false;
             HeadDoctorRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // DoctorRadioButton
             // 
             DoctorRadioButton.AutoSize = true;
-            DoctorRadioButton.Location = new Point(149, 48);
+            DoctorRadioButton.Location = new Point(535, 48);
             DoctorRadioButton.Name = "DoctorRadioButton";
             DoctorRadioButton.Size = new Size(131, 24);
             DoctorRadioButton.TabIndex = 2;
             DoctorRadioButton.TabStop = true;
             DoctorRadioButton.Text = "Лечащий врач";
             DoctorRadioButton.UseVisualStyleBackColor = true;
+            DoctorRadioButton.Visible = false;
             DoctorRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // PatientRadioButton
             // 
             PatientRadioButton.AutoSize = true;
-            PatientRadioButton.Location = new Point(53, 48);
+            PatientRadioButton.Location = new Point(285, 48);
             PatientRadioButton.Name = "PatientRadioButton";
             PatientRadioButton.Size = new Size(90, 24);
             PatientRadioButton.TabIndex = 1;
             PatientRadioButton.TabStop = true;
             PatientRadioButton.Text = "Пациент";
             PatientRadioButton.UseVisualStyleBackColor = true;
+            PatientRadioButton.Visible = false;
             PatientRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // ChoiceRoleLabel
@@ -476,7 +481,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Transparent;
+            BackColor = Color.Gray;
             Controls.Add(SaveAddUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);

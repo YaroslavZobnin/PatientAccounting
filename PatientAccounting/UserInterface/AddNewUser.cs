@@ -6,9 +6,14 @@ namespace PatientAccounting.UserInterface
     public partial class AddNewUser : UserControl, IManagementControl
     {
         public event Action? OnClosed;
-        public AddNewUser()
+        private readonly string _creatorRole;
+        private const int DoctorRole = 3;
+        private const int HeadDoctorRole = 4;
+        public AddNewUser(string creatorRole)
         {
             InitializeComponent();
+            _creatorRole = creatorRole;
+            ConfigureAccessByRole();
         }
         private void RadioButtons_CheckedChanged(object sender, EventArgs e)
         {
@@ -26,10 +31,29 @@ namespace PatientAccounting.UserInterface
                 FillSpecialtyMenu();
             }
         }
+        private void ConfigureAccessByRole()
+        {
+            if(_creatorRole == "Медицинский регистратор")
+            {
+                SetRadioButtonState(PatientRadioButton, true);
+                SetRadioButtonState(DoctorRadioButton, true);
+            }
+            else if(_creatorRole == "Системный администратор")
+            {
+                SetRadioButtonState(HeadDoctorRadioButton, true);
+                SetRadioButtonState(MedicalRegistar, true);
+                SetRadioButtonState(SystemAdminRadioButton, true);
+            }
+        }
         private void SetPanelState(Panel panel, bool visible)
         {
             panel.Visible = visible;
             panel.Enabled = visible;
+        }
+        private void SetRadioButtonState(RadioButton radioButton, bool visible)
+        {
+            radioButton.Visible = visible;
+            radioButton.Enabled = visible;
         }
         private void ChoiceSpecializationTextBox_Click(object sender, EventArgs e)
             => ChoiceSpecializationContextMenuStrip.Show(ChoiceSpecializationTextBox, new Point(0, ChoiceSpecializationTextBox.Height));
@@ -191,7 +215,7 @@ namespace PatientAccounting.UserInterface
             else
             {
                 int roleId = GetSelectedRoleId();
-                if (roleId == 3 || roleId == 4)
+                if (roleId == DoctorRole || roleId == HeadDoctorRole)
                 {
                     if (string.IsNullOrEmpty(ChoiceSpecializationTextBox.Text) || ChoiceSpecializationTextBox.Tag == null)
                     {

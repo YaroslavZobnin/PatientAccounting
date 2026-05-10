@@ -122,6 +122,7 @@
             CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             CancelButton.BackColor = Color.Transparent;
             CancelButton.Cursor = Cursors.Hand;
+            CancelButton.Enabled = false;
             CancelButton.FlatStyle = FlatStyle.Popup;
             CancelButton.Font = new Font("Sylfaen", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
             CancelButton.Location = new Point(3, 488);
@@ -130,6 +131,7 @@
             CancelButton.TabIndex = 25;
             CancelButton.Text = "Отменить";
             CancelButton.UseVisualStyleBackColor = false;
+            CancelButton.Visible = false;
             CancelButton.Click += CancelButton_Click;
             // 
             // InputPassportData
@@ -407,13 +409,14 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Transparent;
             Controls.Add(SaveEditedUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);
             Controls.Add(EditingStaffPanel);
+            Controls.Add(EditingPatientPanel);
             Controls.Add(EditingUserPanel);
             Controls.Add(InputPassportData);
-            Controls.Add(EditingPatientPanel);
             DoubleBuffered = true;
             Name = "EditingUser";
             Size = new Size(876, 523);

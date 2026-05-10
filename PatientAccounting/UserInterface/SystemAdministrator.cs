@@ -18,7 +18,7 @@ namespace PatientAccounting
         private void AddUser_Click(object sender, EventArgs e)
         {
             ActionLabel.Text = "Добавление пользователя";
-            var addUser = new AddNewUser();
+            var addUser = new AddNewUser("Системный администратор");
             addUser.OnClosed += ReturnToMainMenu;
             ShowControl(addUser);
             currentActiveControl = addUser;

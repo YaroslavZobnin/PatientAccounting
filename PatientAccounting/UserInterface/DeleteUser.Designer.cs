@@ -118,6 +118,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Transparent;
             Controls.Add(InfoAboutDeleteLabel);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);

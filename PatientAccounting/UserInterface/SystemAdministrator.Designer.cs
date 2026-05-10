@@ -58,6 +58,7 @@
             // 
             PersonalAccountLabel.Anchor = AnchorStyles.Top;
             PersonalAccountLabel.AutoSize = true;
+            PersonalAccountLabel.BackColor = Color.Transparent;
             PersonalAccountLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
             PersonalAccountLabel.Location = new Point(402, 8);
             PersonalAccountLabel.Name = "PersonalAccountLabel";
@@ -68,6 +69,7 @@
             // FullNameLabel
             // 
             FullNameLabel.Anchor = AnchorStyles.Top;
+            FullNameLabel.BackColor = Color.Transparent;
             FullNameLabel.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FullNameLabel.Location = new Point(151, 35);
             FullNameLabel.Name = "FullNameLabel";
@@ -79,6 +81,7 @@
             // ActionLabel
             // 
             ActionLabel.Anchor = AnchorStyles.Top;
+            ActionLabel.BackColor = Color.Transparent;
             ActionLabel.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
             ActionLabel.Location = new Point(366, 65);
             ActionLabel.Name = "ActionLabel";
@@ -161,6 +164,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Silver;
             Controls.Add(ActionLabel);
             Controls.Add(ChoicePanel);
             Controls.Add(FullNameLabel);

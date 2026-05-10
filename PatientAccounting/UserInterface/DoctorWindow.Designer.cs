@@ -52,6 +52,7 @@
             // 
             // FullNameLabel
             // 
+            FullNameLabel.BackColor = Color.Transparent;
             FullNameLabel.Location = new Point(152, 36);
             FullNameLabel.Name = "FullNameLabel";
             FullNameLabel.Size = new Size(644, 22);
