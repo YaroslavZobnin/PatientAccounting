@@ -30,7 +30,6 @@ namespace PatientAccounting
             ClosedEyePictureBox.Visible = !ClosedEyePictureBox.Visible;
             ClosedEyePictureBox.Enabled = !ClosedEyePictureBox.Enabled;
         }
-
         private void LoginAttempt_Click(object sender, EventArgs e)
         {
             ClearWhiteSpace();

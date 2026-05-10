@@ -15,7 +15,6 @@ namespace PatientAccounting
         }
         private void InitializeFullName()
             => FullNameLabel.Text = GeneralMethods.GetFullName(staff);
-
         private void AddUser_Click(object sender, EventArgs e)
         {
             ActionLabel.Text = "Добавление пользователя";
@@ -23,8 +22,8 @@ namespace PatientAccounting
             addUser.OnClosed += ReturnToMainMenu;
             ShowControl(addUser);
             currentActiveControl = addUser;
-            SwitchVisibilityChoicePanel();
-            SwitchVisibilityMainPanel();
+            SetPanelState(ChoicePanel, false);
+            SetPanelState(MainEventPanel, true);
         }
         private void DeleteUserButton_Click(object sender, EventArgs e)
         {
@@ -33,8 +32,8 @@ namespace PatientAccounting
             deleteUser.OnClosed += ReturnToMainMenu;
             ShowControl(deleteUser);
             currentActiveControl = deleteUser;
-            SwitchVisibilityChoicePanel();
-            SwitchVisibilityMainPanel();
+            SetPanelState(ChoicePanel, false);
+            SetPanelState(MainEventPanel, true);
         }
         private void EditButton_Click(object sender, EventArgs e)
         {
@@ -43,15 +42,15 @@ namespace PatientAccounting
             editingUser.OnClosed += ReturnToMainMenu;
             ShowControl(editingUser);
             currentActiveControl = editingUser;
-            SwitchVisibilityChoicePanel();
-            SwitchVisibilityMainPanel();
+            SetPanelState(ChoicePanel, false);
+            SetPanelState(MainEventPanel, true);
         }
         private void ReturnToMainMenu()
         {
             MainEventPanel.Controls.Clear();
             currentActiveControl = null;
-            SwitchVisibilityMainPanel();
-            SwitchVisibilityChoicePanel();
+            SetPanelState(ChoicePanel, true);
+            SetPanelState(MainEventPanel, false);
             ActionLabel.Text = "Выберите действие";
         }
         private void ShowControl(UserControl newControl)
@@ -62,15 +61,10 @@ namespace PatientAccounting
             newControl.Dock = DockStyle.Fill;
             MainEventPanel.Controls.Add(newControl);
         }
-        private void SwitchVisibilityChoicePanel()
+        private void SetPanelState(Panel panel, bool visible)
         {
-            ChoicePanel.Visible = !ChoicePanel.Visible;
-            ChoicePanel.Enabled = !ChoicePanel.Enabled;
-        }
-        private void SwitchVisibilityMainPanel()
-        {
-            MainEventPanel.Visible = !MainEventPanel.Visible;
-            MainEventPanel.Enabled = !MainEventPanel.Enabled;
+            panel.Visible = visible;
+            panel.Enabled = visible;
         }
     }
 }

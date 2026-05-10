@@ -4,7 +4,7 @@ namespace PatientAccounting
 {
     public partial class PatientWindow : UserControl
     {
-        private Patient patient;
+        private Patient? patient;
         public PatientWindow(Patient patient)
         {
             InitializeComponent();

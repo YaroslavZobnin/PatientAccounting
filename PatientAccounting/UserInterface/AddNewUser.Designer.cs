@@ -53,6 +53,7 @@
             PatientRadioButton = new RadioButton();
             ChoiceRoleLabel = new Label();
             InputStaffPanel = new Panel();
+            WorkExperiencenumericUpDown = new NumericUpDown();
             ChoiceSpecializationTextBox = new TextBox();
             InputExperienceStaffLabel = new Label();
             SpecialityStaffLabel = new Label();
@@ -65,12 +66,11 @@
             InputPatientDataLabel = new Label();
             ChoiceSpecializationContextMenuStrip = new ContextMenuStrip(components);
             SaveAddUser = new Button();
-            WorkExperiencenumericUpDown = new NumericUpDown();
             InputGeneralDataPanel.SuspendLayout();
             ChoiceRolePanel.SuspendLayout();
             InputStaffPanel.SuspendLayout();
-            AddPatientDataPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)WorkExperiencenumericUpDown).BeginInit();
+            AddPatientDataPanel.SuspendLayout();
             SuspendLayout();
             // 
             // BackToMenuButton
@@ -346,6 +346,13 @@
             InputStaffPanel.TabIndex = 19;
             InputStaffPanel.Visible = false;
             // 
+            // WorkExperiencenumericUpDown
+            // 
+            WorkExperiencenumericUpDown.Location = new Point(302, 76);
+            WorkExperiencenumericUpDown.Name = "WorkExperiencenumericUpDown";
+            WorkExperiencenumericUpDown.Size = new Size(350, 27);
+            WorkExperiencenumericUpDown.TabIndex = 14;
+            // 
             // ChoiceSpecializationTextBox
             // 
             ChoiceSpecializationTextBox.BorderStyle = BorderStyle.None;
@@ -465,18 +472,11 @@
             SaveAddUser.UseVisualStyleBackColor = false;
             SaveAddUser.Click += SaveAddUser_Click;
             // 
-            // WorkExperiencenumericUpDown
-            // 
-            WorkExperiencenumericUpDown.Location = new Point(302, 76);
-            WorkExperiencenumericUpDown.Name = "WorkExperiencenumericUpDown";
-            WorkExperiencenumericUpDown.Size = new Size(350, 27);
-            WorkExperiencenumericUpDown.TabIndex = 14;
-            // 
             // AddNewUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.DarkGray;
+            BackColor = Color.Transparent;
             Controls.Add(SaveAddUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);
@@ -484,6 +484,7 @@
             Controls.Add(ChoiceRolePanel);
             Controls.Add(InputStaffPanel);
             Controls.Add(AddPatientDataPanel);
+            DoubleBuffered = true;
             Name = "AddNewUser";
             Size = new Size(876, 523);
             InputGeneralDataPanel.ResumeLayout(false);
@@ -492,9 +493,9 @@
             ChoiceRolePanel.PerformLayout();
             InputStaffPanel.ResumeLayout(false);
             InputStaffPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)WorkExperiencenumericUpDown).EndInit();
             AddPatientDataPanel.ResumeLayout(false);
             AddPatientDataPanel.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)WorkExperiencenumericUpDown).EndInit();
             ResumeLayout(false);
         }
 

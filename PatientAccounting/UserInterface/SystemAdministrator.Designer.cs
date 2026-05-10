@@ -84,9 +84,8 @@
             ActionLabel.Name = "ActionLabel";
             ActionLabel.Size = new Size(245, 23);
             ActionLabel.TabIndex = 8;
-            ActionLabel.Text = "Действие";
+            ActionLabel.Text = "Выберите действие";
             ActionLabel.TextAlign = ContentAlignment.MiddleCenter;
-            ActionLabel.Visible = false;
             // 
             // ChoicePanel
             // 
@@ -103,6 +102,7 @@
             // 
             // EditButton
             // 
+            EditButton.Cursor = Cursors.Hand;
             EditButton.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             EditButton.Location = new Point(435, 65);
             EditButton.Name = "EditButton";
@@ -114,6 +114,7 @@
             // 
             // DeleteUserButton
             // 
+            DeleteUserButton.Cursor = Cursors.Hand;
             DeleteUserButton.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             DeleteUserButton.Location = new Point(217, 65);
             DeleteUserButton.Name = "DeleteUserButton";
@@ -125,6 +126,7 @@
             // 
             // AddUser
             // 
+            AddUser.Cursor = Cursors.Hand;
             AddUser.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             AddUser.Location = new Point(8, 65);
             AddUser.Name = "AddUser";

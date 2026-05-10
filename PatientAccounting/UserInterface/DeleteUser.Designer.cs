@@ -124,6 +124,7 @@
             Controls.Add(FindUserByPassportButton);
             Controls.Add(InputPassportDataTextBox);
             Controls.Add(InputPassportDataLabel);
+            DoubleBuffered = true;
             Name = "DeleteUser";
             Size = new Size(876, 523);
             ResumeLayout(false);

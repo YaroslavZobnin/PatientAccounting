@@ -414,6 +414,7 @@
             Controls.Add(EditingUserPanel);
             Controls.Add(InputPassportData);
             Controls.Add(EditingPatientPanel);
+            DoubleBuffered = true;
             Name = "EditingUser";
             Size = new Size(876, 523);
             InputPassportData.ResumeLayout(false);
