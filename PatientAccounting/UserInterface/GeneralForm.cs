@@ -1,4 +1,5 @@
 ﻿using PatientAccounting.Services;
+using PatientAccounting.UserInterface;
 
 namespace PatientAccounting
 {
@@ -28,6 +29,13 @@ namespace PatientAccounting
                     var systemAdminWindow = new SystemAdministrator(staff);
                     systemAdminWindow.Dock = DockStyle.Fill;
                     UserControlsPanel.Controls.Add(systemAdminWindow);
+                }
+                if(staff.Role == (UserRole)2)
+                {
+                    UserControlsPanel.Controls.Clear();
+                    var medicalRegistrar = new MedicalRegistrar(staff);
+                    medicalRegistrar.Dock = DockStyle.Fill;
+                    UserControlsPanel.Controls.Add(medicalRegistrar);
                 }
             }
         }

@@ -1,4 +1,5 @@
 ﻿using Npgsql;
+using PatientAccounting.Models;
 using PatientAccounting.Services;
 using System.Configuration;
 using System.Data;
@@ -284,6 +285,98 @@ namespace PatientAccounting.Data
             WHERE c.customer_passport_data = @p";
             var args = new Dictionary<string, object> { { "p", passport } };
             return ExecuteQuery(sql, args);
+        }
+        public static DataTable GetListByMode(ViewListMode mode)
+        {
+            return mode switch
+            {
+                ViewListMode.Patients => GetAllPatients(),
+                ViewListMode.Doctors => GetAllDoctors(),
+                ViewListMode.Staff => GetAllStaff(),
+                ViewListMode.Wards => GetAllWards(),
+                ViewListMode.Diseases => GetAllDiseases(),
+                ViewListMode.Treatments => GetAllTreatments(),
+                _ => throw new ArgumentOutOfRangeException("Данного режима не существует")
+            };
+        }
+        private static DataTable GetAllStaff()
+        {
+            string sql = "SELECT " +
+                "sw.staff_worker_id AS \"ID\"," +
+                "sw.staff_worker_surname AS \"Фамилия\"," +
+                "sw.staff_worker_name AS \"Имя\"," +
+                "spec.name_specialization AS \"Специализация\"," +
+                "ur.role_name AS \"Должность\"," +
+                "sw.staff_worker_work_experience AS \"Стаж (лет)\" " +
+                "FROM Staff_worker sw " +
+                "JOIN Specialization spec ON sw.specialization_id = spec.specialization_id " +
+                "JOIN Customer c ON sw.customer_id = c.customer_id " +
+                "JOIN User_role ur ON c.customer_role_id = ur.role_id " +
+                "ORDER BY ur.role_name, sw.staff_worker_surname";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllDoctors()
+        {
+            string sql = "SELECT " +
+                "sw.staff_worker_id AS \"ID\"," +
+                "sw.staff_worker_surname || ' ' || sw.staff_worker_name || ' ' || sw.staff_worker_patronymic AS \"Врач\"," +
+                "spec.name_specialization AS \"Специализация\"," +
+                "sw.staff_worker_work_experience AS \"Стаж\" " +
+                "FROM Staff_worker sw " +
+                "JOIN Specialization spec ON sw.specialization_id = spec.specialization_id " +
+                "JOIN Customer c ON sw.customer_id = c.customer_id " +
+                "WHERE c.customer_role_id IN (3) " +
+                "ORDER BY sw.staff_worker_surname";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllPatients()
+        {
+            string sql = "SELECT " +
+                "patient_id AS \"ID\"," +
+                "patient_surname || ' ' || patient_name || ' ' || patient_patronymic AS \"ФИО\","+
+                "patient_birth_date AS \"Дата рождения\"," +
+                "patient_address AS \"Адрес\" " +
+                "FROM Patient " +
+                "ORDER BY patient_surname";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllWards()
+        {
+            string sql = "SELECT " +
+                "w.ward_id AS \"ID\"," +
+                "w.number_ward AS \"№ Палаты\"," +
+                "d.name_department AS \"Отделение\"," +
+                "tw.name_type_of_ward AS \"Тип палаты\"," +
+                "w.capacity AS \"Вместимость\" " +
+                "FROM Ward w " +
+                "JOIN Department d ON w.department_id = d.department_id " +
+                "JOIN Type_of_ward tw ON w.type_of_ward_id = tw.type_of_ward_id " +
+                "ORDER BY d.name_department, w.number_ward;";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllDiseases()
+        {
+            string sql = "SELECT " +
+                "d.disease_id AS \"ID\"," +
+                "d.disease_name AS \"Название болезни\"," +
+                "c.category_name AS \"Категория\"," +
+                "d.treatment_duration AS \"Срок лечения (дн.)\" " +
+                "FROM Disease d " +
+                "JOIN Category c ON d.category_id = c.category_id " +
+                "ORDER BY c.category_name, d.disease_name;";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllTreatments()
+        {
+            string sql = "SELECT " +
+                "m.medicine_id AS \"ID\"," +
+                "m.name_medicine AS \"Название препарата\"," +
+                "tm.name_type_of_medicine AS \"Тип\"," +
+                "m.medicine_description AS \"Описание\" " +
+                "FROM Medicine m " +
+                "JOIN Type_of_medicine tm ON m.type_of_medicine_id = tm.type_of_medicine_id " +
+                "ORDER BY tm.name_type_of_medicine, m.name_medicine;";
+            return ExecuteQuery(sql, null);
         }
     }
 }

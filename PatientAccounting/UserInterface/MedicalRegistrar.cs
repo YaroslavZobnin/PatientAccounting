@@ -1,14 +1,4 @@
 ﻿using PatientAccounting.Services;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-
 namespace PatientAccounting.UserInterface
 {
     public partial class MedicalRegistrar : UserControl
@@ -25,6 +15,22 @@ namespace PatientAccounting.UserInterface
         {
             panel.Visible = visibility;
             panel.Enabled = visibility;
+        }
+
+        private void ViewingDoctorsOrPatientsButton_Click(object sender, EventArgs e)
+        {
+            var OutputList = new GeneralListView("Медицинский регистратор");
+            ShowControl(OutputList);
+            SetPanelState(ChoiceActionPanel, false);
+            SetPanelState(MainPanel, true);
+        }
+        private void ShowControl(UserControl newControl)
+        {
+            foreach (Control control in MainPanel.Controls)
+                control.Dispose();
+            MainPanel.Controls.Clear();
+            newControl.Dock = DockStyle.Fill;
+            MainPanel.Controls.Add(newControl);
         }
     }
 }

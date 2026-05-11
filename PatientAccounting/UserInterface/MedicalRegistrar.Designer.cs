@@ -32,10 +32,11 @@
             FullNameLabel = new Label();
             MedicalRegistrarLabel = new Label();
             ChoiceActionPanel = new Panel();
-            ChoiceActionLabel = new Label();
-            ViewingDoctorsOrPatientsButton = new Button();
-            WritingToDataBaseButton = new Button();
             PatientRecords = new Button();
+            WritingToDataBaseButton = new Button();
+            ViewingDoctorsOrPatientsButton = new Button();
+            ChoiceActionLabel = new Label();
+            MainPanel = new Panel();
             ChoiceActionPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -84,10 +85,41 @@
             ChoiceActionPanel.Controls.Add(WritingToDataBaseButton);
             ChoiceActionPanel.Controls.Add(ViewingDoctorsOrPatientsButton);
             ChoiceActionPanel.Controls.Add(ChoiceActionLabel);
-            ChoiceActionPanel.Location = new Point(259, 77);
+            ChoiceActionPanel.Location = new Point(258, 66);
             ChoiceActionPanel.Name = "ChoiceActionPanel";
-            ChoiceActionPanel.Size = new Size(463, 109);
+            ChoiceActionPanel.Size = new Size(463, 78);
             ChoiceActionPanel.TabIndex = 5;
+            // 
+            // PatientRecords
+            // 
+            PatientRecords.FlatStyle = FlatStyle.Popup;
+            PatientRecords.Location = new Point(329, 36);
+            PatientRecords.Name = "PatientRecords";
+            PatientRecords.Size = new Size(100, 35);
+            PatientRecords.TabIndex = 3;
+            PatientRecords.Text = "Приём";
+            PatientRecords.UseVisualStyleBackColor = true;
+            // 
+            // WritingToDataBaseButton
+            // 
+            WritingToDataBaseButton.FlatStyle = FlatStyle.Popup;
+            WritingToDataBaseButton.Location = new Point(170, 36);
+            WritingToDataBaseButton.Name = "WritingToDataBaseButton";
+            WritingToDataBaseButton.Size = new Size(100, 35);
+            WritingToDataBaseButton.TabIndex = 2;
+            WritingToDataBaseButton.Text = "Запись";
+            WritingToDataBaseButton.UseVisualStyleBackColor = true;
+            // 
+            // ViewingDoctorsOrPatientsButton
+            // 
+            ViewingDoctorsOrPatientsButton.FlatStyle = FlatStyle.Popup;
+            ViewingDoctorsOrPatientsButton.Location = new Point(12, 36);
+            ViewingDoctorsOrPatientsButton.Name = "ViewingDoctorsOrPatientsButton";
+            ViewingDoctorsOrPatientsButton.Size = new Size(100, 35);
+            ViewingDoctorsOrPatientsButton.TabIndex = 1;
+            ViewingDoctorsOrPatientsButton.Text = "Просмотр";
+            ViewingDoctorsOrPatientsButton.UseVisualStyleBackColor = true;
+            ViewingDoctorsOrPatientsButton.Click += ViewingDoctorsOrPatientsButton_Click;
             // 
             // ChoiceActionLabel
             // 
@@ -99,44 +131,24 @@
             ChoiceActionLabel.TabIndex = 0;
             ChoiceActionLabel.Text = "Выберите действие";
             // 
-            // ViewingDoctorsOrPatientsButton
+            // MainPanel
             // 
-            ViewingDoctorsOrPatientsButton.FlatStyle = FlatStyle.Popup;
-            ViewingDoctorsOrPatientsButton.Location = new Point(15, 64);
-            ViewingDoctorsOrPatientsButton.Name = "ViewingDoctorsOrPatientsButton";
-            ViewingDoctorsOrPatientsButton.Size = new Size(100, 35);
-            ViewingDoctorsOrPatientsButton.TabIndex = 1;
-            ViewingDoctorsOrPatientsButton.Text = "Просмотр";
-            ViewingDoctorsOrPatientsButton.UseVisualStyleBackColor = true;
-            // 
-            // WritingToDataBaseButton
-            // 
-            WritingToDataBaseButton.FlatStyle = FlatStyle.Popup;
-            WritingToDataBaseButton.Location = new Point(175, 64);
-            WritingToDataBaseButton.Name = "WritingToDataBaseButton";
-            WritingToDataBaseButton.Size = new Size(100, 35);
-            WritingToDataBaseButton.TabIndex = 2;
-            WritingToDataBaseButton.Text = "Запись";
-            WritingToDataBaseButton.UseVisualStyleBackColor = true;
-            // 
-            // PatientRecords
-            // 
-            PatientRecords.FlatStyle = FlatStyle.Popup;
-            PatientRecords.Location = new Point(329, 64);
-            PatientRecords.Name = "PatientRecords";
-            PatientRecords.Size = new Size(100, 35);
-            PatientRecords.TabIndex = 3;
-            PatientRecords.Text = "Приём";
-            PatientRecords.UseVisualStyleBackColor = true;
+            MainPanel.Anchor = AnchorStyles.Top;
+            MainPanel.BackColor = Color.Transparent;
+            MainPanel.Location = new Point(7, 68);
+            MainPanel.Name = "MainPanel";
+            MainPanel.Size = new Size(869, 546);
+            MainPanel.TabIndex = 6;
             // 
             // MedicalRegistrar
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(ChoiceActionPanel);
             Controls.Add(MedicalRegistrarLabel);
             Controls.Add(FullNameLabel);
             Controls.Add(PersonalAccountLabel);
+            Controls.Add(ChoiceActionPanel);
+            Controls.Add(MainPanel);
             Name = "MedicalRegistrar";
             Size = new Size(879, 649);
             ChoiceActionPanel.ResumeLayout(false);
@@ -155,5 +167,6 @@
         private Label ChoiceActionLabel;
         private Button PatientRecords;
         private Button WritingToDataBaseButton;
+        private Panel MainPanel;
     }
 }
