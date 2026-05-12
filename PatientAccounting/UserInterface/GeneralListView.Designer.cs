@@ -37,8 +37,7 @@
             DoctorListRadioButton = new RadioButton();
             StaffRadioButton = new RadioButton();
             OutputListPanel = new Panel();
-            DeleteButton = new Button();
-            EditButton = new Button();
+            ExitToMenuButton = new Button();
             OutputInfoDataGridView = new DataGridView();
             ChoiceListPanel.SuspendLayout();
             OutputListPanel.SuspendLayout();
@@ -118,7 +117,7 @@
             PatientListRadioButton.AutoSize = true;
             PatientListRadioButton.BackColor = Color.Transparent;
             PatientListRadioButton.Enabled = false;
-            PatientListRadioButton.Location = new Point(431, 23);
+            PatientListRadioButton.Location = new Point(326, 23);
             PatientListRadioButton.Name = "PatientListRadioButton";
             PatientListRadioButton.Size = new Size(101, 24);
             PatientListRadioButton.TabIndex = 1;
@@ -147,7 +146,7 @@
             // 
             StaffRadioButton.AutoSize = true;
             StaffRadioButton.Enabled = false;
-            StaffRadioButton.Location = new Point(326, 23);
+            StaffRadioButton.Location = new Point(433, 23);
             StaffRadioButton.Name = "StaffRadioButton";
             StaffRadioButton.Size = new Size(99, 24);
             StaffRadioButton.TabIndex = 6;
@@ -159,8 +158,7 @@
             // OutputListPanel
             // 
             OutputListPanel.BackColor = Color.Transparent;
-            OutputListPanel.Controls.Add(DeleteButton);
-            OutputListPanel.Controls.Add(EditButton);
+            OutputListPanel.Controls.Add(ExitToMenuButton);
             OutputListPanel.Controls.Add(OutputInfoDataGridView);
             OutputListPanel.Location = new Point(4, 56);
             OutputListPanel.Name = "OutputListPanel";
@@ -168,33 +166,17 @@
             OutputListPanel.TabIndex = 2;
             OutputListPanel.Visible = false;
             // 
-            // DeleteButton
+            // ExitToMenuButton
             // 
-            DeleteButton.Anchor = AnchorStyles.Top;
-            DeleteButton.Cursor = Cursors.Hand;
-            DeleteButton.Enabled = false;
-            DeleteButton.FlatStyle = FlatStyle.Popup;
-            DeleteButton.Location = new Point(628, 369);
-            DeleteButton.Name = "DeleteButton";
-            DeleteButton.Size = new Size(136, 28);
-            DeleteButton.TabIndex = 2;
-            DeleteButton.Text = "Удалить";
-            DeleteButton.UseVisualStyleBackColor = true;
-            DeleteButton.Visible = false;
-            // 
-            // EditButton
-            // 
-            EditButton.Anchor = AnchorStyles.Top;
-            EditButton.Cursor = Cursors.Hand;
-            EditButton.Enabled = false;
-            EditButton.FlatStyle = FlatStyle.Popup;
-            EditButton.Location = new Point(381, 369);
-            EditButton.Name = "EditButton";
-            EditButton.Size = new Size(136, 28);
-            EditButton.TabIndex = 1;
-            EditButton.Text = "Редактировать";
-            EditButton.UseVisualStyleBackColor = true;
-            EditButton.Visible = false;
+            ExitToMenuButton.Cursor = Cursors.Hand;
+            ExitToMenuButton.FlatStyle = FlatStyle.Popup;
+            ExitToMenuButton.Location = new Point(409, 368);
+            ExitToMenuButton.Name = "ExitToMenuButton";
+            ExitToMenuButton.Size = new Size(144, 29);
+            ExitToMenuButton.TabIndex = 1;
+            ExitToMenuButton.Text = "Выход";
+            ExitToMenuButton.UseVisualStyleBackColor = true;
+            ExitToMenuButton.Click += ExitToMenuButton_Click;
             // 
             // OutputInfoDataGridView
             // 
@@ -237,7 +219,6 @@
         private Panel OutputListPanel;
         private DataGridView OutputInfoDataGridView;
         private RadioButton StaffRadioButton;
-        private Button DeleteButton;
-        private Button EditButton;
+        private Button ExitToMenuButton;
     }
 }

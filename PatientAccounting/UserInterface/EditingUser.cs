@@ -3,7 +3,7 @@ using PatientAccounting.Interfaces;
 using System.Data;
 namespace PatientAccounting.UserInterface
 {
-    public partial class EditingUser : UserControl, IManagementControl
+    public partial class EditingUser : UserControl, IManagementControl, IWindowClosed
     {
         public event Action? OnClosed;
         private int _currentUserId;

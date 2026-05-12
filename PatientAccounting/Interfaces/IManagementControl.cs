@@ -6,6 +6,5 @@
         void Cancel();
         void ExitToMenu();
         bool ValidateData();
-        event Action? OnClosed;
     }
 }

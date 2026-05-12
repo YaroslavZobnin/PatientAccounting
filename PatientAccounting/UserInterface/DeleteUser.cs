@@ -2,7 +2,7 @@
 using PatientAccounting.Interfaces;
 namespace PatientAccounting.UserInterface
 {
-    public partial class DeleteUser : UserControl, IManagementControl
+    public partial class DeleteUser : UserControl, IManagementControl, IWindowClosed
     {
         public event Action? OnClosed;
         public DeleteUser()

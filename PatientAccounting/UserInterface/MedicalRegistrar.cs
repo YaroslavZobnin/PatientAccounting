@@ -1,7 +1,8 @@
-﻿using PatientAccounting.Services;
+﻿using PatientAccounting.Interfaces;
+using PatientAccounting.Services;
 namespace PatientAccounting.UserInterface
 {
-    public partial class MedicalRegistrar : UserControl
+    public partial class MedicalRegistrar : UserControl, IPresenter
     {
         private Staff staff;
         public MedicalRegistrar(Staff staff)
@@ -19,18 +20,26 @@ namespace PatientAccounting.UserInterface
 
         private void ViewingDoctorsOrPatientsButton_Click(object sender, EventArgs e)
         {
-            var OutputList = new GeneralListView("Медицинский регистратор");
-            ShowControl(OutputList);
+            var outputList = new GeneralListView("Медицинский регистратор");
+            ShowControl(outputList);
             SetPanelState(ChoiceActionPanel, false);
             SetPanelState(MainPanel, true);
+            outputList.OnClosed += ReturnToMainMenu;
         }
-        private void ShowControl(UserControl newControl)
+
+        public void ShowControl(UserControl newControl)
         {
             foreach (Control control in MainPanel.Controls)
                 control.Dispose();
             MainPanel.Controls.Clear();
             newControl.Dock = DockStyle.Fill;
             MainPanel.Controls.Add(newControl);
+        }
+        public void ReturnToMainMenu()
+        {
+            MainPanel.Controls.Clear();
+            SetPanelState(ChoiceActionPanel, true);
+            SetPanelState(MainPanel, false);
         }
     }
 }

@@ -3,7 +3,7 @@ using PatientAccounting.Interfaces;
 using System.Data;
 namespace PatientAccounting.UserInterface
 {
-    public partial class AddNewUser : UserControl, IManagementControl
+    public partial class AddNewUser : UserControl, IManagementControl, IWindowClosed
     {
         public event Action? OnClosed;
         private readonly string _creatorRole;

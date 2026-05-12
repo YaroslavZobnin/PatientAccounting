@@ -3,7 +3,7 @@ using PatientAccounting.Services;
 using PatientAccounting.UserInterface;
 namespace PatientAccounting
 {
-    public partial class SystemAdministrator : UserControl
+    public partial class SystemAdministrator : UserControl, IPresenter
     {
         private Staff staff;
         private IManagementControl? currentActiveControl;
@@ -45,7 +45,7 @@ namespace PatientAccounting
             SetPanelState(ChoicePanel, false);
             SetPanelState(MainEventPanel, true);
         }
-        private void ReturnToMainMenu()
+        public void ReturnToMainMenu()
         {
             MainEventPanel.Controls.Clear();
             currentActiveControl = null;
@@ -53,7 +53,7 @@ namespace PatientAccounting
             SetPanelState(MainEventPanel, false);
             ActionLabel.Text = "Выберите действие";
         }
-        private void ShowControl(UserControl newControl)
+        public void ShowControl(UserControl newControl)
         {
             foreach (Control control in MainEventPanel.Controls)
                 control.Dispose();

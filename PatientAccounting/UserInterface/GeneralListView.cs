@@ -1,10 +1,12 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Models;
 using System.Data;
+using PatientAccounting.Interfaces;
 namespace PatientAccounting.UserInterface
 {
-    public partial class GeneralListView : UserControl
+    public partial class GeneralListView : UserControl, IWindowClosed
     {
+        public event Action? OnClosed;
         private ViewListMode _currentMode;
         private string _userRole;
         public GeneralListView(string userRole)
@@ -12,24 +14,11 @@ namespace PatientAccounting.UserInterface
             InitializeComponent();
             _userRole = userRole;
             ConfigureInterface();
-            ConfigureButtons();
-        }
-        private void ConfigureButtons()
-        {
-            if (!AccessManager.CanView(_userRole, _currentMode))
-            {
-                this.Controls.Clear();
-                this.Controls.Add(new Label { Text = "Доступ запрещен", Dock = DockStyle.Fill });
-                return;
-            }
-            bool editable = AccessManager.CanEdit(_userRole, _currentMode);
-            SetButtonState(EditButton, editable);
-            SetButtonState(DeleteButton, editable);
         }
         private void ConfigureInterface()
         {
             SetRadioButtonState(PatientListRadioButton, true);
-            if(_userRole == "Главврач")
+            if (_userRole == "Главврач")
             {
                 SetRadioButtonState(DiseaseRadioButton, true);
                 SetRadioButtonState(WardsRadioButton, true);
@@ -90,10 +79,6 @@ namespace PatientAccounting.UserInterface
             panel.Visible = visible;
             panel.Enabled = visible;
         }
-        private void SetButtonState(Button button, bool visible)
-        {
-            button.Visible = visible;
-            button.Enabled = visible;
-        }
+        private void ExitToMenuButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
     }
 }
