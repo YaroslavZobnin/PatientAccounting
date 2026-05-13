@@ -26,13 +26,16 @@ namespace PatientAccounting.UserInterface
             SetPanelState(MainPanel, true);
             outputList.OnClosed += Reversion;
         }
-        public void ShowControl(UserControl newControl)
+        public void ShowControl(IWindowClosed newControl)
         {
             foreach (Control control in MainPanel.Controls)
                 control.Dispose();
-            MainPanel.Controls.Clear();
-            newControl.Dock = DockStyle.Fill;
-            MainPanel.Controls.Add(newControl);
+            if (newControl is UserControl uiControl)
+            {
+                MainPanel.Controls.Clear();
+                uiControl.Dock = DockStyle.Fill;
+                MainPanel.Controls.Add(uiControl);
+            }
         }
         public void Reversion()
         {
@@ -55,6 +58,10 @@ namespace PatientAccounting.UserInterface
             SetPanelState(ChoiceActionPanel, false);
             SetPanelState(MainPanel, true);
             patientDischarge.OnClosed += Reversion;
+        }
+        private void CreateMedicalHistory_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

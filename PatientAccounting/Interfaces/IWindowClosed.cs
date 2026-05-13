@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting.Interfaces
 {
-    internal interface IWindowClosed
+    public interface IWindowClosed
     {
         event Action? OnClosed;
     }

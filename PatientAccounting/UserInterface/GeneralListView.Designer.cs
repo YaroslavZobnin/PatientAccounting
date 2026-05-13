@@ -175,7 +175,7 @@
             ExitToMenuButton.Name = "ExitToMenuButton";
             ExitToMenuButton.Size = new Size(144, 29);
             ExitToMenuButton.TabIndex = 1;
-            ExitToMenuButton.Text = "Выход";
+            ExitToMenuButton.Text = "Назад";
             ExitToMenuButton.UseVisualStyleBackColor = true;
             ExitToMenuButton.Click += ExitToMenuButton_Click;
             // 

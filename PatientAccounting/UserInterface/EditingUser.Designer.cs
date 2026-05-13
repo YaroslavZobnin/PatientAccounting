@@ -60,6 +60,7 @@
             SpecializationLabel = new Label();
             WorkExperienceLabel = new Label();
             SaveEditedUser = new Button();
+            SearchUserByPassportPanel = new Panel();
             InputPassportData.SuspendLayout();
             EditingUserPanel.SuspendLayout();
             EditingPatientPanel.SuspendLayout();
@@ -405,18 +406,28 @@
             SaveEditedUser.UseVisualStyleBackColor = false;
             SaveEditedUser.Click += SaveEditedUser_Click;
             // 
+            // SearchUserByPassportPanel
+            // 
+            SearchUserByPassportPanel.Anchor = AnchorStyles.Top;
+            SearchUserByPassportPanel.BackColor = Color.Transparent;
+            SearchUserByPassportPanel.Location = new Point(109, 360);
+            SearchUserByPassportPanel.Name = "SearchUserByPassportPanel";
+            SearchUserByPassportPanel.Size = new Size(694, 87);
+            SearchUserByPassportPanel.TabIndex = 32;
+            // 
             // EditingUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Transparent;
+            BackColor = Color.Gainsboro;
+            Controls.Add(SearchUserByPassportPanel);
             Controls.Add(SaveEditedUser);
             Controls.Add(BackToMenuButton);
             Controls.Add(CancelButton);
             Controls.Add(EditingStaffPanel);
             Controls.Add(EditingPatientPanel);
-            Controls.Add(EditingUserPanel);
             Controls.Add(InputPassportData);
+            Controls.Add(EditingUserPanel);
             DoubleBuffered = true;
             Name = "EditingUser";
             Size = new Size(876, 523);
@@ -466,5 +477,6 @@
         private NumericUpDown WorkExperienceNumericUpDown;
         private Button SaveEditedUser;
         private Label WarningLabel;
+        private Panel SearchUserByPassportPanel;
     }
 }

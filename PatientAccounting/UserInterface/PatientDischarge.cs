@@ -1,6 +1,5 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
-
 namespace PatientAccounting.UserInterface
 {
     public partial class PatientDischarge : UserControl, IWindowClosed
@@ -10,7 +9,6 @@ namespace PatientAccounting.UserInterface
         {
             InitializeComponent();
             InitializeDataGrid();
-
         }
         private void InitializeDataGrid()
         {
@@ -18,7 +16,6 @@ namespace PatientAccounting.UserInterface
             if (PatientsDataGridView.Columns.Contains("ID"))
                 PatientsDataGridView.Columns["ID"].Visible = false;
         }
-
         private void PatientDischargeButton_Click(object sender, EventArgs e)
         {
             if (PatientsDataGridView.CurrentRow == null) return;

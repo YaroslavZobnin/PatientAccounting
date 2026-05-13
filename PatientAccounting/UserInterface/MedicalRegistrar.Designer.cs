@@ -37,6 +37,7 @@
             ViewingDoctorsOrPatientsButton = new Button();
             ChoiceActionLabel = new Label();
             MainPanel = new Panel();
+            CreateMedicalHistory = new Button();
             ChoiceActionPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -81,17 +82,19 @@
             // 
             ChoiceActionPanel.Anchor = AnchorStyles.Top;
             ChoiceActionPanel.BackColor = Color.Transparent;
+            ChoiceActionPanel.Controls.Add(CreateMedicalHistory);
             ChoiceActionPanel.Controls.Add(PatientExtract);
             ChoiceActionPanel.Controls.Add(WritingToDataBaseButton);
             ChoiceActionPanel.Controls.Add(ViewingDoctorsOrPatientsButton);
             ChoiceActionPanel.Controls.Add(ChoiceActionLabel);
-            ChoiceActionPanel.Location = new Point(258, 66);
+            ChoiceActionPanel.Location = new Point(135, 66);
             ChoiceActionPanel.Name = "ChoiceActionPanel";
-            ChoiceActionPanel.Size = new Size(463, 78);
+            ChoiceActionPanel.Size = new Size(685, 78);
             ChoiceActionPanel.TabIndex = 5;
             // 
             // PatientExtract
             // 
+            PatientExtract.Cursor = Cursors.Hand;
             PatientExtract.FlatStyle = FlatStyle.Popup;
             PatientExtract.Location = new Point(329, 36);
             PatientExtract.Name = "PatientExtract";
@@ -103,17 +106,20 @@
             // 
             // WritingToDataBaseButton
             // 
+            WritingToDataBaseButton.Cursor = Cursors.Hand;
             WritingToDataBaseButton.FlatStyle = FlatStyle.Popup;
+            WritingToDataBaseButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             WritingToDataBaseButton.Location = new Point(170, 36);
             WritingToDataBaseButton.Name = "WritingToDataBaseButton";
             WritingToDataBaseButton.Size = new Size(100, 35);
             WritingToDataBaseButton.TabIndex = 2;
-            WritingToDataBaseButton.Text = "Запись";
+            WritingToDataBaseButton.Text = "Запись в базу";
             WritingToDataBaseButton.UseVisualStyleBackColor = true;
             WritingToDataBaseButton.Click += WritingToDataBaseButton_Click;
             // 
             // ViewingDoctorsOrPatientsButton
             // 
+            ViewingDoctorsOrPatientsButton.Cursor = Cursors.Hand;
             ViewingDoctorsOrPatientsButton.FlatStyle = FlatStyle.Popup;
             ViewingDoctorsOrPatientsButton.Location = new Point(12, 36);
             ViewingDoctorsOrPatientsButton.Name = "ViewingDoctorsOrPatientsButton";
@@ -127,7 +133,7 @@
             // 
             ChoiceActionLabel.AutoSize = true;
             ChoiceActionLabel.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            ChoiceActionLabel.Location = new Point(150, 0);
+            ChoiceActionLabel.Location = new Point(268, 2);
             ChoiceActionLabel.Name = "ChoiceActionLabel";
             ChoiceActionLabel.Size = new Size(169, 23);
             ChoiceActionLabel.TabIndex = 0;
@@ -141,6 +147,19 @@
             MainPanel.Name = "MainPanel";
             MainPanel.Size = new Size(869, 546);
             MainPanel.TabIndex = 6;
+            // 
+            // CreateMedicalHistory
+            // 
+            CreateMedicalHistory.Cursor = Cursors.Hand;
+            CreateMedicalHistory.FlatStyle = FlatStyle.Popup;
+            CreateMedicalHistory.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            CreateMedicalHistory.Location = new Point(460, 36);
+            CreateMedicalHistory.Name = "CreateMedicalHistory";
+            CreateMedicalHistory.Size = new Size(136, 35);
+            CreateMedicalHistory.TabIndex = 4;
+            CreateMedicalHistory.Text = "Создание карточки";
+            CreateMedicalHistory.UseVisualStyleBackColor = true;
+            CreateMedicalHistory.Click += CreateMedicalHistory_Click;
             // 
             // MedicalRegistrar
             // 
@@ -170,5 +189,6 @@
         private Button PatientExtract;
         private Button WritingToDataBaseButton;
         private Panel MainPanel;
+        private Button CreateMedicalHistory;
     }
 }

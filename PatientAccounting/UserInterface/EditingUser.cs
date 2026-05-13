@@ -9,9 +9,32 @@ namespace PatientAccounting.UserInterface
         private int _currentUserId;
         private string? _currentRole;
         private DataRow? _originalRow;
+        private PassportSearching? _passportSearching;
         public EditingUser()
         {
             InitializeComponent();
+            PassportSearch();
+        }
+        private void PassportSearch()
+        {
+            _passportSearching = new PassportSearching("Введите пасспортные данные для редактирования");
+            _passportSearching.Dock = DockStyle.Fill;
+            SearchUserByPassportPanel.Controls.Add(_passportSearching);
+            _passportSearching.OnUserFound += (DataRow foundRow) =>
+            {
+                _originalRow = foundRow;
+                _currentUserId = Convert.ToInt32(_originalRow["customer_id"]);
+                _currentRole = _originalRow["role_name"].ToString();
+                LoadUserData();
+            };
+        }
+        private void LoadUserData()
+        {
+            if (_originalRow == null) return;
+            SetPanelState(InputPassportData, false); 
+            SetPanelState(EditingUserPanel, true);  
+            SetButtonState(CancelButton, true);
+            MapUserDataToUI(_originalRow);
         }
         private void AcceptedInputPassportDataButton_Click(object sender, EventArgs e)
         {

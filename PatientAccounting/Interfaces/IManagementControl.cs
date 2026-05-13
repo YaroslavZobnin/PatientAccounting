@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting.Interfaces
 {
-    internal interface IManagementControl
+    public interface IManagementControl : IWindowClosed
     {
         void SaveProcess();
         void Cancel();

@@ -1,8 +1,8 @@
 ﻿namespace PatientAccounting.Interfaces
 {
-    internal interface IPresenter
+    public interface IPresenter
     {
         void Reversion();
-        void ShowControl(UserControl newControl);
+        void ShowControl(IWindowClosed newControl);
     }
 }

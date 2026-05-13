@@ -1,6 +1,7 @@
 ﻿using PatientAccounting.Interfaces;
 using PatientAccounting.Services;
 using PatientAccounting.UserInterface;
+using System.Windows.Forms;
 namespace PatientAccounting
 {
     public partial class SystemAdministrator : UserControl, IPresenter
@@ -53,13 +54,16 @@ namespace PatientAccounting
             SetPanelState(MainEventPanel, false);
             ActionLabel.Text = "Выберите действие";
         }
-        public void ShowControl(UserControl newControl)
+        public void ShowControl(IWindowClosed newControl)
         {
             foreach (Control control in MainEventPanel.Controls)
                 control.Dispose();
-            MainEventPanel.Controls.Clear();
-            newControl.Dock = DockStyle.Fill;
-            MainEventPanel.Controls.Add(newControl);
+            if (newControl is UserControl uiControl)
+            {
+                MainEventPanel.Controls.Clear();
+                uiControl.Dock = DockStyle.Fill;
+                MainEventPanel.Controls.Add(uiControl);
+            }
         }
         private void SetPanelState(Panel panel, bool visible)
         {
