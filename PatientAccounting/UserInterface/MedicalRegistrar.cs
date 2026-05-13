@@ -24,9 +24,8 @@ namespace PatientAccounting.UserInterface
             ShowControl(outputList);
             SetPanelState(ChoiceActionPanel, false);
             SetPanelState(MainPanel, true);
-            outputList.OnClosed += ReturnToMainMenu;
+            outputList.OnClosed += Reversion;
         }
-
         public void ShowControl(UserControl newControl)
         {
             foreach (Control control in MainPanel.Controls)
@@ -35,11 +34,27 @@ namespace PatientAccounting.UserInterface
             newControl.Dock = DockStyle.Fill;
             MainPanel.Controls.Add(newControl);
         }
-        public void ReturnToMainMenu()
+        public void Reversion()
         {
             MainPanel.Controls.Clear();
             SetPanelState(ChoiceActionPanel, true);
             SetPanelState(MainPanel, false);
+        }
+        private void WritingToDataBaseButton_Click(object sender, EventArgs e)
+        {
+            var addNewUser = new AddNewUser("Медицинский регистратор");
+            ShowControl(addNewUser);
+            SetPanelState(ChoiceActionPanel, false);
+            SetPanelState(MainPanel, true);
+            addNewUser.OnClosed += Reversion;
+        }
+        private void PatientExtract_Click(object sender, EventArgs e)
+        {
+            var patientDischarge = new PatientDischarge();
+            ShowControl(patientDischarge);
+            SetPanelState(ChoiceActionPanel, false);
+            SetPanelState(MainPanel, true);
+            patientDischarge.OnClosed += Reversion;
         }
     }
 }

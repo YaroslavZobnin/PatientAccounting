@@ -154,6 +154,7 @@
             StaffRadioButton.Text = "Персонал";
             StaffRadioButton.UseVisualStyleBackColor = true;
             StaffRadioButton.Visible = false;
+            StaffRadioButton.CheckedChanged += RadioButtons_CheckedChanged;
             // 
             // OutputListPanel
             // 
@@ -162,7 +163,7 @@
             OutputListPanel.Controls.Add(OutputInfoDataGridView);
             OutputListPanel.Location = new Point(4, 56);
             OutputListPanel.Name = "OutputListPanel";
-            OutputListPanel.Size = new Size(862, 400);
+            OutputListPanel.Size = new Size(862, 473);
             OutputListPanel.TabIndex = 2;
             OutputListPanel.Visible = false;
             // 
@@ -170,7 +171,7 @@
             // 
             ExitToMenuButton.Cursor = Cursors.Hand;
             ExitToMenuButton.FlatStyle = FlatStyle.Popup;
-            ExitToMenuButton.Location = new Point(409, 368);
+            ExitToMenuButton.Location = new Point(419, 444);
             ExitToMenuButton.Name = "ExitToMenuButton";
             ExitToMenuButton.Size = new Size(144, 29);
             ExitToMenuButton.TabIndex = 1;
@@ -189,7 +190,7 @@
             OutputInfoDataGridView.Location = new Point(3, 3);
             OutputInfoDataGridView.Name = "OutputInfoDataGridView";
             OutputInfoDataGridView.RowHeadersWidth = 51;
-            OutputInfoDataGridView.Size = new Size(856, 360);
+            OutputInfoDataGridView.Size = new Size(856, 435);
             OutputInfoDataGridView.TabIndex = 0;
             // 
             // GeneralListView
@@ -199,7 +200,7 @@
             Controls.Add(OutputListPanel);
             Controls.Add(ChoiceListPanel);
             Name = "GeneralListView";
-            Size = new Size(869, 458);
+            Size = new Size(869, 546);
             ChoiceListPanel.ResumeLayout(false);
             ChoiceListPanel.PerformLayout();
             OutputListPanel.ResumeLayout(false);

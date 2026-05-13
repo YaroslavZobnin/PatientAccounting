@@ -2,7 +2,7 @@
 {
     internal interface IPresenter
     {
-        void ReturnToMainMenu();
+        void Reversion();
         void ShowControl(UserControl newControl);
     }
 }

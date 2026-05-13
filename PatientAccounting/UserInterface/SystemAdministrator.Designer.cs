@@ -143,11 +143,11 @@
             // 
             ChoiceLabel.AutoSize = true;
             ChoiceLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ChoiceLabel.Location = new Point(74, 5);
+            ChoiceLabel.Location = new Point(33, 0);
             ChoiceLabel.Name = "ChoiceLabel";
-            ChoiceLabel.Size = new Size(490, 25);
+            ChoiceLabel.Size = new Size(562, 25);
             ChoiceLabel.TabIndex = 3;
-            ChoiceLabel.Text = "Выберите, какую манипуляцию вы будете проводить\r\n";
+            ChoiceLabel.Text = "Выберите, какое действие вы будете проводить с аккаунтами\r\n";
             // 
             // MainEventPanel
             // 

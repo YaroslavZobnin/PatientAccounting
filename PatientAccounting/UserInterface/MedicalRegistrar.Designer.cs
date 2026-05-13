@@ -32,7 +32,7 @@
             FullNameLabel = new Label();
             MedicalRegistrarLabel = new Label();
             ChoiceActionPanel = new Panel();
-            PatientRecords = new Button();
+            PatientExtract = new Button();
             WritingToDataBaseButton = new Button();
             ViewingDoctorsOrPatientsButton = new Button();
             ChoiceActionLabel = new Label();
@@ -81,7 +81,7 @@
             // 
             ChoiceActionPanel.Anchor = AnchorStyles.Top;
             ChoiceActionPanel.BackColor = Color.Transparent;
-            ChoiceActionPanel.Controls.Add(PatientRecords);
+            ChoiceActionPanel.Controls.Add(PatientExtract);
             ChoiceActionPanel.Controls.Add(WritingToDataBaseButton);
             ChoiceActionPanel.Controls.Add(ViewingDoctorsOrPatientsButton);
             ChoiceActionPanel.Controls.Add(ChoiceActionLabel);
@@ -90,15 +90,16 @@
             ChoiceActionPanel.Size = new Size(463, 78);
             ChoiceActionPanel.TabIndex = 5;
             // 
-            // PatientRecords
+            // PatientExtract
             // 
-            PatientRecords.FlatStyle = FlatStyle.Popup;
-            PatientRecords.Location = new Point(329, 36);
-            PatientRecords.Name = "PatientRecords";
-            PatientRecords.Size = new Size(100, 35);
-            PatientRecords.TabIndex = 3;
-            PatientRecords.Text = "Приём";
-            PatientRecords.UseVisualStyleBackColor = true;
+            PatientExtract.FlatStyle = FlatStyle.Popup;
+            PatientExtract.Location = new Point(329, 36);
+            PatientExtract.Name = "PatientExtract";
+            PatientExtract.Size = new Size(100, 35);
+            PatientExtract.TabIndex = 3;
+            PatientExtract.Text = "Выписка";
+            PatientExtract.UseVisualStyleBackColor = true;
+            PatientExtract.Click += PatientExtract_Click;
             // 
             // WritingToDataBaseButton
             // 
@@ -109,6 +110,7 @@
             WritingToDataBaseButton.TabIndex = 2;
             WritingToDataBaseButton.Text = "Запись";
             WritingToDataBaseButton.UseVisualStyleBackColor = true;
+            WritingToDataBaseButton.Click += WritingToDataBaseButton_Click;
             // 
             // ViewingDoctorsOrPatientsButton
             // 
@@ -165,7 +167,7 @@
         private Panel ChoiceActionPanel;
         private Button ViewingDoctorsOrPatientsButton;
         private Label ChoiceActionLabel;
-        private Button PatientRecords;
+        private Button PatientExtract;
         private Button WritingToDataBaseButton;
         private Panel MainPanel;
     }

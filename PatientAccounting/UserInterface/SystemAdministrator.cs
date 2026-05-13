@@ -19,7 +19,7 @@ namespace PatientAccounting
         {
             ActionLabel.Text = "Добавление пользователя";
             var addUser = new AddNewUser("Системный администратор");
-            addUser.OnClosed += ReturnToMainMenu;
+            addUser.OnClosed += Reversion;
             ShowControl(addUser);
             currentActiveControl = addUser;
             SetPanelState(ChoicePanel, false);
@@ -29,7 +29,7 @@ namespace PatientAccounting
         {
             ActionLabel.Text = "Удаление пользователя";
             var deleteUser = new DeleteUser();
-            deleteUser.OnClosed += ReturnToMainMenu;
+            deleteUser.OnClosed += Reversion;
             ShowControl(deleteUser);
             currentActiveControl = deleteUser;
             SetPanelState(ChoicePanel, false);
@@ -39,13 +39,13 @@ namespace PatientAccounting
         {
             ActionLabel.Text = "Редактирование пользователя";
             var editingUser = new EditingUser();
-            editingUser.OnClosed += ReturnToMainMenu;
+            editingUser.OnClosed += Reversion;
             ShowControl(editingUser);
             currentActiveControl = editingUser;
             SetPanelState(ChoicePanel, false);
             SetPanelState(MainEventPanel, true);
         }
-        public void ReturnToMainMenu()
+        public void Reversion()
         {
             MainEventPanel.Controls.Clear();
             currentActiveControl = null;

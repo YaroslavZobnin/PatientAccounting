@@ -378,5 +378,36 @@ namespace PatientAccounting.Data
                 "ORDER BY tm.name_type_of_medicine, m.name_medicine;";
             return ExecuteQuery(sql, null);
         }
+        public static DataTable GetPatientsWithoutDischarge()
+        {
+            string sql = "SELECT " +
+                "mh.medical_history_id AS \"ID\"," +
+                "p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS \"ФИО Пациента\"," +
+                "d.disease_name AS \"Диагноз\"," +
+                "w.number_ward AS \"Палата\"," +
+                "mh.date_of_receipt AS \"Дата поступления\" " +
+                "FROM Medical_history mh " +
+                "JOIN Patient p ON mh.patient_id = p.patient_id " +
+                "JOIN Disease d ON mh.disease_id = d.disease_id " +
+                "JOIN Ward w ON mh.ward_id = w.ward_id " +
+                "WHERE mh.date_of_discharge IS NULL -- Только те, кто еще лечится " +
+                "ORDER BY mh.date_of_receipt";
+            return ExecuteQuery(sql, null);
+        }
+        public static bool DischargePatient(int medicalHistoryId)
+        {
+            string sql = "UPDATE Medical_history SET date_of_discharge = CURRENT_DATE WHERE medical_history_id = @id";
+            var args = new Dictionary<string, object> { { "id", medicalHistoryId } };
+            try
+            {
+                ExecuteNonQuery(sql, args);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при выписке: {ex.Message}");
+                return false;
+            }
+        }
     }
 }
