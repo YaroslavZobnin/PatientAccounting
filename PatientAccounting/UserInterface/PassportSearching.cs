@@ -26,5 +26,6 @@ namespace PatientAccounting.UserInterface
                 MessageBox.Show($"Ошибка при поиске по паспорту: {ex.Message}");
             }
         }
+        public void Clear() => PassportDataTextBox.Clear();
     }
 }

@@ -36,11 +36,13 @@
             // 
             // SearchByPassportLabel
             // 
+            SearchByPassportLabel.Anchor = AnchorStyles.Top;
             SearchByPassportLabel.AutoSize = true;
             SearchByPassportLabel.BackColor = Color.Transparent;
+            SearchByPassportLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             SearchByPassportLabel.Location = new Point(255, 0);
             SearchByPassportLabel.Name = "SearchByPassportLabel";
-            SearchByPassportLabel.Size = new Size(142, 20);
+            SearchByPassportLabel.Size = new Size(169, 25);
             SearchByPassportLabel.TabIndex = 0;
             SearchByPassportLabel.Text = "Поиск по паспорту";
             // 
@@ -48,7 +50,8 @@
             // 
             CommentsLabel.Anchor = AnchorStyles.Top;
             CommentsLabel.BackColor = Color.Transparent;
-            CommentsLabel.Location = new Point(62, 20);
+            CommentsLabel.Font = new Font("Segoe UI", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            CommentsLabel.Location = new Point(93, 34);
             CommentsLabel.Name = "CommentsLabel";
             CommentsLabel.Size = new Size(504, 25);
             CommentsLabel.TabIndex = 1;
@@ -57,7 +60,7 @@
             // PassportDataTextBox
             // 
             PassportDataTextBox.Anchor = AnchorStyles.Top;
-            PassportDataTextBox.Location = new Point(62, 62);
+            PassportDataTextBox.Location = new Point(93, 83);
             PassportDataTextBox.Name = "PassportDataTextBox";
             PassportDataTextBox.Size = new Size(492, 27);
             PassportDataTextBox.TabIndex = 2;
@@ -68,7 +71,7 @@
             SearchButton.BackColor = Color.Transparent;
             SearchButton.Cursor = Cursors.Hand;
             SearchButton.FlatStyle = FlatStyle.Popup;
-            SearchButton.Location = new Point(273, 95);
+            SearchButton.Location = new Point(278, 126);
             SearchButton.Name = "SearchButton";
             SearchButton.Size = new Size(115, 36);
             SearchButton.TabIndex = 3;
@@ -85,7 +88,7 @@
             Controls.Add(CommentsLabel);
             Controls.Add(SearchByPassportLabel);
             Name = "PassportSearching";
-            Size = new Size(605, 143);
+            Size = new Size(667, 187);
             ResumeLayout(false);
             PerformLayout();
         }

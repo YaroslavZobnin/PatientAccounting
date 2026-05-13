@@ -1,27 +1,40 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
+using System.Data;
 namespace PatientAccounting.UserInterface
 {
     public partial class DeleteUser : UserControl, IManagementControl, IWindowClosed
     {
         public event Action? OnClosed;
+        private PassportSearching? _passportSearching;
+        private DataRow? _foundUserRow;
         public DeleteUser()
         {
             InitializeComponent();
+            InitPassportSearch();
         }
-        private void FindUserByPassportButton_Click(object sender, EventArgs e) => SaveProcess();
-        private void CancelButton_Click(object sender, EventArgs e) => Cancel();
-        public void Cancel() => InputPassportDataTextBox.Clear();
-        public void ExitToMenu()
+        private void InitPassportSearch()
         {
-            InputPassportDataTextBox.Clear();
-            OnClosed?.Invoke();
+            _passportSearching = new PassportSearching("Введите паспортные данные для УДАЛЕНИЯ пользователя");
+            _passportSearching.Dock = DockStyle.Fill;
+            DeleteUserPanel.Controls.Clear();
+            DeleteUserPanel.Controls.Add(_passportSearching);
+            _passportSearching.OnUserFound += (DataRow foundRow) =>
+            {
+                _foundUserRow = foundRow;
+                SaveProcess();
+            };
         }
         public void SaveProcess()
         {
-            if (!ValidateData()) return;
-            string passport = InputPassportDataTextBox.Text.Trim();
-            if (ConfirmDeleteWithPassportData(passport) != DialogResult.Yes) return;
+            if (_foundUserRow == null) return;
+            string? passport = _foundUserRow["customer_passport_data"].ToString();
+            string fullName = GetUserFullName(_foundUserRow);
+            if (ConfirmDelete(fullName, passport) != DialogResult.Yes)
+            {
+                _foundUserRow = null;
+                return;
+            }
             try
             {
                 DataBaseProcessing.DeleteUserByPassport(passport);
@@ -33,18 +46,32 @@ namespace PatientAccounting.UserInterface
                 MessageBox.Show(ex.Message, "Ошибка при удалении", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        public bool ValidateData()
+        private string GetUserFullName(DataRow row)
         {
-            if (string.IsNullOrWhiteSpace(InputPassportDataTextBox.Text))
+            if (row["role_name"].ToString() == "Пациент")
             {
-                MessageBox.Show("Пожалуйста, введите паспортные данные для поиска.");
-                return false;
+                return $"{row["patient_surname"]} {row["patient_name"]} {row["patient_patronymic"]}";
             }
-            return true;
+            else
+            {
+                return $"{row["staff_worker_surname"]} {row["staff_worker_name"]} {row["staff_worker_patronymic"]}";
+            }
         }
-        private DialogResult ConfirmDeleteWithPassportData(string passportData)
-            => MessageBox.Show($"Вы уверены, что хотите безвозвратно удалить пользователя (Паспорт: {passportData})?",
+        public void Cancel()
+        {
+            _foundUserRow = null;
+            _passportSearching?.Clear();
+        }
+        public void ExitToMenu()
+        {
+            Cancel();
+            OnClosed?.Invoke();
+        }
+        public bool ValidateData() => _foundUserRow != null;
+        private DialogResult ConfirmDelete(string name, string passport)
+            => MessageBox.Show($"Вы уверены, что хотите БЕЗВОЗВРАТНО удалить пользователя?\n\nФИО: {name}\nПаспорт: {passport}",
                 "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         private void BackToMenuButton_Click(object sender, EventArgs e) => ExitToMenu();
+        private void CancelButton_Click(object sender, EventArgs e) => Cancel();
     }
 }

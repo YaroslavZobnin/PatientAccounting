@@ -28,12 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            InputPassportDataLabel = new Label();
-            InputPassportDataTextBox = new TextBox();
-            AcceptedInputPassportDataButton = new Button();
             BackToMenuButton = new Button();
             CancelButton = new Button();
-            InputPassportData = new Panel();
             EditingUserPanel = new Panel();
             WarningLabel = new Label();
             RoleComboBox = new ComboBox();
@@ -49,6 +45,7 @@
             UserPassportTextBox = new TextBox();
             UserLoginTextBox = new TextBox();
             AllInfoAboutUser = new Label();
+            SearchUserByPassportPanel = new Panel();
             EditingPatientPanel = new Panel();
             DateOfBirthDateTimePicker = new DateTimePicker();
             DateOfBirthLabel = new Label();
@@ -60,48 +57,11 @@
             SpecializationLabel = new Label();
             WorkExperienceLabel = new Label();
             SaveEditedUser = new Button();
-            SearchUserByPassportPanel = new Panel();
-            InputPassportData.SuspendLayout();
             EditingUserPanel.SuspendLayout();
             EditingPatientPanel.SuspendLayout();
             EditingStaffPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)WorkExperienceNumericUpDown).BeginInit();
             SuspendLayout();
-            // 
-            // InputPassportDataLabel
-            // 
-            InputPassportDataLabel.Anchor = AnchorStyles.Top;
-            InputPassportDataLabel.AutoSize = true;
-            InputPassportDataLabel.BackColor = Color.Transparent;
-            InputPassportDataLabel.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            InputPassportDataLabel.Location = new Point(7, 0);
-            InputPassportDataLabel.Name = "InputPassportDataLabel";
-            InputPassportDataLabel.Size = new Size(584, 56);
-            InputPassportDataLabel.TabIndex = 1;
-            InputPassportDataLabel.Text = "Введите паспортные данные пользователя для его изменения\r\n\r\n";
-            InputPassportDataLabel.TextAlign = ContentAlignment.MiddleCenter;
-            // 
-            // InputPassportDataTextBox
-            // 
-            InputPassportDataTextBox.Anchor = AnchorStyles.Top;
-            InputPassportDataTextBox.Cursor = Cursors.IBeam;
-            InputPassportDataTextBox.Location = new Point(75, 59);
-            InputPassportDataTextBox.Name = "InputPassportDataTextBox";
-            InputPassportDataTextBox.Size = new Size(431, 27);
-            InputPassportDataTextBox.TabIndex = 2;
-            // 
-            // AcceptedInputPassportDataButton
-            // 
-            AcceptedInputPassportDataButton.BackColor = Color.Transparent;
-            AcceptedInputPassportDataButton.FlatStyle = FlatStyle.Popup;
-            AcceptedInputPassportDataButton.Font = new Font("Segoe UI", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            AcceptedInputPassportDataButton.Location = new Point(210, 101);
-            AcceptedInputPassportDataButton.Name = "AcceptedInputPassportDataButton";
-            AcceptedInputPassportDataButton.Size = new Size(134, 33);
-            AcceptedInputPassportDataButton.TabIndex = 3;
-            AcceptedInputPassportDataButton.Text = "Поиск";
-            AcceptedInputPassportDataButton.UseVisualStyleBackColor = false;
-            AcceptedInputPassportDataButton.Click += AcceptedInputPassportDataButton_Click;
             // 
             // BackToMenuButton
             // 
@@ -134,17 +94,6 @@
             CancelButton.UseVisualStyleBackColor = false;
             CancelButton.Visible = false;
             CancelButton.Click += CancelButton_Click;
-            // 
-            // InputPassportData
-            // 
-            InputPassportData.BackColor = Color.Transparent;
-            InputPassportData.Controls.Add(AcceptedInputPassportDataButton);
-            InputPassportData.Controls.Add(InputPassportDataTextBox);
-            InputPassportData.Controls.Add(InputPassportDataLabel);
-            InputPassportData.Location = new Point(178, 3);
-            InputPassportData.Name = "InputPassportData";
-            InputPassportData.Size = new Size(605, 142);
-            InputPassportData.TabIndex = 27;
             // 
             // EditingUserPanel
             // 
@@ -296,6 +245,15 @@
             AllInfoAboutUser.TabIndex = 0;
             AllInfoAboutUser.Text = "Вся информация о пользователе";
             // 
+            // SearchUserByPassportPanel
+            // 
+            SearchUserByPassportPanel.Anchor = AnchorStyles.Top;
+            SearchUserByPassportPanel.BackColor = Color.Transparent;
+            SearchUserByPassportPanel.Location = new Point(150, 3);
+            SearchUserByPassportPanel.Name = "SearchUserByPassportPanel";
+            SearchUserByPassportPanel.Size = new Size(667, 187);
+            SearchUserByPassportPanel.TabIndex = 32;
+            // 
             // EditingPatientPanel
             // 
             EditingPatientPanel.Anchor = AnchorStyles.Top;
@@ -406,15 +364,6 @@
             SaveEditedUser.UseVisualStyleBackColor = false;
             SaveEditedUser.Click += SaveEditedUser_Click;
             // 
-            // SearchUserByPassportPanel
-            // 
-            SearchUserByPassportPanel.Anchor = AnchorStyles.Top;
-            SearchUserByPassportPanel.BackColor = Color.Transparent;
-            SearchUserByPassportPanel.Location = new Point(109, 360);
-            SearchUserByPassportPanel.Name = "SearchUserByPassportPanel";
-            SearchUserByPassportPanel.Size = new Size(694, 87);
-            SearchUserByPassportPanel.TabIndex = 32;
-            // 
             // EditingUser
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -426,13 +375,10 @@
             Controls.Add(CancelButton);
             Controls.Add(EditingStaffPanel);
             Controls.Add(EditingPatientPanel);
-            Controls.Add(InputPassportData);
             Controls.Add(EditingUserPanel);
             DoubleBuffered = true;
             Name = "EditingUser";
             Size = new Size(876, 523);
-            InputPassportData.ResumeLayout(false);
-            InputPassportData.PerformLayout();
             EditingUserPanel.ResumeLayout(false);
             EditingUserPanel.PerformLayout();
             EditingPatientPanel.ResumeLayout(false);
@@ -444,13 +390,8 @@
         }
 
         #endregion
-
-        private Label InputPassportDataLabel;
-        private TextBox InputPassportDataTextBox;
-        private Button AcceptedInputPassportDataButton;
         private Button BackToMenuButton;
         private Button CancelButton;
-        private Panel InputPassportData;
         private Panel EditingUserPanel;
         private TextBox UserLoginTextBox;
         private Label AllInfoAboutUser;

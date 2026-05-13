@@ -13,66 +13,42 @@ namespace PatientAccounting.UserInterface
         public EditingUser()
         {
             InitializeComponent();
-            PassportSearch();
+            SetPanelState(EditingUserPanel, false);
+            SetButtonState(CancelButton, false);
+            InitPassportSearch();
         }
-        private void PassportSearch()
+        private void InitPassportSearch()
         {
-            _passportSearching = new PassportSearching("Введите пасспортные данные для редактирования");
+            _passportSearching = new PassportSearching("Введите паспортные данные для редактирования");
             _passportSearching.Dock = DockStyle.Fill;
+
+            SearchUserByPassportPanel.Controls.Clear();
             SearchUserByPassportPanel.Controls.Add(_passportSearching);
+
             _passportSearching.OnUserFound += (DataRow foundRow) =>
             {
                 _originalRow = foundRow;
                 _currentUserId = Convert.ToInt32(_originalRow["customer_id"]);
                 _currentRole = _originalRow["role_name"].ToString();
+
                 LoadUserData();
             };
         }
+
         private void LoadUserData()
         {
             if (_originalRow == null) return;
-            SetPanelState(InputPassportData, false); 
-            SetPanelState(EditingUserPanel, true);  
+            SetPanelState(SearchUserByPassportPanel, false);
+            SetPanelState(EditingUserPanel, true);
             SetButtonState(CancelButton, true);
             MapUserDataToUI(_originalRow);
-        }
-        private void AcceptedInputPassportDataButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                var dataTable = DataBaseProcessing.GetUserByPassport(InputPassportDataTextBox.Text.Trim());
-                if (dataTable.Rows.Count == 0)
-                {
-                    MessageBox.Show("Пользователь не найден.");
-                    return;
-                }
-                SetPanelState(InputPassportData, false);
-                SetButtonState(CancelButton, true);
-                _originalRow = dataTable.Rows[0];
-                _currentUserId = Convert.ToInt32(_originalRow["customer_id"]);
-                _currentRole = _originalRow["role_name"].ToString();
-                SetPanelState(EditingUserPanel, true);
-                MapUserDataToUI(_originalRow);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void SetPanelState(Panel panel, bool visible)
-        {
-            panel.Visible = visible;
-            panel.Enabled = visible;
-        }
-        private void SetButtonState(Button button, bool visible)
-        {
-            button.Visible = visible;
-            button.Enabled = visible;
         }
 
         private void MapUserDataToUI(DataRow row)
         {
             FillGeneralFields(row);
+            SetPanelState(EditingPatientPanel, false);
+            SetPanelState(EditingStaffPanel, false);
             if (_currentRole == "Пациент")
             {
                 SetPanelState(EditingPatientPanel, true);
@@ -96,13 +72,12 @@ namespace PatientAccounting.UserInterface
             NameTextBox.Text = row["patient_name"].ToString();
             PatronymicTextBox.Text = row["patient_patronymic"].ToString();
             var birthDateValue = row["patient_birth_date"];
-            if (birthDateValue is DateOnly dateOnly)
+            if (birthDateValue != DBNull.Value)
             {
-                DateOfBirthDateTimePicker.Value = dateOnly.ToDateTime(TimeOnly.MinValue);
-            }
-            else if (birthDateValue is DateTime date)
-            {
-                DateOfBirthDateTimePicker.Value = date;
+                if (birthDateValue is DateOnly dateOnly)
+                    DateOfBirthDateTimePicker.Value = dateOnly.ToDateTime(TimeOnly.MinValue);
+                else if (birthDateValue is DateTime dateTime)
+                    DateOfBirthDateTimePicker.Value = dateTime;
             }
             AddressTextBox.Text = row["patient_address"].ToString();
         }
@@ -111,9 +86,13 @@ namespace PatientAccounting.UserInterface
             SurnameTextBox.Text = row["staff_worker_surname"].ToString();
             NameTextBox.Text = row["staff_worker_name"].ToString();
             PatronymicTextBox.Text = row["staff_worker_patronymic"].ToString();
-            WorkExperienceNumericUpDown.Value = (int)row["staff_worker_work_experience"];
+            WorkExperienceNumericUpDown.Value = row["staff_worker_work_experience"] != DBNull.Value
+                ? Convert.ToInt32(row["staff_worker_work_experience"]) : 0;
             if (row["specialization_id"] != DBNull.Value)
+            {
+                SpecializationsComboBox.Enabled = true;
                 LoadSpecialization();
+            }
             else
                 SpecializationsComboBox.Enabled = false;
         }
@@ -123,7 +102,8 @@ namespace PatientAccounting.UserInterface
             SpecializationsComboBox.DataSource = spec;
             SpecializationsComboBox.DisplayMember = "name_specialization";
             SpecializationsComboBox.ValueMember = "specialization_id";
-            SpecializationsComboBox.SelectedValue = _originalRow["specialization_id"];
+            if (_originalRow?["specialization_id"] != DBNull.Value)
+                SpecializationsComboBox.SelectedValue = _originalRow["specialization_id"];
         }
         private void LoadUserRolesList()
         {
@@ -131,7 +111,7 @@ namespace PatientAccounting.UserInterface
             RoleComboBox.DataSource = role;
             RoleComboBox.DisplayMember = "role_name";
             RoleComboBox.ValueMember = "role_id";
-            if (_originalRow["customer_role_id"] != DBNull.Value)
+            if (_originalRow?["customer_role_id"] != DBNull.Value)
                 RoleComboBox.SelectedValue = _originalRow["customer_role_id"];
         }
         public void SaveProcess()
@@ -141,21 +121,23 @@ namespace PatientAccounting.UserInterface
             {
                 DataBaseProcessing.UpdateCustomerBase(_currentUserId, UserLoginTextBox.Text, UserPassportTextBox.Text);
                 if (_currentRole == "Пациент")
+                {
                     DataBaseProcessing.UpdatePatientDetails(_currentUserId, SurnameTextBox.Text,
                         NameTextBox.Text, PatronymicTextBox.Text, DateOfBirthDateTimePicker.Value, AddressTextBox.Text);
+                }
                 else
                 {
-                    object? specId = (_currentRole == "Медицинский регистратор" || _currentRole == "Системный администратор")
-                        ? null : SpecializationsComboBox.SelectedValue;
+                    int? specId = (_currentRole == "Медицинский регистратор" || _currentRole == "Системный администратор")
+                        ? null : (int?)SpecializationsComboBox.SelectedValue;
                     DataBaseProcessing.UpdateStaffDetails(_currentUserId, SurnameTextBox.Text, NameTextBox.Text,
-                        PatronymicTextBox.Text, (int?)SpecializationsComboBox.SelectedValue, (int)WorkExperienceNumericUpDown.Value);
+                        PatronymicTextBox.Text, specId, (int)WorkExperienceNumericUpDown.Value);
                 }
-                MessageBox.Show("Данные сохранены.");
+                MessageBox.Show("Данные успешно сохранены.");
                 OnClosed?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка: {ex.Message}");
+                MessageBox.Show($"Ошибка при сохранении: {ex.Message}");
             }
         }
         public void Cancel()
@@ -171,22 +153,27 @@ namespace PatientAccounting.UserInterface
         public bool ValidateData()
         {
             if (!GeneralCheckData()) return false;
-            if (_currentRole == "Patient")
+
+            if (_currentRole == "Пациент")
+            {
                 if (!PatientCheckData()) return false;
-                else if (_currentRole == "Staff_worker")
-                    if (!StaffCheckData()) return false;
+            }
+            else
+            {
+                if (!StaffCheckData()) return false;
+            }
             return true;
         }
         private bool GeneralCheckData()
         {
-            if (string.IsNullOrWhiteSpace(UserLoginTextBox.Text) || string.IsNullOrWhiteSpace(UserLoginTextBox.Text))
+            if (string.IsNullOrWhiteSpace(UserLoginTextBox.Text) || string.IsNullOrWhiteSpace(UserPassportTextBox.Text))
             {
-                MessageBox.Show("Логин и паспорт должны быть заполнены!", "Ошибка валидации");
+                MessageBox.Show("Логин и паспорт должны быть заполнены!", "Ошибка");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(SurnameTextBox.Text) || string.IsNullOrWhiteSpace(NameTextBox.Text))
             {
-                MessageBox.Show("Фамилия и Имя обязательны для заполнения!", "Ошибка валидации");
+                MessageBox.Show("Фамилия и Имя обязательны!", "Ошибка");
                 return false;
             }
             return true;
@@ -195,12 +182,12 @@ namespace PatientAccounting.UserInterface
         {
             if (DateOfBirthDateTimePicker.Value > DateTime.Now)
             {
-                MessageBox.Show("Дата рождения не может быть в будущем!", "Ошибка валидации");
+                MessageBox.Show("Дата рождения не может быть в будущем!", "Ошибка");
                 return false;
             }
             if (string.IsNullOrWhiteSpace(AddressTextBox.Text))
             {
-                MessageBox.Show("Адрес пациента не может быть пустым!", "Ошибка валидации");
+                MessageBox.Show("Адрес пациента обязателен!", "Ошибка");
                 return false;
             }
             return true;
@@ -209,24 +196,31 @@ namespace PatientAccounting.UserInterface
         {
             if (WorkExperienceNumericUpDown.Value < 0 || WorkExperienceNumericUpDown.Value > 80)
             {
-                MessageBox.Show("Опыт работы должен быть числом от 0 до 80!", "Ошибка валидации");
+                MessageBox.Show("Опыт работы должен быть от 0 до 80!", "Ошибка");
                 return false;
             }
             bool needsSpecialization = (_currentRole != "Медицинский регистратор" && _currentRole != "Системный администратор");
             if (needsSpecialization && SpecializationsComboBox.SelectedIndex == -1)
             {
-                MessageBox.Show("Выберите специализацию сотрудника!", "Ошибка валидации");
+                MessageBox.Show("Выберите специализацию!", "Ошибка");
                 return false;
             }
             return true;
         }
+        private void SetPanelState(Panel panel, bool visible)
+        {
+            panel.Visible = visible;
+            panel.Enabled = visible;
+        }
+        private void SetButtonState(Button button, bool visible)
+        {
+            button.Visible = visible;
+            button.Enabled = visible;
+        }
         private DialogResult ConfirmExit()
-           => MessageBox.Show("Вернуться в меню? Все несохраненные изменения будут потеряны.", "Выход", MessageBoxButtons.YesNo);
-
+           => MessageBox.Show("Вернуться в меню? Несохраненные изменения пропадут.", "Выход", MessageBoxButtons.YesNo);
         private void SaveEditedUser_Click(object sender, EventArgs e) => SaveProcess();
-
         private void BackToMenuButton_Click(object sender, EventArgs e) => ExitToMenu();
-
         private void CancelButton_Click(object sender, EventArgs e) => Cancel();
 
     }
