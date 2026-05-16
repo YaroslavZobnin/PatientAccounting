@@ -1,9 +1,11 @@
 ﻿using PatientAccounting.Data;
 using System.Data;
+using PatientAccounting.Interfaces;
 namespace PatientAccounting.UserInterface
 {
-    public partial class PassportSearching : UserControl
+    public partial class PassportSearching : UserControl, IWindowClosed
     {
+        public event Action? OnClosed;
         public event Action<DataRow>? OnUserFound;
         public PassportSearching(string? comments)
         {
@@ -27,5 +29,7 @@ namespace PatientAccounting.UserInterface
             }
         }
         public void Clear() => PassportDataTextBox.Clear();
+        public void Cancel() => Clear();
+        private void CancelButton_Click(object sender, EventArgs e) => Cancel();
     }
 }

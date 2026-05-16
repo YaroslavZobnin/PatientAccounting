@@ -33,11 +33,9 @@
             GetPatientFromPassportRadioButton = new RadioButton();
             GetPatientFromListRadioButton = new RadioButton();
             SearchPatientLabel = new Label();
-            panel1 = new Panel();
-            PatientsListDataGridView = new DataGridView();
+            ContentPanel = new Panel();
+            CancelButton = new Button();
             ChoicePanel.SuspendLayout();
-            panel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)PatientsListDataGridView).BeginInit();
             SuspendLayout();
             // 
             // CreateMedicalHistoryLabel
@@ -59,7 +57,7 @@
             ChoicePanel.Controls.Add(GetPatientFromPassportRadioButton);
             ChoicePanel.Controls.Add(GetPatientFromListRadioButton);
             ChoicePanel.Controls.Add(SearchPatientLabel);
-            ChoicePanel.Location = new Point(252, 3);
+            ChoicePanel.Location = new Point(298, 28);
             ChoicePanel.Name = "ChoicePanel";
             ChoicePanel.Size = new Size(303, 75);
             ChoicePanel.TabIndex = 1;
@@ -71,7 +69,6 @@
             GetPatientFromPassportRadioButton.Name = "GetPatientFromPassportRadioButton";
             GetPatientFromPassportRadioButton.Size = new Size(118, 24);
             GetPatientFromPassportRadioButton.TabIndex = 2;
-            GetPatientFromPassportRadioButton.TabStop = true;
             GetPatientFromPassportRadioButton.Text = "По паспорту";
             GetPatientFromPassportRadioButton.UseVisualStyleBackColor = true;
             GetPatientFromPassportRadioButton.CheckedChanged += GetPatientFromPassportRadioButton_CheckedChanged;
@@ -83,7 +80,6 @@
             GetPatientFromListRadioButton.Name = "GetPatientFromListRadioButton";
             GetPatientFromListRadioButton.Size = new Size(100, 24);
             GetPatientFromListRadioButton.TabIndex = 1;
-            GetPatientFromListRadioButton.TabStop = true;
             GetPatientFromListRadioButton.Text = "По списку";
             GetPatientFromListRadioButton.UseVisualStyleBackColor = true;
             GetPatientFromListRadioButton.CheckedChanged += GetPatientFromListRadioButton_CheckedChanged;
@@ -99,42 +95,39 @@
             SearchPatientLabel.TabIndex = 0;
             SearchPatientLabel.Text = "Как осуществляем поиск?";
             // 
-            // panel1
+            // ContentPanel
             // 
-            panel1.Controls.Add(PatientsListDataGridView);
-            panel1.Controls.Add(ChoicePanel);
-            panel1.Location = new Point(46, 28);
-            panel1.Name = "panel1";
-            panel1.Size = new Size(804, 476);
-            panel1.TabIndex = 2;
+            ContentPanel.Location = new Point(32, 106);
+            ContentPanel.Name = "ContentPanel";
+            ContentPanel.Size = new Size(816, 395);
+            ContentPanel.TabIndex = 3;
             // 
-            // PatientsListDataGridView
+            // CancelButton
             // 
-            PatientsListDataGridView.AllowUserToAddRows = false;
-            PatientsListDataGridView.AllowUserToDeleteRows = false;
-            PatientsListDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            PatientsListDataGridView.BackgroundColor = Color.WhiteSmoke;
-            PatientsListDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            PatientsListDataGridView.Enabled = false;
-            PatientsListDataGridView.Location = new Point(3, 84);
-            PatientsListDataGridView.Name = "PatientsListDataGridView";
-            PatientsListDataGridView.RowHeadersWidth = 51;
-            PatientsListDataGridView.Size = new Size(798, 314);
-            PatientsListDataGridView.TabIndex = 2;
-            PatientsListDataGridView.Visible = false;
+            CancelButton.BackColor = Color.Transparent;
+            CancelButton.Cursor = Cursors.Hand;
+            CancelButton.FlatStyle = FlatStyle.Popup;
+            CancelButton.Location = new Point(3, 507);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Size = new Size(93, 36);
+            CancelButton.TabIndex = 4;
+            CancelButton.Text = "Выход";
+            CancelButton.UseVisualStyleBackColor = false;
+            CancelButton.Click += CancelButton_Click;
             // 
             // CreateMedicalHistory
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(panel1);
+            Controls.Add(CancelButton);
+            Controls.Add(ContentPanel);
+            Controls.Add(ChoicePanel);
             Controls.Add(CreateMedicalHistoryLabel);
+            DoubleBuffered = true;
             Name = "CreateMedicalHistory";
             Size = new Size(869, 546);
             ChoicePanel.ResumeLayout(false);
             ChoicePanel.PerformLayout();
-            panel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)PatientsListDataGridView).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -146,7 +139,7 @@
         private RadioButton GetPatientFromPassportRadioButton;
         private RadioButton GetPatientFromListRadioButton;
         private Label SearchPatientLabel;
-        private Panel panel1;
-        private DataGridView PatientsListDataGridView;
+        private Panel ContentPanel;
+        private Button CancelButton;
     }
 }

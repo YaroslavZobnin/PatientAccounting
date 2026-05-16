@@ -61,7 +61,11 @@ namespace PatientAccounting.UserInterface
         }
         private void CreateMedicalHistory_Click(object sender, EventArgs e)
         {
-
+            var createMedicalHistory = new CreateMedicalHistory();
+            ShowControl(createMedicalHistory);
+            SetPanelState(ChoiceActionPanel, false);
+            SetPanelState(MainPanel, true);
+            createMedicalHistory.OnClosed += Reversion;
         }
     }
 }

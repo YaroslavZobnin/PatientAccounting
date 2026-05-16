@@ -301,7 +301,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllStaff()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "sw.staff_worker_id AS \"ID\"," +
                 "sw.staff_worker_surname AS \"Фамилия\"," +
                 "sw.staff_worker_name AS \"Имя\"," +
@@ -317,7 +317,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllDoctors()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "sw.staff_worker_id AS \"ID\"," +
                 "sw.staff_worker_surname || ' ' || sw.staff_worker_name || ' ' || sw.staff_worker_patronymic AS \"Врач\"," +
                 "spec.name_specialization AS \"Специализация\"," +
@@ -331,7 +331,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllPatients()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "patient_id AS \"ID\"," +
                 "patient_surname || ' ' || patient_name || ' ' || patient_patronymic AS \"ФИО\","+
                 "patient_birth_date AS \"Дата рождения\"," +
@@ -342,7 +342,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllWards()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "w.ward_id AS \"ID\"," +
                 "w.number_ward AS \"№ Палаты\"," +
                 "d.name_department AS \"Отделение\"," +
@@ -356,7 +356,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllDiseases()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "d.disease_id AS \"ID\"," +
                 "d.disease_name AS \"Название болезни\"," +
                 "c.category_name AS \"Категория\"," +
@@ -368,7 +368,7 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllTreatments()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "m.medicine_id AS \"ID\"," +
                 "m.name_medicine AS \"Название препарата\"," +
                 "tm.name_type_of_medicine AS \"Тип\"," +
@@ -380,7 +380,7 @@ namespace PatientAccounting.Data
         }
         public static DataTable GetPatientsWithoutDischarge()
         {
-            string sql = "SELECT " +
+            const string sql = "SELECT " +
                 "mh.medical_history_id AS \"ID\"," +
                 "p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS \"ФИО Пациента\"," +
                 "d.disease_name AS \"Диагноз\"," +
@@ -396,7 +396,7 @@ namespace PatientAccounting.Data
         }
         public static bool DischargePatient(int medicalHistoryId)
         {
-            string sql = "UPDATE Medical_history SET date_of_discharge = CURRENT_DATE WHERE medical_history_id = @id";
+            const string sql = "UPDATE Medical_history SET date_of_discharge = CURRENT_DATE WHERE medical_history_id = @id";
             var args = new Dictionary<string, object> { { "id", medicalHistoryId } };
             try
             {
@@ -407,6 +407,25 @@ namespace PatientAccounting.Data
             {
                 MessageBox.Show($"Ошибка при выписке: {ex.Message}");
                 return false;
+            }
+        }
+        public static bool InsertMedicalHistory(int patientId, int staffWorkerId, int wardId, DateTime dateOfReceipt)
+        {
+            const string sql = @"
+                 INSERT INTO Medical_history (patient_id, staff_worker_id, ward_id, date_of_receipt) 
+                 VALUES (@patientId, @staffId, @wardId, @dateReceipt)";
+            var args = new Dictionary<string, object>
+            {
+                    { "patientId", patientId },{ "staffId", staffWorkerId },{ "wardId", wardId },{ "dateReceipt", dateOfReceipt }
+            };
+            try
+            {
+                ExecuteNonQuery(sql, args);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Не удалось создать запись истории болезни в базе данных.", ex);
             }
         }
     }

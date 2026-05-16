@@ -32,12 +32,12 @@
             FullNameLabel = new Label();
             MedicalRegistrarLabel = new Label();
             ChoiceActionPanel = new Panel();
+            CreateMedicalHistory = new Button();
             PatientExtract = new Button();
             WritingToDataBaseButton = new Button();
             ViewingDoctorsOrPatientsButton = new Button();
             ChoiceActionLabel = new Label();
             MainPanel = new Panel();
-            CreateMedicalHistory = new Button();
             ChoiceActionPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -91,6 +91,19 @@
             ChoiceActionPanel.Name = "ChoiceActionPanel";
             ChoiceActionPanel.Size = new Size(685, 78);
             ChoiceActionPanel.TabIndex = 5;
+            // 
+            // CreateMedicalHistory
+            // 
+            CreateMedicalHistory.Cursor = Cursors.Hand;
+            CreateMedicalHistory.FlatStyle = FlatStyle.Popup;
+            CreateMedicalHistory.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            CreateMedicalHistory.Location = new Point(480, 36);
+            CreateMedicalHistory.Name = "CreateMedicalHistory";
+            CreateMedicalHistory.Size = new Size(136, 35);
+            CreateMedicalHistory.TabIndex = 4;
+            CreateMedicalHistory.Text = "Создание карточки";
+            CreateMedicalHistory.UseVisualStyleBackColor = true;
+            CreateMedicalHistory.Click += CreateMedicalHistory_Click;
             // 
             // PatientExtract
             // 
@@ -148,19 +161,6 @@
             MainPanel.Size = new Size(869, 546);
             MainPanel.TabIndex = 6;
             // 
-            // CreateMedicalHistory
-            // 
-            CreateMedicalHistory.Cursor = Cursors.Hand;
-            CreateMedicalHistory.FlatStyle = FlatStyle.Popup;
-            CreateMedicalHistory.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            CreateMedicalHistory.Location = new Point(460, 36);
-            CreateMedicalHistory.Name = "CreateMedicalHistory";
-            CreateMedicalHistory.Size = new Size(136, 35);
-            CreateMedicalHistory.TabIndex = 4;
-            CreateMedicalHistory.Text = "Создание карточки";
-            CreateMedicalHistory.UseVisualStyleBackColor = true;
-            CreateMedicalHistory.Click += CreateMedicalHistory_Click;
-            // 
             // MedicalRegistrar
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -170,6 +170,7 @@
             Controls.Add(PersonalAccountLabel);
             Controls.Add(ChoiceActionPanel);
             Controls.Add(MainPanel);
+            DoubleBuffered = true;
             Name = "MedicalRegistrar";
             Size = new Size(879, 649);
             ChoiceActionPanel.ResumeLayout(false);

@@ -1,4 +1,6 @@
-﻿namespace PatientAccounting.Services
+﻿using System.Data;
+
+namespace PatientAccounting.Services
 {
     internal static class GeneralMethods
     {
@@ -13,6 +15,12 @@
             else throw new ArgumentException("Выход за предел допустимых ролей");
         }
         public static string GetAnyInfo(string firstComms, string addInfo) => $"{firstComms}{addInfo}";
-        
+        public static string GetPatientFullName(DataRow row)
+        {
+            string name = row["patient_surname"].ToString() + ' ' 
+                + row["patient_name"].ToString() + ' ' 
+                + row["patient_patronymic"].ToString();
+            return name.Trim();
+        }
     }
 }

@@ -32,6 +32,7 @@
             CommentsLabel = new Label();
             PassportDataTextBox = new TextBox();
             SearchButton = new Button();
+            CancelButton = new Button();
             SuspendLayout();
             // 
             // SearchByPassportLabel
@@ -71,7 +72,7 @@
             SearchButton.BackColor = Color.Transparent;
             SearchButton.Cursor = Cursors.Hand;
             SearchButton.FlatStyle = FlatStyle.Popup;
-            SearchButton.Location = new Point(278, 126);
+            SearchButton.Location = new Point(395, 126);
             SearchButton.Name = "SearchButton";
             SearchButton.Size = new Size(115, 36);
             SearchButton.TabIndex = 3;
@@ -79,14 +80,30 @@
             SearchButton.UseVisualStyleBackColor = false;
             SearchButton.Click += SearchButton_Click;
             // 
+            // CancelButton
+            // 
+            CancelButton.Anchor = AnchorStyles.Top;
+            CancelButton.BackColor = Color.Transparent;
+            CancelButton.Cursor = Cursors.Hand;
+            CancelButton.FlatStyle = FlatStyle.Popup;
+            CancelButton.Location = new Point(157, 126);
+            CancelButton.Name = "CancelButton";
+            CancelButton.Size = new Size(115, 36);
+            CancelButton.TabIndex = 4;
+            CancelButton.Text = "Отмена";
+            CancelButton.UseVisualStyleBackColor = false;
+            CancelButton.Click += CancelButton_Click;
+            // 
             // PassportSearching
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(CancelButton);
             Controls.Add(SearchButton);
             Controls.Add(PassportDataTextBox);
             Controls.Add(CommentsLabel);
             Controls.Add(SearchByPassportLabel);
+            DoubleBuffered = true;
             Name = "PassportSearching";
             Size = new Size(667, 187);
             ResumeLayout(false);
@@ -99,5 +116,6 @@
         private Label CommentsLabel;
         private TextBox PassportDataTextBox;
         private Button SearchButton;
+        private Button CancelButton;
     }
 }
