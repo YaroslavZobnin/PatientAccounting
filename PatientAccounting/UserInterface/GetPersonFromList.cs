@@ -21,10 +21,14 @@ namespace PatientAccounting.UserInterface
             {
                 DataTable data = DataBaseProcessing.GetListByMode(_currentMode);
                 UniversalGrid.DataSource = data;
+
                 if (UniversalGrid.Columns.Contains("ID"))
-                    UniversalGrid.Columns["ID"].Visible = false;
-                if (UniversalGrid.Columns.Contains("patient_id"))
-                    UniversalGrid.Columns["patient_id"].Visible = false;
+                {
+                    data.Columns["ID"].ColumnName = "patient_id";
+                    SetColumnsState(UniversalGrid, "patient_id", false);
+                }
+                if (UniversalGrid.Columns.Contains("role_name"))
+                    SetColumnsState(UniversalGrid, "role_name", false);
             }
             catch (Exception ex)
             {
@@ -41,6 +45,8 @@ namespace PatientAccounting.UserInterface
             else
                 MessageBox.Show("Пожалуйста, выберите строку из таблицы.");
         }
-        private void CancelChoice() => OnClosed?.Invoke();
+        private void SetColumnsState(DataGridView data, string columnName, bool visible)
+            => data.Columns[columnName].Visible = visible;
+        private void Exit() => OnClosed?.Invoke();
     }
 }

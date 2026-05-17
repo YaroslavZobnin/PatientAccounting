@@ -90,7 +90,7 @@
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new Size(115, 36);
             CancelButton.TabIndex = 4;
-            CancelButton.Text = "Отмена";
+            CancelButton.Text = "Очистить";
             CancelButton.UseVisualStyleBackColor = false;
             CancelButton.Click += CancelButton_Click;
             // 

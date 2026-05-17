@@ -52,6 +52,7 @@
             // 
             // DoctorComboBox
             // 
+            DoctorComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             DoctorComboBox.FormattingEnabled = true;
             DoctorComboBox.Location = new Point(3, 72);
             DoctorComboBox.Name = "DoctorComboBox";
@@ -61,6 +62,7 @@
             // WardComboBox
             // 
             WardComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            WardComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             WardComboBox.FormattingEnabled = true;
             WardComboBox.Location = new Point(416, 72);
             WardComboBox.Name = "WardComboBox";

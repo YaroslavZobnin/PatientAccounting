@@ -58,6 +58,7 @@
             SelectButton.TabIndex = 1;
             SelectButton.Text = "Выбрать";
             SelectButton.UseVisualStyleBackColor = false;
+            SelectButton.Click += SelectButton_Click;
             // 
             // GetPersonFromList
             // 

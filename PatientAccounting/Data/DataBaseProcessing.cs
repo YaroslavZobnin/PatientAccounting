@@ -275,7 +275,7 @@ namespace PatientAccounting.Data
         {
             const string sql = @"
             SELECT c.*, ur.role_name,
-                   p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_address,
+                   p.patient_id, p.patient_surname, p.patient_name, p.patient_patronymic, p.patient_birth_date, p.patient_address,
                    sw.staff_worker_surname, sw.staff_worker_name, sw.staff_worker_patronymic, 
                    sw.specialization_id, sw.staff_worker_work_experience
             FROM Customer c
@@ -293,6 +293,7 @@ namespace PatientAccounting.Data
                 ViewListMode.Patients => GetAllPatients(),
                 ViewListMode.Doctors => GetAllDoctors(),
                 ViewListMode.Staff => GetAllStaff(),
+                ViewListMode.MedicalStaff => GetAllMedicalStaff(),
                 ViewListMode.Wards => GetAllWards(),
                 ViewListMode.Diseases => GetAllDiseases(),
                 ViewListMode.Treatments => GetAllTreatments(),
@@ -331,13 +332,29 @@ namespace PatientAccounting.Data
         }
         private static DataTable GetAllPatients()
         {
+            const string sql = @"SELECT 
+                  patient_id AS ""ID"",
+                  patient_surname || ' ' || patient_name || ' ' || patient_patronymic AS ""ФИО"",
+                  patient_birth_date AS ""Дата рождения"",
+                  patient_address AS ""Адрес"",
+                  CAST('Пациент' AS text) AS ""role_name""
+                  FROM Patient
+                  ORDER BY patient_surname;";
+            return ExecuteQuery(sql, null);
+        }
+        private static DataTable GetAllMedicalStaff()
+        {
             const string sql = "SELECT " +
-                "patient_id AS \"ID\"," +
-                "patient_surname || ' ' || patient_name || ' ' || patient_patronymic AS \"ФИО\","+
-                "patient_birth_date AS \"Дата рождения\"," +
-                "patient_address AS \"Адрес\" " +
-                "FROM Patient " +
-                "ORDER BY patient_surname";
+                "sw.staff_worker_id AS \"ID\"," +
+                "sw.staff_worker_surname || ' ' || sw.staff_worker_name || ' ' || sw.staff_worker_patronymic AS \"Врач\"," +
+                "spec.name_specialization AS \"Специализация\"," +
+                "sw.staff_worker_work_experience AS \"Стаж\" " +
+                "FROM Staff_worker sw " +
+                "JOIN Specialization spec ON sw.specialization_id = spec.specialization_id " +
+                "JOIN Customer c ON sw.customer_id = c.customer_id " +
+                "JOIN User_role ur ON c.customer_role_id = ur.role_id " +
+                "WHERE c.customer_role_id IN (3, 4) " +
+                "ORDER BY sw.staff_worker_surname";
             return ExecuteQuery(sql, null);
         }
         private static DataTable GetAllWards()
@@ -426,6 +443,26 @@ namespace PatientAccounting.Data
             catch (Exception ex)
             {
                 throw new Exception("Не удалось создать запись истории болезни в базе данных.", ex);
+            }
+        }
+        public static DataTable GetAvailableWards()
+        {
+            const string sql = @"
+                    SELECT 
+                    w.ward_id AS ""ID"",
+                    'Палата №' || w.number_ward || ' (Свободно мест: ' || (w.capacity - COUNT(mh.patient_id)) || ')' AS ""№ Палаты""
+                    FROM Ward w
+                    LEFT JOIN Medical_history mh ON w.ward_id = mh.ward_id AND mh.date_of_discharge IS NULL
+                    GROUP BY w.ward_id, w.number_ward, w.capacity
+                    HAVING COUNT(mh.patient_id) < w.capacity
+                    ORDER BY w.number_ward;";
+            try
+            {
+                return ExecuteQuery(sql, null);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Ошибка при получении списка свободных палат", ex);
             }
         }
     }

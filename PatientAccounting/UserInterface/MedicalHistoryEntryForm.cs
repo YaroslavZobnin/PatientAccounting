@@ -17,12 +17,21 @@ namespace PatientAccounting.UserInterface
         }
         private void LoadComboBoxes()
         {
-            DoctorComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Doctors);
-            DoctorComboBox.DisplayMember = "Врач";
-            DoctorComboBox.ValueMember = "ID";
-            WardComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
-            WardComboBox.DisplayMember = "№ Палаты";
-            WardComboBox.ValueMember = "ID";
+            try
+            {
+                DoctorComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.MedicalStaff);
+                DoctorComboBox.DisplayMember = "Врач";
+                DoctorComboBox.ValueMember = "ID";
+                DoctorComboBox.SelectedIndex = -1;
+                WardComboBox.DataSource = DataBaseProcessing.GetAvailableWards();
+                WardComboBox.DisplayMember = "№ Палаты";
+                WardComboBox.ValueMember = "ID";
+                WardComboBox.SelectedIndex = -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке списков: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
         public bool ValidateData()
         {

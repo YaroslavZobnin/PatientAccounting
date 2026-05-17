@@ -28,8 +28,8 @@ namespace PatientAccounting.UserInterface
             try
             {
                 ValidateTakenData.IsNeededRole(row, "Пациент");
-                int id = Convert.ToInt32(row["customer_role_id"]);
-                string name = GeneralMethods.GetPatientFullName(row);
+                int id = Convert.ToInt32(row["patient_id"]);
+                string? name = row["ФИО"].ToString();
                 SetPanelState(ChoicePanel, false);
                 var entryForm = new MedicalHistoryEntryForm(id, name);
                 entryForm.OnClosed += () => OnClosed?.Invoke();
@@ -39,7 +39,7 @@ namespace PatientAccounting.UserInterface
             {
                 MessageBox.Show(ex.Message, "Ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Критическая ошибка!", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

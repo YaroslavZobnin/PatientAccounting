@@ -5,6 +5,7 @@
         Patients,
         Staff,
         Doctors,
+        MedicalStaff,
         Wards,
         Diseases,
         Treatments

@@ -111,7 +111,7 @@
             CancelButton.Name = "CancelButton";
             CancelButton.Size = new Size(93, 36);
             CancelButton.TabIndex = 4;
-            CancelButton.Text = "Выход";
+            CancelButton.Text = "Меню";
             CancelButton.UseVisualStyleBackColor = false;
             CancelButton.Click += CancelButton_Click;
             // 
