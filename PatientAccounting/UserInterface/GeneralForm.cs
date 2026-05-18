@@ -14,30 +14,25 @@ namespace PatientAccounting
         }
         private void WindowDefinition()
         {
-            if(_user is Patient patient)
+            UserControl? targetWindow = _user switch
             {
-                UserControlsPanel.Controls.Clear();
-                var patientWindow = new PatientWindow(patient);
-                patientWindow.Dock = DockStyle.Fill;
-                UserControlsPanel.Controls.Add(patientWindow);
-            }
-            else if(_user is Staff staff)
-            {
-                if (staff.Role == (UserRole)5)
-                {
-                    UserControlsPanel.Controls.Clear();
-                    var systemAdminWindow = new SystemAdministrator(staff);
-                    systemAdminWindow.Dock = DockStyle.Fill;
-                    UserControlsPanel.Controls.Add(systemAdminWindow);
-                }
-                if(staff.Role == (UserRole)2)
-                {
-                    UserControlsPanel.Controls.Clear();
-                    var medicalRegistrar = new MedicalRegistrar(staff);
-                    medicalRegistrar.Dock = DockStyle.Fill;
-                    UserControlsPanel.Controls.Add(medicalRegistrar);
-                }
-            }
+                Patient patient => new PatientWindow(patient),
+                Staff staff when staff.Role == UserRole.SystemRegistrar => new SystemAdministrator(staff),
+                Staff staff when staff.Role == UserRole.MedicalRegistrar => new MedicalRegistrar(staff),
+                Staff staff when staff.Role == UserRole.AttendingPhysician => new DoctorWindow(staff),
+                _ => null 
+            };
+            if (targetWindow != null)
+                ChangeUserInterface(targetWindow);
+            else
+                MessageBox.Show("Ошибка: Роль пользователя не распознана или доступ запрещен.",
+                                "Ошибка авторизации", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+        private void ChangeUserInterface(UserControl control)
+        {
+            UserControlsPanel.Controls.Clear();
+            control.Dock = DockStyle.Fill;
+            UserControlsPanel.Controls.Add(control);
         }
         private void ExitButton_Click(object sender, EventArgs e) => this.Close();
         private void ExtraMenuButton_Click(object sender, EventArgs e) => OpenAdditionalButtons();

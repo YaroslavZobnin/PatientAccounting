@@ -9,23 +9,30 @@ namespace PatientAccounting.UserInterface
         public event Action? OnClosed;
         public event Action<DataRow>? OnItemSelected;
         private ViewListMode _currentMode;
+        private DataTable? _customDataSource;
         public GetPersonFromList(ViewListMode mode)
         {
             InitializeComponent();
             _currentMode = mode;
             LoadData();
         }
+        public GetPersonFromList(DataTable customData)
+        {
+            InitializeComponent();
+            _customDataSource = customData;
+            LoadData();
+        }
         private void LoadData()
         {
             try
             {
-                DataTable data = DataBaseProcessing.GetListByMode(_currentMode);
+                DataTable data = _customDataSource ?? DataBaseProcessing.GetListByMode(_currentMode);
                 UniversalGrid.DataSource = data;
-
+                string nameRole = Translator.TranslateRole(_currentMode) + "_id";
                 if (UniversalGrid.Columns.Contains("ID"))
                 {
-                    data.Columns["ID"].ColumnName = "patient_id";
-                    SetColumnsState(UniversalGrid, "patient_id", false);
+                    data.Columns["ID"].ColumnName = nameRole;
+                    SetColumnsState(UniversalGrid, nameRole, false);
                 }
                 if (UniversalGrid.Columns.Contains("role_name"))
                     SetColumnsState(UniversalGrid, "role_name", false);

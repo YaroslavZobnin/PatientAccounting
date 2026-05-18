@@ -29,7 +29,7 @@ namespace PatientAccounting.UserInterface
             {
                 ValidateTakenData.IsNeededRole(row, "Пациент");
                 int id = Convert.ToInt32(row["patient_id"]);
-                string? name = row["ФИО"].ToString();
+                string name = GeneralMethods.GetPatientFullName(row);
                 SetPanelState(ChoicePanel, false);
                 var entryForm = new MedicalHistoryEntryForm(id, name);
                 entryForm.OnClosed += () => OnClosed?.Invoke();
@@ -67,7 +67,6 @@ namespace PatientAccounting.UserInterface
             panel.Visible = visible;
             panel.Enabled = visible;
         }
-
         private void CancelButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
     }
 }

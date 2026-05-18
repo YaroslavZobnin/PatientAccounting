@@ -4,6 +4,8 @@ using PatientAccounting.Services;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
+using System.Net;
+using System.Windows.Forms;
 namespace PatientAccounting.Data
 {
     internal static class DataBaseProcessing
@@ -464,6 +466,64 @@ namespace PatientAccounting.Data
             {
                 throw new Exception("Ошибка при получении списка свободных палат", ex);
             }
+        }
+        public static DataTable GetActiveHistoriesByPatient(int patientId)
+        {
+            const string sql = @"
+                    SELECT 
+                        mh.medical_history_id AS ""ID"",
+                        mh.date_of_receipt AS ""Дата поступления"",
+                        w.number_ward AS ""Палата"",
+                        d.staff_worker_surname || ' ' || d.staff_worker_surname || d.staff_worker_patronymic AS ""Врач""
+                    FROM Medical_history mh
+                    JOIN Ward w ON mh.ward_id = w.ward_id
+                    JOIN Staff_worker d ON mh.staff_worker_id = d.staff_worker_id
+                    WHERE mh.patient_id = @patientId AND mh.date_of_discharge IS NULL
+                    ORDER BY mh.date_of_receipt DESC;";
+            var args = new Dictionary<string, object> { { "patientId", patientId } };
+            return ExecuteQuery(sql, args);
+        }
+        public static DataTable GetPastHistoriesByPatient(int patientId)
+        {
+            const string sql = @"SELECT 
+                        mh.date_of_receipt AS ""Поступление"",
+                        mh.date_of_discharge AS ""Выписка"",
+                        dis.disease_name AS ""Диагноз"",
+                        m.name_medicine AS ""Лечение""
+                    FROM Medical_history mh
+                    LEFT JOIN Disease dis ON mh.disease_id = dis.disease_id
+                    LEFT JOIN Treatment t ON mh.medical_history_id = t.medical_history_id
+                    LEFT JOIN Medicine m ON t.medicine_id = m.medicine_id
+                    WHERE mh.patient_id = @patientId AND mh.date_of_discharge IS NOT NULL
+                    ORDER BY mh.date_of_discharge DESC";
+            var args = new Dictionary<string, object> { { "patientId", patientId } };
+            return ExecuteQuery(sql, args);
+        }
+        public static void UpdateMedicalHistory(int historyId, int diseaseId, int treatmentId, int wardId)
+        {
+            const string sql = @"UPDATE Medical_history 
+                    SET disease_id = @diseaseId, 
+                        treatment_id = @treatmentId,
+                        ward_id = @wardId
+                    WHERE medical_history_id = @historyId;";
+
+            var args = new Dictionary<string, object>
+            {
+                { "historyId", historyId },
+                { "diseaseId", diseaseId },
+                { "treatmentId", treatmentId },
+                { "wardId", wardId }
+            };
+            ExecuteNonQuery(sql, args);
+        }
+        public static DataRow? GetMedicalHistoryDetails(int historyId)
+        {
+            const string sql = @"SELECT ward_id, date_of_receipt
+                    FROM Medical_history 
+                    WHERE medical_history_id = @historyId;";
+            var args = new Dictionary<string, object> { { "historyId", historyId } };
+            DataTable dataTable = ExecuteQuery(sql, args);
+            return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
         }
     }
 }

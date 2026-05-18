@@ -35,6 +35,7 @@
             SearchByListRadioButton = new RadioButton();
             SearchByPassportRadioButton = new RadioButton();
             ChoiceParameterLabel = new Label();
+            MainPanel = new Panel();
             ChoiceSearchParameterPanel.SuspendLayout();
             SuspendLayout();
             // 
@@ -52,7 +53,9 @@
             // 
             // FullNameLabel
             // 
+            FullNameLabel.Anchor = AnchorStyles.Top;
             FullNameLabel.BackColor = Color.Transparent;
+            FullNameLabel.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             FullNameLabel.Location = new Point(152, 36);
             FullNameLabel.Name = "FullNameLabel";
             FullNameLabel.Size = new Size(644, 22);
@@ -75,46 +78,58 @@
             // 
             // ChoiceSearchParameterPanel
             // 
+            ChoiceSearchParameterPanel.Anchor = AnchorStyles.Top;
             ChoiceSearchParameterPanel.BackColor = Color.Transparent;
             ChoiceSearchParameterPanel.Controls.Add(SearchByListRadioButton);
             ChoiceSearchParameterPanel.Controls.Add(SearchByPassportRadioButton);
             ChoiceSearchParameterPanel.Controls.Add(ChoiceParameterLabel);
             ChoiceSearchParameterPanel.Location = new Point(276, 61);
             ChoiceSearchParameterPanel.Name = "ChoiceSearchParameterPanel";
-            ChoiceSearchParameterPanel.Size = new Size(463, 69);
+            ChoiceSearchParameterPanel.Size = new Size(413, 69);
             ChoiceSearchParameterPanel.TabIndex = 5;
             // 
             // SearchByListRadioButton
             // 
             SearchByListRadioButton.AutoSize = true;
-            SearchByListRadioButton.Location = new Point(248, 34);
+            SearchByListRadioButton.Location = new Point(3, 35);
             SearchByListRadioButton.Name = "SearchByListRadioButton";
             SearchByListRadioButton.Size = new Size(179, 24);
             SearchByListRadioButton.TabIndex = 2;
             SearchByListRadioButton.TabStop = true;
             SearchByListRadioButton.Text = "По списку пациентов";
             SearchByListRadioButton.UseVisualStyleBackColor = true;
+            SearchByListRadioButton.CheckedChanged += SearchByListRadioButton_CheckedChanged;
             // 
             // SearchByPassportRadioButton
             // 
             SearchByPassportRadioButton.AutoSize = true;
-            SearchByPassportRadioButton.Location = new Point(14, 34);
+            SearchByPassportRadioButton.Location = new Point(283, 35);
             SearchByPassportRadioButton.Name = "SearchByPassportRadioButton";
             SearchByPassportRadioButton.Size = new Size(118, 24);
             SearchByPassportRadioButton.TabIndex = 1;
             SearchByPassportRadioButton.TabStop = true;
             SearchByPassportRadioButton.Text = "По паспорту";
             SearchByPassportRadioButton.UseVisualStyleBackColor = true;
+            SearchByPassportRadioButton.CheckedChanged += SearchByPassportRadioButton_CheckedChanged;
             // 
             // ChoiceParameterLabel
             // 
             ChoiceParameterLabel.AutoSize = true;
             ChoiceParameterLabel.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            ChoiceParameterLabel.Location = new Point(102, 9);
+            ChoiceParameterLabel.Location = new Point(109, 9);
             ChoiceParameterLabel.Name = "ChoiceParameterLabel";
             ChoiceParameterLabel.Size = new Size(219, 23);
             ChoiceParameterLabel.TabIndex = 0;
             ChoiceParameterLabel.Text = "Как осуществляем поиск?";
+            // 
+            // MainPanel
+            // 
+            MainPanel.Anchor = AnchorStyles.Top;
+            MainPanel.BackColor = Color.Transparent;
+            MainPanel.Location = new Point(8, 61);
+            MainPanel.Name = "MainPanel";
+            MainPanel.Size = new Size(869, 548);
+            MainPanel.TabIndex = 6;
             // 
             // DoctorWindow
             // 
@@ -124,6 +139,7 @@
             Controls.Add(SystemAdminLabel);
             Controls.Add(FullNameLabel);
             Controls.Add(PersonalAccountLabel);
+            Controls.Add(MainPanel);
             DoubleBuffered = true;
             Name = "DoctorWindow";
             Size = new Size(879, 649);
@@ -142,5 +158,6 @@
         private RadioButton SearchByListRadioButton;
         private RadioButton SearchByPassportRadioButton;
         private Label ChoiceParameterLabel;
+        private Panel MainPanel;
     }
 }

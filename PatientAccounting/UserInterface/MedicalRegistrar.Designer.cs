@@ -97,7 +97,7 @@
             CreateMedicalHistory.Cursor = Cursors.Hand;
             CreateMedicalHistory.FlatStyle = FlatStyle.Popup;
             CreateMedicalHistory.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            CreateMedicalHistory.Location = new Point(480, 36);
+            CreateMedicalHistory.Location = new Point(507, 36);
             CreateMedicalHistory.Name = "CreateMedicalHistory";
             CreateMedicalHistory.Size = new Size(136, 35);
             CreateMedicalHistory.TabIndex = 4;
@@ -109,7 +109,7 @@
             // 
             PatientExtract.Cursor = Cursors.Hand;
             PatientExtract.FlatStyle = FlatStyle.Popup;
-            PatientExtract.Location = new Point(329, 36);
+            PatientExtract.Location = new Point(354, 36);
             PatientExtract.Name = "PatientExtract";
             PatientExtract.Size = new Size(100, 35);
             PatientExtract.TabIndex = 3;
@@ -122,7 +122,7 @@
             WritingToDataBaseButton.Cursor = Cursors.Hand;
             WritingToDataBaseButton.FlatStyle = FlatStyle.Popup;
             WritingToDataBaseButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            WritingToDataBaseButton.Location = new Point(170, 36);
+            WritingToDataBaseButton.Location = new Point(185, 36);
             WritingToDataBaseButton.Name = "WritingToDataBaseButton";
             WritingToDataBaseButton.Size = new Size(100, 35);
             WritingToDataBaseButton.TabIndex = 2;
@@ -134,7 +134,7 @@
             // 
             ViewingDoctorsOrPatientsButton.Cursor = Cursors.Hand;
             ViewingDoctorsOrPatientsButton.FlatStyle = FlatStyle.Popup;
-            ViewingDoctorsOrPatientsButton.Location = new Point(12, 36);
+            ViewingDoctorsOrPatientsButton.Location = new Point(45, 36);
             ViewingDoctorsOrPatientsButton.Name = "ViewingDoctorsOrPatientsButton";
             ViewingDoctorsOrPatientsButton.Size = new Size(100, 35);
             ViewingDoctorsOrPatientsButton.TabIndex = 1;
