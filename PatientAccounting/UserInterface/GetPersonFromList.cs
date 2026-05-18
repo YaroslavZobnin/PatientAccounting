@@ -54,6 +54,6 @@ namespace PatientAccounting.UserInterface
         }
         private void SetColumnsState(DataGridView data, string columnName, bool visible)
             => data.Columns[columnName].Visible = visible;
-        private void Exit() => OnClosed?.Invoke();
+        private void ExitButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
     }
 }

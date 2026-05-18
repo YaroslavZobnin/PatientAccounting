@@ -14,26 +14,11 @@ namespace PatientAccounting.UserInterface
             Reversion();
         }
         private void InitializeFullName() => FullNameLabel.Text = GeneralMethods.GetFullName(_staff);
-        private void OpenPatientSearch()
-        {
-            var searchControl = new GetPersonFromList(ViewListMode.Patients);
-            searchControl.OnItemSelected += (patientRow) =>
-            {
-                int patientId = Convert.ToInt32(patientRow["patient_id"]);
-                string patientName = patientRow["ФИО"].ToString() ?? "Неизвестный пациент";
-                OpenHistorySelector(patientId, patientName);
-            };
-            ShowControl(searchControl);
-        }
         private void OpenHistorySelector(int patientId, string patientName)
         {
             var historySelector = new PatientHistorySelector(patientId, patientName);
-            historySelector.OnClosed += () => OpenPatientSearch();
-            historySelector.OnHistorySelected += (historyId) =>
-            {
-                OpenTreatmentForm(historyId, patientId, patientName);
-            };
-
+            historySelector.OnClosed += () => Reversion();
+            historySelector.OnHistorySelected += (historyId) => OpenTreatmentForm(historyId, patientId, patientName);
             ShowControl(historySelector);
         }
         private void OpenTreatmentForm(int historyId, int patientId, string patientName)
@@ -66,30 +51,22 @@ namespace PatientAccounting.UserInterface
             panel.Visible = visible;
             panel.Enabled = visible;
         }
-
-        private void SearchByListRadioButton_CheckedChanged(object sender, EventArgs e)
-            => OpenPatientSearchByList();
-
-        private void SearchByPassportRadioButton_CheckedChanged(object sender, EventArgs e)
-            => OpenPatientSearchByPassport();
         private void OpenPatientSearchByList()
         {
             var searchControl = new GetPersonFromList(ViewListMode.Patients);
-
-            searchControl.OnItemSelected += (patientRow) => 
+            searchControl.OnItemSelected += (patientRow) =>
             {
                 int patientId = Convert.ToInt32(patientRow["patient_id"]);
                 string patientName = patientRow["ФИО"].ToString() ?? "Неизвестный пациент";
                 OpenHistorySelector(patientId, patientName);
             };
+            searchControl.OnClosed += () => Reversion();
             ShowControl(searchControl);
         }
         private void OpenPatientSearchByPassport()
         {
-
             var passportControl = new PassportSearching("Введите данные пациента");
-
-            passportControl.OnUserFound += (patientRow) => 
+            passportControl.OnUserFound += (patientRow) =>
             {
                 ValidateTakenData.IsNeededRole(patientRow, "Пациент");
                 int patientId = Convert.ToInt32(patientRow["patient_id"]);
@@ -99,5 +76,9 @@ namespace PatientAccounting.UserInterface
             passportControl.OnClosed += () => Reversion();
             ShowControl(passportControl);
         }
+
+        private void SearchByListButton_Click(object sender, EventArgs e) => OpenPatientSearchByList();
+
+        private void SearchByPassportButton_Click(object sender, EventArgs e) => OpenPatientSearchByPassport();
     }
 }

@@ -33,6 +33,7 @@
             PassportDataTextBox = new TextBox();
             SearchButton = new Button();
             CancelButton = new Button();
+            MenuButton = new Button();
             SuspendLayout();
             // 
             // SearchByPassportLabel
@@ -94,10 +95,25 @@
             CancelButton.UseVisualStyleBackColor = false;
             CancelButton.Click += CancelButton_Click;
             // 
+            // MenuButton
+            // 
+            MenuButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            MenuButton.BackColor = Color.Transparent;
+            MenuButton.Cursor = Cursors.Hand;
+            MenuButton.FlatStyle = FlatStyle.Popup;
+            MenuButton.Location = new Point(3, 152);
+            MenuButton.Name = "MenuButton";
+            MenuButton.Size = new Size(95, 32);
+            MenuButton.TabIndex = 5;
+            MenuButton.Text = "Меню";
+            MenuButton.UseVisualStyleBackColor = false;
+            MenuButton.Click += MenuButton_Click;
+            // 
             // PassportSearching
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(MenuButton);
             Controls.Add(CancelButton);
             Controls.Add(SearchButton);
             Controls.Add(PassportDataTextBox);
@@ -117,5 +133,6 @@
         private TextBox PassportDataTextBox;
         private Button SearchButton;
         private Button CancelButton;
+        private Button MenuButton;
     }
 }

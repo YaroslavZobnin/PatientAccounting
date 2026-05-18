@@ -30,6 +30,7 @@
         {
             UniversalGrid = new DataGridView();
             SelectButton = new Button();
+            ExitButton = new Button();
             ((System.ComponentModel.ISupportInitialize)UniversalGrid).BeginInit();
             SuspendLayout();
             // 
@@ -50,6 +51,7 @@
             // 
             // SelectButton
             // 
+            SelectButton.Anchor = AnchorStyles.Bottom;
             SelectButton.BackColor = Color.Transparent;
             SelectButton.FlatStyle = FlatStyle.Popup;
             SelectButton.Location = new Point(288, 350);
@@ -60,11 +62,24 @@
             SelectButton.UseVisualStyleBackColor = false;
             SelectButton.Click += SelectButton_Click;
             // 
+            // ExitButton
+            // 
+            ExitButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            ExitButton.FlatStyle = FlatStyle.Popup;
+            ExitButton.Location = new Point(4, 350);
+            ExitButton.Name = "ExitButton";
+            ExitButton.Size = new Size(174, 30);
+            ExitButton.TabIndex = 2;
+            ExitButton.Text = "Отмена";
+            ExitButton.UseVisualStyleBackColor = true;
+            ExitButton.Click += ExitButton_Click;
+            // 
             // GetPersonFromList
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.Transparent;
+            Controls.Add(ExitButton);
             Controls.Add(SelectButton);
             Controls.Add(UniversalGrid);
             DoubleBuffered = true;
@@ -78,5 +93,6 @@
 
         private DataGridView UniversalGrid;
         private Button SelectButton;
+        private Button ExitButton;
     }
 }

@@ -32,8 +32,8 @@
             FullNameLabel = new Label();
             SystemAdminLabel = new Label();
             ChoiceSearchParameterPanel = new Panel();
-            SearchByListRadioButton = new RadioButton();
-            SearchByPassportRadioButton = new RadioButton();
+            SearchByPassportButton = new Button();
+            SearchByListButton = new Button();
             ChoiceParameterLabel = new Label();
             MainPanel = new Panel();
             ChoiceSearchParameterPanel.SuspendLayout();
@@ -80,37 +80,38 @@
             // 
             ChoiceSearchParameterPanel.Anchor = AnchorStyles.Top;
             ChoiceSearchParameterPanel.BackColor = Color.Transparent;
-            ChoiceSearchParameterPanel.Controls.Add(SearchByListRadioButton);
-            ChoiceSearchParameterPanel.Controls.Add(SearchByPassportRadioButton);
+            ChoiceSearchParameterPanel.Controls.Add(SearchByPassportButton);
+            ChoiceSearchParameterPanel.Controls.Add(SearchByListButton);
             ChoiceSearchParameterPanel.Controls.Add(ChoiceParameterLabel);
             ChoiceSearchParameterPanel.Location = new Point(276, 61);
             ChoiceSearchParameterPanel.Name = "ChoiceSearchParameterPanel";
             ChoiceSearchParameterPanel.Size = new Size(413, 69);
             ChoiceSearchParameterPanel.TabIndex = 5;
             // 
-            // SearchByListRadioButton
+            // SearchByPassportButton
             // 
-            SearchByListRadioButton.AutoSize = true;
-            SearchByListRadioButton.Location = new Point(3, 35);
-            SearchByListRadioButton.Name = "SearchByListRadioButton";
-            SearchByListRadioButton.Size = new Size(179, 24);
-            SearchByListRadioButton.TabIndex = 2;
-            SearchByListRadioButton.TabStop = true;
-            SearchByListRadioButton.Text = "По списку пациентов";
-            SearchByListRadioButton.UseVisualStyleBackColor = true;
-            SearchByListRadioButton.CheckedChanged += SearchByListRadioButton_CheckedChanged;
+            SearchByPassportButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            SearchByPassportButton.Cursor = Cursors.Hand;
+            SearchByPassportButton.FlatStyle = FlatStyle.Popup;
+            SearchByPassportButton.Location = new Point(266, 38);
+            SearchByPassportButton.Name = "SearchByPassportButton";
+            SearchByPassportButton.Size = new Size(106, 28);
+            SearchByPassportButton.TabIndex = 2;
+            SearchByPassportButton.Text = "По паспорту";
+            SearchByPassportButton.UseVisualStyleBackColor = true;
+            SearchByPassportButton.Click += SearchByPassportButton_Click;
             // 
-            // SearchByPassportRadioButton
+            // SearchByListButton
             // 
-            SearchByPassportRadioButton.AutoSize = true;
-            SearchByPassportRadioButton.Location = new Point(283, 35);
-            SearchByPassportRadioButton.Name = "SearchByPassportRadioButton";
-            SearchByPassportRadioButton.Size = new Size(118, 24);
-            SearchByPassportRadioButton.TabIndex = 1;
-            SearchByPassportRadioButton.TabStop = true;
-            SearchByPassportRadioButton.Text = "По паспорту";
-            SearchByPassportRadioButton.UseVisualStyleBackColor = true;
-            SearchByPassportRadioButton.CheckedChanged += SearchByPassportRadioButton_CheckedChanged;
+            SearchByListButton.Cursor = Cursors.Hand;
+            SearchByListButton.FlatStyle = FlatStyle.Popup;
+            SearchByListButton.Location = new Point(8, 38);
+            SearchByListButton.Name = "SearchByListButton";
+            SearchByListButton.Size = new Size(106, 28);
+            SearchByListButton.TabIndex = 1;
+            SearchByListButton.Text = "По списку";
+            SearchByListButton.UseVisualStyleBackColor = true;
+            SearchByListButton.Click += SearchByListButton_Click;
             // 
             // ChoiceParameterLabel
             // 
@@ -124,7 +125,7 @@
             // 
             // MainPanel
             // 
-            MainPanel.Anchor = AnchorStyles.Top;
+            MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             MainPanel.BackColor = Color.Transparent;
             MainPanel.Location = new Point(8, 61);
             MainPanel.Name = "MainPanel";
@@ -155,9 +156,9 @@
         private Label FullNameLabel;
         private Label SystemAdminLabel;
         private Panel ChoiceSearchParameterPanel;
-        private RadioButton SearchByListRadioButton;
-        private RadioButton SearchByPassportRadioButton;
         private Label ChoiceParameterLabel;
         private Panel MainPanel;
+        private Button SearchByPassportButton;
+        private Button SearchByListButton;
     }
 }

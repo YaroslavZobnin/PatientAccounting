@@ -449,8 +449,7 @@ namespace PatientAccounting.Data
         }
         public static DataTable GetAvailableWards()
         {
-            const string sql = @"
-                    SELECT 
+            const string sql = @"SELECT 
                     w.ward_id AS ""ID"",
                     'Палата №' || w.number_ward || ' (Свободно мест: ' || (w.capacity - COUNT(mh.patient_id)) || ')' AS ""№ Палаты""
                     FROM Ward w
@@ -469,12 +468,11 @@ namespace PatientAccounting.Data
         }
         public static DataTable GetActiveHistoriesByPatient(int patientId)
         {
-            const string sql = @"
-                    SELECT 
+            const string sql = @"SELECT 
                         mh.medical_history_id AS ""ID"",
                         mh.date_of_receipt AS ""Дата поступления"",
                         w.number_ward AS ""Палата"",
-                        d.staff_worker_surname || ' ' || d.staff_worker_surname || d.staff_worker_patronymic AS ""Врач""
+                        d.staff_worker_surname || ' ' || d.staff_worker_surname || ' ' || d.staff_worker_patronymic AS ""Врач""
                     FROM Medical_history mh
                     JOIN Ward w ON mh.ward_id = w.ward_id
                     JOIN Staff_worker d ON mh.staff_worker_id = d.staff_worker_id

@@ -31,5 +31,11 @@ namespace PatientAccounting.UserInterface
         public void Clear() => PassportDataTextBox.Clear();
         public void Cancel() => Clear();
         private void CancelButton_Click(object sender, EventArgs e) => Cancel();
+
+        private void MenuButton_Click(object sender, EventArgs e)
+        {
+            Cancel();
+            OnClosed?.Invoke();
+        }
     }
 }

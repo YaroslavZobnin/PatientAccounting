@@ -89,6 +89,7 @@
             SearchByDate.Name = "SearchByDate";
             SearchByDate.Size = new Size(188, 27);
             SearchByDate.TabIndex = 3;
+            SearchByDate.Value = new DateTime(2026, 5, 18, 16, 54, 24, 0);
             // 
             // SearchByDatePanel
             // 
