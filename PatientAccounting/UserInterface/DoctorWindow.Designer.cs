@@ -125,7 +125,7 @@
             // 
             // MainPanel
             // 
-            MainPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            MainPanel.Anchor = AnchorStyles.Top;
             MainPanel.BackColor = Color.Transparent;
             MainPanel.Location = new Point(8, 61);
             MainPanel.Name = "MainPanel";

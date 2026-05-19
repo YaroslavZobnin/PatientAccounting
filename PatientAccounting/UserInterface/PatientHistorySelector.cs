@@ -10,13 +10,15 @@ namespace PatientAccounting.UserInterface
         public event Action? OnClosed;
         public event Action<int>? OnHistorySelected; 
         private int _patientId;
+        private int _doctorId;
         private string _patientName;
         private DataTable _activeHistories;
         private bool _isShowingArchive = false;
-        public PatientHistorySelector(int patientId, string patientName)
+        public PatientHistorySelector(int patientId, string patientName, int doctorId)
         {
             InitializeComponent();
             _patientId = patientId;
+            _doctorId = doctorId;
             _patientName = patientName;
             PatientLabel.Text = $"Мед. карты пациента: {patientName}";
             LoadActiveHistories();
@@ -25,9 +27,8 @@ namespace PatientAccounting.UserInterface
         {
             try
             {
-                _activeHistories = DataBaseProcessing.GetActiveHistoriesByPatient(_patientId);
+                _activeHistories = DataBaseProcessing.GetActiveHistoriesByDoctor(_patientId, _doctorId);
                 HistoriesGrid.DataSource = _activeHistories;
-
                 if (HistoriesGrid.Columns.Contains("ID"))
                     HistoriesGrid.Columns["ID"].Visible = false;
             }
@@ -46,13 +47,29 @@ namespace PatientAccounting.UserInterface
             panel.Visible = visible;
             panel.Enabled = visible;
         }
-        private void HistoryDatePicker_ValueChanged(object sender, EventArgs e)
+        private void SearchDate_ValueChanged(object sender, EventArgs e)
+            => SearchDate();
+        private void SearchDate()
         {
-            if (_activeHistories == null) return;
-            string selectedDate = SearchByDate.Value.ToString("yyyy-MM-dd");
-            DataView dv = _activeHistories.DefaultView;
-            dv.RowFilter = $"[Дата поступления] <= #{selectedDate}# AND ([Дата выписки] >= #{selectedDate}# OR [Дата выписки] IS NULL)";
-            HistoriesGrid.DataSource = dv;
+            if (_activeHistories == null)
+                return;
+            if (SearchByDate.Checked)
+            {
+                DataTable filteredTable = _activeHistories.Clone();
+                DateOnly selectedDate = DateOnly.FromDateTime(SearchByDate.Value);
+                foreach (DataRow row in _activeHistories.Rows)
+                {
+                    if (row["Дата поступления"] != DBNull.Value)
+                    {
+                        DateOnly receiptDate = (DateOnly)row["Дата поступления"];
+                        if (receiptDate == selectedDate)
+                            filteredTable.ImportRow(row);
+                    }
+                }
+                HistoriesGrid.DataSource = filteredTable;
+            }
+            else
+                HistoriesGrid.DataSource = _activeHistories;
         }
         private void SwapModeButton_Click(object sender, EventArgs e)
         {

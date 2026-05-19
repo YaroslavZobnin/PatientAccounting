@@ -456,7 +456,7 @@ namespace PatientAccounting.Data
                     LEFT JOIN Medical_history mh ON w.ward_id = mh.ward_id AND mh.date_of_discharge IS NULL
                     GROUP BY w.ward_id, w.number_ward, w.capacity
                     HAVING COUNT(mh.patient_id) < w.capacity
-                    ORDER BY w.number_ward;";
+                    ORDER BY w.number_ward";
             try
             {
                 return ExecuteQuery(sql, null);
@@ -466,19 +466,22 @@ namespace PatientAccounting.Data
                 throw new Exception("Ошибка при получении списка свободных палат", ex);
             }
         }
-        public static DataTable GetActiveHistoriesByPatient(int patientId)
+        public static DataTable GetActiveHistoriesByDoctor(int patientId, int doctorId)
         {
             const string sql = @"SELECT 
                         mh.medical_history_id AS ""ID"",
                         mh.date_of_receipt AS ""Дата поступления"",
-                        w.number_ward AS ""Палата"",
-                        d.staff_worker_surname || ' ' || d.staff_worker_surname || ' ' || d.staff_worker_patronymic AS ""Врач""
+                        w.number_ward AS ""Палата""
                     FROM Medical_history mh
-                    JOIN Ward w ON mh.ward_id = w.ward_id
-                    JOIN Staff_worker d ON mh.staff_worker_id = d.staff_worker_id
-                    WHERE mh.patient_id = @patientId AND mh.date_of_discharge IS NULL
-                    ORDER BY mh.date_of_receipt DESC;";
-            var args = new Dictionary<string, object> { { "patientId", patientId } };
+                    LEFT JOIN Ward w ON mh.ward_id = w.ward_id
+                    WHERE mh.patient_id = @patientId 
+                      AND mh.staff_worker_id = @doctorId         
+                      AND mh.date_of_discharge IS NULL";
+            var args = new Dictionary<string, object>
+            {
+                { "patientId", patientId },
+                { "doctorId", doctorId }
+            };
             return ExecuteQuery(sql, args);
         }
         public static DataTable GetPastHistoriesByPatient(int patientId)
@@ -497,31 +500,45 @@ namespace PatientAccounting.Data
             var args = new Dictionary<string, object> { { "patientId", patientId } };
             return ExecuteQuery(sql, args);
         }
-        public static void UpdateMedicalHistory(int historyId, int diseaseId, int treatmentId, int wardId)
+        public static void UpdateMedicalHistory(int historyId, int diseaseId, int medicineId, int wardId)
         {
-            const string sql = @"UPDATE Medical_history 
-                    SET disease_id = @diseaseId, 
-                        treatment_id = @treatmentId,
-                        ward_id = @wardId
-                    WHERE medical_history_id = @historyId;";
+            const string sqlUpdateHistory = @"
+            UPDATE Medical_history 
+            SET ward_id = @ward_id, 
+                disease_id = @disease_id
+            WHERE medical_history_id = @history_id;";
 
+
+            const string sqlDeleteOldTreatment = @"
+            DELETE FROM Treatment 
+            WHERE medical_history_id = @history_id;";
+
+            const string sqlInsertNewTreatment = @"
+            INSERT INTO Treatment (medical_history_id, medicine_id)
+            VALUES (@history_id, @medicine_id);";
             var args = new Dictionary<string, object>
             {
-                { "historyId", historyId },
-                { "diseaseId", diseaseId },
-                { "treatmentId", treatmentId },
-                { "wardId", wardId }
+                { "history_id", historyId },
+                { "ward_id", wardId },
+                { "disease_id", diseaseId },
+                { "medicine_id", medicineId } 
             };
-            ExecuteNonQuery(sql, args);
+            ExecuteNonQuery(sqlUpdateHistory, args);
+            ExecuteNonQuery(sqlDeleteOldTreatment, args);
+            ExecuteNonQuery(sqlInsertNewTreatment, args);
         }
         public static DataRow? GetMedicalHistoryDetails(int historyId)
         {
-            const string sql = @"SELECT ward_id, date_of_receipt
-                    FROM Medical_history 
-                    WHERE medical_history_id = @historyId;";
+            const string sql = @"SELECT mh.date_of_receipt, mh.ward_id, mh.disease_id,
+                        (SELECT t.medicine_id 
+                         FROM Treatment t 
+                         WHERE t.medical_history_id = mh.medical_history_id 
+                         ORDER BY t.treatment_id DESC) AS treatment_id
+                    FROM Medical_history mh
+                    WHERE mh.medical_history_id = @historyId;";
             var args = new Dictionary<string, object> { { "historyId", historyId } };
-            DataTable dataTable = ExecuteQuery(sql, args);
-            return dataTable.Rows.Count > 0 ? dataTable.Rows[0] : null;
+            DataTable dt = ExecuteQuery(sql, args);
+            return dt.Rows.Count > 0 ? dt.Rows[0] : null;
         }
     }
 }

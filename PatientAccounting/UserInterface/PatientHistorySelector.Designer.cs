@@ -87,9 +87,11 @@
             SearchByDate.Anchor = AnchorStyles.Top;
             SearchByDate.Location = new Point(41, 31);
             SearchByDate.Name = "SearchByDate";
+            SearchByDate.ShowCheckBox = true;
             SearchByDate.Size = new Size(188, 27);
             SearchByDate.TabIndex = 3;
             SearchByDate.Value = new DateTime(2026, 5, 18, 16, 54, 24, 0);
+            SearchByDate.ValueChanged += SearchDate_ValueChanged;
             // 
             // SearchByDatePanel
             // 

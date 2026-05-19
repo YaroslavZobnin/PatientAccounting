@@ -1,9 +1,7 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
 using PatientAccounting.Models;
-using System;
 using System.Data;
-using System.Windows.Forms;
 namespace PatientAccounting.UserInterface
 {
     public partial class DoctorTreatmentForm : UserControl, IWindowClosed
@@ -21,19 +19,21 @@ namespace PatientAccounting.UserInterface
         {
             try
             {
-                DiseaseComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Diseases);
                 DiseaseComboBox.DisplayMember = "Название болезни";
                 DiseaseComboBox.ValueMember = "ID";
+                DiseaseComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Diseases);
                 DiseaseComboBox.SelectedIndex = -1;
 
-                TreatmentComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Treatments);
-                TreatmentComboBox.DisplayMember = "Наименование";
+                TreatmentComboBox.DisplayMember = "Название препарата";
                 TreatmentComboBox.ValueMember = "ID";
+                TreatmentComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Treatments);
                 TreatmentComboBox.SelectedIndex = -1;
 
-                WardsComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
-                WardsComboBox.DisplayMember = "Номер палаты";
+                WardsComboBox.MaxDropDownItems = 8;
+                WardsComboBox.IntegralHeight = true;
+                WardsComboBox.DisplayMember = "№ Палаты";
                 WardsComboBox.ValueMember = "ID";
+                WardsComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
                 WardsComboBox.SelectedIndex = -1;
             }
             catch (Exception ex)
@@ -49,12 +49,17 @@ namespace PatientAccounting.UserInterface
                 DataRow? historyRow = DataBaseProcessing.GetMedicalHistoryDetails(_medicalHistoryId);
                 if (historyRow != null)
                 {
-                    DateOfReceipt.Value = (DateTime)historyRow["date_of_receipt"];
+                    DateOnly receiptDate = (DateOnly)historyRow["date_of_receipt"];
+
+                    DateOfReceipt.Value = receiptDate.ToDateTime(TimeOnly.MinValue);
                     if (historyRow["ward_id"] != DBNull.Value)
-                    {
-                        int currentWardId = Convert.ToInt32(historyRow["ward_id"]);
-                        WardsComboBox.SelectedValue = currentWardId;
-                    }
+                        WardsComboBox.SelectedValue = Convert.ToInt32(historyRow["ward_id"]);
+
+                    if (historyRow["disease_id"] != DBNull.Value)
+                        DiseaseComboBox.SelectedValue = Convert.ToInt32(historyRow["disease_id"]);
+
+                    if (historyRow["treatment_id"] != DBNull.Value)
+                        TreatmentComboBox.SelectedValue = Convert.ToInt32(historyRow["treatment_id"]);
                 }
             }
             catch (Exception ex)
@@ -70,6 +75,14 @@ namespace PatientAccounting.UserInterface
                                 "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
+            if (DiseaseComboBox.SelectedValue == null ||
+                TreatmentComboBox.SelectedValue == null ||
+                WardsComboBox.SelectedValue == null)
+            {
+                MessageBox.Show("Пожалуйста, убедитесь, что выбраны все поля: диагноз, лечение и палата!",
+                                "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
             try
             {
                 int diseaseId = Convert.ToInt32(DiseaseComboBox.SelectedValue);
@@ -82,7 +95,7 @@ namespace PatientAccounting.UserInterface
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении назначений в базу данных: {ex.Message}",
+                MessageBox.Show($"Ошибка при сохранении назначений в базу данных: {ex.ToString()}",
                                 "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }

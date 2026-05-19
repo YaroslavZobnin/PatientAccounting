@@ -59,7 +59,7 @@
             ExtraMenuPanel.Enabled = false;
             ExtraMenuPanel.Location = new Point(5, 54);
             ExtraMenuPanel.Name = "ExtraMenuPanel";
-            ExtraMenuPanel.Size = new Size(114, 75);
+            ExtraMenuPanel.Size = new Size(114, 93);
             ExtraMenuPanel.TabIndex = 2;
             ExtraMenuPanel.Visible = false;
             // 
@@ -68,7 +68,7 @@
             SizeScreenButton.Anchor = AnchorStyles.Top;
             SizeScreenButton.FlatStyle = FlatStyle.Popup;
             SizeScreenButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            SizeScreenButton.Location = new Point(0, 36);
+            SizeScreenButton.Location = new Point(0, 57);
             SizeScreenButton.Name = "SizeScreenButton";
             SizeScreenButton.Size = new Size(114, 33);
             SizeScreenButton.TabIndex = 1;
@@ -82,9 +82,9 @@
             BackToAuthorizationButton.FlatStyle = FlatStyle.Popup;
             BackToAuthorizationButton.Location = new Point(0, 3);
             BackToAuthorizationButton.Name = "BackToAuthorizationButton";
-            BackToAuthorizationButton.Size = new Size(114, 27);
+            BackToAuthorizationButton.Size = new Size(114, 48);
             BackToAuthorizationButton.TabIndex = 0;
-            BackToAuthorizationButton.Text = "Авторизация";
+            BackToAuthorizationButton.Text = "Выход из аккаунта";
             BackToAuthorizationButton.UseVisualStyleBackColor = true;
             BackToAuthorizationButton.Click += BackToAuthorizationButton_Click;
             // 
@@ -94,12 +94,12 @@
             ExtraMenuButton.Cursor = Cursors.Hand;
             ExtraMenuButton.FlatAppearance.BorderColor = Color.Gray;
             ExtraMenuButton.FlatStyle = FlatStyle.Flat;
-            ExtraMenuButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            ExtraMenuButton.Location = new Point(5, 12);
+            ExtraMenuButton.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ExtraMenuButton.Location = new Point(5, 3);
             ExtraMenuButton.Name = "ExtraMenuButton";
-            ExtraMenuButton.Size = new Size(114, 27);
+            ExtraMenuButton.Size = new Size(114, 36);
             ExtraMenuButton.TabIndex = 1;
-            ExtraMenuButton.Text = "Дополнительно";
+            ExtraMenuButton.Text = "Аккаунт";
             ExtraMenuButton.UseVisualStyleBackColor = true;
             ExtraMenuButton.Click += ExtraMenuButton_Click;
             // 
@@ -108,11 +108,11 @@
             ExitButton.Anchor = AnchorStyles.Bottom;
             ExitButton.Cursor = Cursors.Hand;
             ExitButton.FlatStyle = FlatStyle.Popup;
-            ExitButton.Location = new Point(13, 610);
+            ExitButton.Location = new Point(13, 581);
             ExitButton.Name = "ExitButton";
-            ExitButton.Size = new Size(100, 27);
+            ExitButton.Size = new Size(100, 56);
             ExitButton.TabIndex = 0;
-            ExitButton.Text = "Выйти";
+            ExitButton.Text = "Выйти из программы";
             ExitButton.UseVisualStyleBackColor = true;
             ExitButton.Click += ExitButton_Click;
             // 

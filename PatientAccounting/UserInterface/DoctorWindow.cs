@@ -5,7 +5,7 @@ namespace PatientAccounting.UserInterface
 {
     public partial class DoctorWindow : UserControl, IPresenter
     {
-        private Staff? _staff;
+        private Staff _staff;
         public DoctorWindow(Staff staff)
         {
             InitializeComponent();
@@ -16,7 +16,7 @@ namespace PatientAccounting.UserInterface
         private void InitializeFullName() => FullNameLabel.Text = GeneralMethods.GetFullName(_staff);
         private void OpenHistorySelector(int patientId, string patientName)
         {
-            var historySelector = new PatientHistorySelector(patientId, patientName);
+            var historySelector = new PatientHistorySelector(patientId, patientName, _staff.StaffId);
             historySelector.OnClosed += () => Reversion();
             historySelector.OnHistorySelected += (historyId) => OpenTreatmentForm(historyId, patientId, patientName);
             ShowControl(historySelector);
