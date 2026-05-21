@@ -4,8 +4,6 @@ using PatientAccounting.Services;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
-using System.Net;
-using System.Windows.Forms;
 namespace PatientAccounting.Data
 {
     internal static class DataBaseProcessing
@@ -487,16 +485,16 @@ namespace PatientAccounting.Data
         public static DataTable GetPastHistoriesByPatient(int patientId)
         {
             const string sql = @"SELECT 
-                        mh.date_of_receipt AS ""Поступление"",
-                        mh.date_of_discharge AS ""Выписка"",
-                        dis.disease_name AS ""Диагноз"",
-                        m.name_medicine AS ""Лечение""
+                        mh.medical_history_id AS ""ID"",
+                        mh.date_of_receipt AS ""Дата поступления"",
+                        mh.date_of_discharge AS ""Дата выписки"",
+                        d.disease_name AS ""Диагноз"",
+                        w.number_ward AS ""№ Палаты""
                     FROM Medical_history mh
-                    LEFT JOIN Disease dis ON mh.disease_id = dis.disease_id
-                    LEFT JOIN Treatment t ON mh.medical_history_id = t.medical_history_id
-                    LEFT JOIN Medicine m ON t.medicine_id = m.medicine_id
+                    LEFT JOIN Disease d ON mh.disease_id = d.disease_id
+                    LEFT JOIN Ward w ON mh.ward_id = w.ward_id
                     WHERE mh.patient_id = @patientId AND mh.date_of_discharge IS NOT NULL
-                    ORDER BY mh.date_of_discharge DESC";
+                    ORDER BY mh.date_of_receipt DESC;";
             var args = new Dictionary<string, object> { { "patientId", patientId } };
             return ExecuteQuery(sql, args);
         }
@@ -539,6 +537,38 @@ namespace PatientAccounting.Data
             var args = new Dictionary<string, object> { { "historyId", historyId } };
             DataTable dt = ExecuteQuery(sql, args);
             return dt.Rows.Count > 0 ? dt.Rows[0] : null;
+        }
+        public static DataTable GetPatientsByStatus(bool lookInArchive)
+        {
+            string sql = @"SELECT 
+                        p.patient_id,
+                        p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS ""ФИО"",
+                        mh.medical_history_id,
+                        mh.date_of_receipt AS ""Дата поступления"",
+                        mh.date_of_discharge AS ""Дата выписки"",
+                        d.disease_name AS ""Диагноз"",
+                        w.number_ward AS ""№ Палаты""
+                    FROM Medical_history mh
+                    JOIN Patient p ON mh.patient_id = p.patient_id
+                    LEFT JOIN Disease d ON mh.disease_id = d.disease_id
+                    LEFT JOIN Ward w ON mh.ward_id = w.ward_id
+                    WHERE (@lookInArchive = 1 AND mh.date_of_discharge IS NOT NULL)
+                       OR (@lookInArchive = 0 AND mh.date_of_discharge IS NULL)
+                    ORDER BY mh.date_of_receipt DESC;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@lookInArchive", lookInArchive ? 1 : 0 }
+            };
+            return ExecuteQuery(sql, parameters);
+        }
+        public static bool HasHistoryInStatus(int patientId, bool lookInArchive)
+        {
+            string sql = lookInArchive
+                ? "SELECT COUNT(*) FROM Medical_history WHERE patient_id = @patientId AND date_of_discharge IS NOT NULL;"
+                : "SELECT COUNT(*) FROM Medical_history WHERE patient_id = @patientId AND date_of_discharge IS NULL;";
+            var args = new Dictionary<string, object> { { "patientId", patientId } };
+            DataTable dt = ExecuteQuery(sql, args);
+            return Convert.ToInt32(dt.Rows[0][0]) > 0;
         }
     }
 }

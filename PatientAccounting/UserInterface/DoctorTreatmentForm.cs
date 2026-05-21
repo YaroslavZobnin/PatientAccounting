@@ -8,13 +8,43 @@ namespace PatientAccounting.UserInterface
     {
         public event Action? OnClosed;
         private readonly int _medicalHistoryId;
-        public DoctorTreatmentForm(int medicalHistoryId)
+        private bool _isReadOnly;
+        public DoctorTreatmentForm(int medicalHistoryId, bool isReadOnly)
         {
             InitializeComponent();
             _medicalHistoryId = medicalHistoryId;
+            _isReadOnly = isReadOnly;
             LoadMedicalDirectories();
             LoadCurrentHistoryData();
+            if (_isReadOnly)
+                ApplyReadOnlyMode();
         }
+        private void ApplyReadOnlyMode()
+        {
+            //// 1. Прячем или отключаем кнопки сохранения/добавления данных
+            //SaveButton.Visible = false;
+            //AddAppointmentButton.Visible = false;
+            //DeleteButton.Visible = false;
+
+            //// 2. Блокируем выпадающие списки и текстовые поля (врач может смотреть, но не менять)
+            //DiseaseComboBox.Enabled = false;
+            //WardComboBox.Enabled = false;
+            //ComplaintsTextBox.ReadOnly = true;
+
+            //// Если назначения выводятся в DataGridView, запрещаем их редактировать
+            //AppointmentsGrid.ReadOnly = true;
+            //AppointmentsGrid.AllowUserToAddRows = false;
+            //AppointmentsGrid.AllowUserToDeleteRows = false;
+
+            //// 3. Кнопки навигации оставляем КОРРЕКТНО работать
+            //BackButton.Enabled = true;  // Вернуться назад к списку карт
+            //MenuButton.Enabled = true;  // Выйти в главное меню
+
+            SettingReadOnlyModeForComboBox(DiseaseComboBox, true);
+            SettingReadOnlyModeForComboBox(TreatmentComboBox, true);
+            SettingReadOnlyModeForComboBox(WardsComboBox, true);
+        }
+        private void SettingReadOnlyModeForComboBox(ComboBox cb, bool readOnly) => cb.Enabled = readOnly;
         private void LoadMedicalDirectories()
         {
             try

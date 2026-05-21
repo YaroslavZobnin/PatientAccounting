@@ -10,23 +10,48 @@ namespace PatientAccounting.UserInterface
         public event Action<DataRow>? OnItemSelected;
         private ViewListMode _currentMode;
         private DataTable? _customDataSource;
+        private DataTable? _unfilteredTable;
+        private bool _isArchiveMode;
         public GetPersonFromList(ViewListMode mode)
         {
             InitializeComponent();
             _currentMode = mode;
+            _isArchiveMode = false;
             LoadData();
+            ConfigureDatePanel();
+            ConfigureCheckBox();
         }
-        public GetPersonFromList(DataTable customData)
+        public GetPersonFromList(DataTable customData, bool isArchiveMode = false)
         {
             InitializeComponent();
             _customDataSource = customData;
+            _isArchiveMode = isArchiveMode;
             LoadData();
+            ConfigureDatePanel();
+            ConfigureCheckBox();
+        }
+        private void ConfigureDatePanel()
+        {
+            if (ArchiveDatePicker != null)
+            {
+                ArchiveDatePicker.Visible = _isArchiveMode;
+                ArchiveDatePicker.Enabled = _isArchiveMode;
+            }
+        }
+        private void ConfigureCheckBox()
+        {
+            if(!ArchiveDatePicker.Visible)
+            {
+                FilterByDateCheckBox.Visible = false;
+                FilterByDateCheckBox.Enabled = false;
+            }
         }
         private void LoadData()
         {
             try
             {
                 DataTable data = _customDataSource ?? DataBaseProcessing.GetListByMode(_currentMode);
+                _unfilteredTable = data;
                 UniversalGrid.DataSource = data;
                 string nameRole = Translator.TranslateRole(_currentMode) + "_id";
                 if (UniversalGrid.Columns.Contains("ID"))
@@ -34,12 +59,24 @@ namespace PatientAccounting.UserInterface
                     data.Columns["ID"].ColumnName = nameRole;
                     SetColumnsState(UniversalGrid, nameRole, false);
                 }
-                if (UniversalGrid.Columns.Contains("role_name"))
-                    SetColumnsState(UniversalGrid, "role_name", false);
+                ApplyColumnsVisibility(nameRole);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка загрузки данных: {ex.Message}");
+            }
+        }
+        private void ApplyColumnsVisibility(string nameRole)
+        {
+            HideColumn(UniversalGrid, nameRole);
+            HideColumn(UniversalGrid, "medical_history_id");
+            HideColumn(UniversalGrid, "patient_id");
+        }
+        private void HideColumn(DataGridView dgv, string name)
+        {
+            if(dgv.Columns.Contains(name))
+            {
+                SetColumnsState(dgv, name, false);
             }
         }
         private void SelectButton_Click(object sender, EventArgs e)
@@ -51,6 +88,31 @@ namespace PatientAccounting.UserInterface
             }
             else
                 MessageBox.Show("Пожалуйста, выберите строку из таблицы.");
+        }
+        private void SearchDate_Changed(object sender, EventArgs e)
+        {
+            if (_unfilteredTable == null) return;
+            if (FilterByDateCheckBox.Checked)
+            {
+                DataTable filteredTable = _unfilteredTable.Clone();
+                DateOnly selectedDate = DateOnly.FromDateTime(ArchiveDatePicker.Value);
+                foreach (DataRow row in _unfilteredTable.Rows)
+                {
+                    if (row["Дата поступления"] != DBNull.Value)
+                    {
+                        DateOnly receiptDate = row["Дата поступления"] is DateTime dt
+                            ? DateOnly.FromDateTime(dt)
+                            : (DateOnly)row["Дата поступления"];
+                        if (receiptDate == selectedDate)
+                            filteredTable.ImportRow(row);
+                    }
+                }
+                UniversalGrid.DataSource = filteredTable;
+            }
+            else
+                UniversalGrid.DataSource = _unfilteredTable;
+            string nameRole = Translator.TranslateRole(_currentMode) + "_id";
+            ApplyColumnsVisibility(nameRole);
         }
         private void SetColumnsState(DataGridView data, string columnName, bool visible)
             => data.Columns[columnName].Visible = visible;

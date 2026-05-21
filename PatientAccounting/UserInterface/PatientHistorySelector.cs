@@ -1,6 +1,4 @@
-﻿using System;
-using System.Data;
-using System.Windows.Forms;
+﻿using System.Data;
 using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
 namespace PatientAccounting.UserInterface
@@ -8,29 +6,39 @@ namespace PatientAccounting.UserInterface
     public partial class PatientHistorySelector : UserControl, IWindowClosed
     {
         public event Action? OnClosed;
-        public event Action<int>? OnHistorySelected; 
+        public event Action<int>? OnHistorySelected;
         private int _patientId;
         private int _doctorId;
         private string _patientName;
-        private DataTable _activeHistories;
-        private bool _isShowingArchive = false;
-        public PatientHistorySelector(int patientId, string patientName, int doctorId)
+        private DataTable _histories;
+        private bool _isShowingArchive;
+        public PatientHistorySelector(int patientId, string patientName, int doctorId, bool isArchiveMode)
         {
             InitializeComponent();
             _patientId = patientId;
             _doctorId = doctorId;
             _patientName = patientName;
+            _isShowingArchive = isArchiveMode;
             PatientLabel.Text = $"Мед. карты пациента: {patientName}";
-            LoadActiveHistories();
+            LoadHistories();
         }
-        private void LoadActiveHistories()
+        private void LoadHistories()
         {
             try
             {
-                _activeHistories = DataBaseProcessing.GetActiveHistoriesByDoctor(_patientId, _doctorId);
-                HistoriesGrid.DataSource = _activeHistories;
-                if (HistoriesGrid.Columns.Contains("ID"))
-                    HistoriesGrid.Columns["ID"].Visible = false;
+                if (!_isShowingArchive)
+                {
+                    _histories = DataBaseProcessing.GetActiveHistoriesByDoctor(_patientId, _doctorId);
+                    TransitionToTreatment.Text = "Перейти к лечению";
+                }
+                else
+                {
+                    _histories = DataBaseProcessing.GetPastHistoriesByPatient(_patientId);
+                    TransitionToTreatment.Text = "Просмотреть детали";
+                }
+                SetButtonState(TransitionToTreatment, true);
+                SetPanelState(SearchByDatePanel, _isShowingArchive);
+                SearchDate();
             }
             catch (Exception ex)
             {
@@ -51,17 +59,18 @@ namespace PatientAccounting.UserInterface
             => SearchDate();
         private void SearchDate()
         {
-            if (_activeHistories == null)
-                return;
-            if (SearchByDate.Checked)
+            if (_histories == null) return;
+            if (_isShowingArchive && FilterByDateCheckBox.Checked)
             {
-                DataTable filteredTable = _activeHistories.Clone();
+                DataTable filteredTable = _histories.Clone();
                 DateOnly selectedDate = DateOnly.FromDateTime(SearchByDate.Value);
-                foreach (DataRow row in _activeHistories.Rows)
+                foreach (DataRow row in _histories.Rows)
                 {
                     if (row["Дата поступления"] != DBNull.Value)
                     {
-                        DateOnly receiptDate = (DateOnly)row["Дата поступления"];
+                        DateOnly receiptDate = row["Дата поступления"] is DateTime dt
+                            ? DateOnly.FromDateTime(dt)
+                            : (DateOnly)row["Дата поступления"];
                         if (receiptDate == selectedDate)
                             filteredTable.ImportRow(row);
                     }
@@ -69,27 +78,9 @@ namespace PatientAccounting.UserInterface
                 HistoriesGrid.DataSource = filteredTable;
             }
             else
-                HistoriesGrid.DataSource = _activeHistories;
-        }
-        private void SwapModeButton_Click(object sender, EventArgs e)
-        {
-            if (!_isShowingArchive)
-            {
-                DataTable pastHistories = DataBaseProcessing.GetPastHistoriesByPatient(_patientId);
-                HistoriesGrid.DataSource = pastHistories;
-                SwapModeButton.Text = "Нынешние";
-                SetButtonState(TransitionToTreatment, false);
-                SetPanelState(SearchByDatePanel, false);
-                _isShowingArchive = true;
-            }
-            else
-            {
-                LoadActiveHistories();
-                SwapModeButton.Text = "Архив";
-                SetButtonState(TransitionToTreatment, true);
-                SetPanelState(SearchByDatePanel, true);
-                _isShowingArchive = false;
-            }
+                HistoriesGrid.DataSource = _histories;
+            if (HistoriesGrid.Columns.Contains("ID"))
+                HistoriesGrid.Columns["ID"].Visible = false;
         }
         private void TransitionToTreatment_Click(object sender, EventArgs e)
         {

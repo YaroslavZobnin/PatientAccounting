@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             HistoriesGrid = new DataGridView();
-            SwapModeButton = new Button();
             TransitionToTreatment = new Button();
             SearchByDate = new DateTimePicker();
             SearchByDatePanel = new Panel();
+            FilterByDateCheckBox = new CheckBox();
             SearchByDateLabel = new Label();
             PatientLabel = new Label();
             ExitButton = new Button();
@@ -54,20 +54,6 @@
             HistoriesGrid.Size = new Size(598, 359);
             HistoriesGrid.TabIndex = 0;
             // 
-            // SwapModeButton
-            // 
-            SwapModeButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            SwapModeButton.BackColor = Color.Transparent;
-            SwapModeButton.Cursor = Cursors.Hand;
-            SwapModeButton.FlatStyle = FlatStyle.Popup;
-            SwapModeButton.Location = new Point(635, 469);
-            SwapModeButton.Name = "SwapModeButton";
-            SwapModeButton.Size = new Size(98, 27);
-            SwapModeButton.TabIndex = 1;
-            SwapModeButton.Text = "Архив";
-            SwapModeButton.UseVisualStyleBackColor = false;
-            SwapModeButton.Click += SwapModeButton_Click;
-            // 
             // TransitionToTreatment
             // 
             TransitionToTreatment.Anchor = AnchorStyles.Bottom;
@@ -87,7 +73,6 @@
             SearchByDate.Anchor = AnchorStyles.Top;
             SearchByDate.Location = new Point(41, 31);
             SearchByDate.Name = "SearchByDate";
-            SearchByDate.ShowCheckBox = true;
             SearchByDate.Size = new Size(188, 27);
             SearchByDate.TabIndex = 3;
             SearchByDate.Value = new DateTime(2026, 5, 18, 16, 54, 24, 0);
@@ -95,12 +80,26 @@
             // 
             // SearchByDatePanel
             // 
+            SearchByDatePanel.Anchor = AnchorStyles.Top;
+            SearchByDatePanel.Controls.Add(FilterByDateCheckBox);
             SearchByDatePanel.Controls.Add(SearchByDateLabel);
             SearchByDatePanel.Controls.Add(SearchByDate);
             SearchByDatePanel.Location = new Point(245, 30);
             SearchByDatePanel.Name = "SearchByDatePanel";
             SearchByDatePanel.Size = new Size(266, 62);
             SearchByDatePanel.TabIndex = 4;
+            // 
+            // FilterByDateCheckBox
+            // 
+            FilterByDateCheckBox.Anchor = AnchorStyles.Top;
+            FilterByDateCheckBox.AutoSize = true;
+            FilterByDateCheckBox.BackColor = Color.Transparent;
+            FilterByDateCheckBox.Location = new Point(17, 36);
+            FilterByDateCheckBox.Name = "FilterByDateCheckBox";
+            FilterByDateCheckBox.Size = new Size(18, 17);
+            FilterByDateCheckBox.TabIndex = 7;
+            FilterByDateCheckBox.UseVisualStyleBackColor = false;
+            FilterByDateCheckBox.CheckedChanged += SearchDate_ValueChanged;
             // 
             // SearchByDateLabel
             // 
@@ -145,7 +144,6 @@
             Controls.Add(PatientLabel);
             Controls.Add(SearchByDatePanel);
             Controls.Add(TransitionToTreatment);
-            Controls.Add(SwapModeButton);
             Controls.Add(HistoriesGrid);
             Name = "PatientHistorySelector";
             Size = new Size(736, 503);
@@ -158,12 +156,12 @@
         #endregion
 
         private DataGridView HistoriesGrid;
-        private Button SwapModeButton;
         private Button TransitionToTreatment;
         private DateTimePicker SearchByDate;
         private Panel SearchByDatePanel;
         private Label SearchByDateLabel;
         private Label PatientLabel;
         private Button ExitButton;
+        private CheckBox FilterByDateCheckBox;
     }
 }
