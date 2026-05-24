@@ -407,7 +407,7 @@ namespace PatientAccounting.Data
                 "JOIN Patient p ON mh.patient_id = p.patient_id " +
                 "JOIN Disease d ON mh.disease_id = d.disease_id " +
                 "JOIN Ward w ON mh.ward_id = w.ward_id " +
-                "WHERE mh.date_of_discharge IS NULL -- Только те, кто еще лечится " +
+                "WHERE mh.date_of_discharge IS NULL " +
                 "ORDER BY mh.date_of_receipt";
             return ExecuteQuery(sql, null);
         }

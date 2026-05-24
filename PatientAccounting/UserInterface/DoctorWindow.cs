@@ -89,18 +89,12 @@ namespace PatientAccounting.UserInterface
 
                 int patientId = Convert.ToInt32(patientRow["patient_id"]);
                 string patientName = GeneralMethods.GetPatientFullName(patientRow);
-
-                // ПРОВЕРКА: Соответствует ли найденный пациент текущему режиму (Текущие / Архив)
                 bool isCorrectStatus = DataBaseProcessing.HasHistoryInStatus(patientId, _showArchive);
 
                 if (isCorrectStatus)
-                {
-                    // Если всё совпало — открываем селектор историй
                     OpenHistorySelector(patientId, patientName);
-                }
                 else
                 {
-                    // Если пациент найден, но его статус не тот, что выбран на кнопках сверху
                     string modeName = _showArchive ? "в «Архиве»" : "среди «Текущих пациентов»";
                     MessageBox.Show($"Пациент найден, но у него нет историй болезни {modeName}.",
                                     "Внимание", MessageBoxButtons.OK, MessageBoxIcon.Warning);
