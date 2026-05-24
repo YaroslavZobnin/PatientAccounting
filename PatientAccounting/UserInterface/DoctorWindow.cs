@@ -34,6 +34,7 @@ namespace PatientAccounting.UserInterface
         {
             foreach (Control control in MainPanel.Controls)
                 control.Dispose();
+
             if (newControl is UserControl uiControl)
             {
                 MainPanel.Controls.Clear();
