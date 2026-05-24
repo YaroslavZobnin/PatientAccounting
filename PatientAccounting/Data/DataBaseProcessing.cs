@@ -69,6 +69,7 @@ namespace PatientAccounting.Data
         public static DataTable GetTreatmentByHistoryId(int historyId)
         {
             string sqlQuery = @"SELECT 
+                m.medicine_id AS ""medicine_id"",
                 m.name_medicine AS ""Препарат"",
                 tm.name_type_of_medicine AS ""Тип"",
                 m.medicine_description AS ""Описание""
@@ -498,67 +499,93 @@ namespace PatientAccounting.Data
             var args = new Dictionary<string, object> { { "patientId", patientId } };
             return ExecuteQuery(sql, args);
         }
-        public static void UpdateMedicalHistory(int historyId, int diseaseId, int medicineId, int wardId)
+        public static void UpdateMedicalHistory(int historyId, int diseaseId, List<int> medicineIds, int wardId)
         {
             const string sqlUpdateHistory = @"
-            UPDATE Medical_history 
-            SET ward_id = @ward_id, 
-                disease_id = @disease_id
-            WHERE medical_history_id = @history_id;";
-
-
+                    UPDATE Medical_history 
+                    SET ward_id = @ward_id, 
+                        disease_id = @disease_id
+                    WHERE medical_history_id = @history_id;";
             const string sqlDeleteOldTreatment = @"
-            DELETE FROM Treatment 
-            WHERE medical_history_id = @history_id;";
-
+                    DELETE FROM Treatment 
+                    WHERE medical_history_id = @history_id;";
             const string sqlInsertNewTreatment = @"
-            INSERT INTO Treatment (medical_history_id, medicine_id)
-            VALUES (@history_id, @medicine_id);";
-            var args = new Dictionary<string, object>
+                    INSERT INTO Treatment (medical_history_id, medicine_id)
+                    VALUES (@history_id, @medicine_id);";
+            var historyArgs = new Dictionary<string, object>
             {
                 { "history_id", historyId },
                 { "ward_id", wardId },
-                { "disease_id", diseaseId },
-                { "medicine_id", medicineId } 
+                { "disease_id", diseaseId }
             };
-            ExecuteNonQuery(sqlUpdateHistory, args);
-            ExecuteNonQuery(sqlDeleteOldTreatment, args);
-            ExecuteNonQuery(sqlInsertNewTreatment, args);
+            ExecuteNonQuery(sqlUpdateHistory, historyArgs);
+            var deleteArgs = new Dictionary<string, object>
+            {
+                { "history_id", historyId }
+            };
+            ExecuteNonQuery(sqlDeleteOldTreatment, deleteArgs);
+            foreach (int medId in medicineIds)
+            {
+                var insertArgs = new Dictionary<string, object>
+                {
+                    { "history_id", historyId },
+                    { "medicine_id", medId }
+                };
+                ExecuteNonQuery(sqlInsertNewTreatment, insertArgs);
+            }
         }
         public static DataRow? GetMedicalHistoryDetails(int historyId)
         {
             const string sql = @"SELECT mh.date_of_receipt, mh.ward_id, mh.disease_id,
-                        (SELECT t.medicine_id 
-                         FROM Treatment t 
-                         WHERE t.medical_history_id = mh.medical_history_id 
-                         ORDER BY t.treatment_id DESC) AS treatment_id
-                    FROM Medical_history mh
-                    WHERE mh.medical_history_id = @historyId;";
+                    (SELECT t.treatment_id 
+                     FROM Treatment t 
+                     WHERE t.medical_history_id = mh.medical_history_id 
+                     ORDER BY t.treatment_id DESC LIMIT 1) AS treatment_id
+                FROM Medical_history mh
+                WHERE mh.medical_history_id = @historyId;";
             var args = new Dictionary<string, object> { { "historyId", historyId } };
             DataTable dt = ExecuteQuery(sql, args);
             return dt.Rows.Count > 0 ? dt.Rows[0] : null;
         }
-        public static DataTable GetPatientsByStatus(bool lookInArchive)
+        public static DataTable GetPatientsByStatus(bool lookInArchive, int doctorId)
         {
-            string sql = @"SELECT 
-                        p.patient_id,
-                        p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS ""ФИО"",
-                        mh.medical_history_id,
-                        mh.date_of_receipt AS ""Дата поступления"",
-                        mh.date_of_discharge AS ""Дата выписки"",
-                        d.disease_name AS ""Диагноз"",
-                        w.number_ward AS ""№ Палаты""
-                    FROM Medical_history mh
-                    JOIN Patient p ON mh.patient_id = p.patient_id
-                    LEFT JOIN Disease d ON mh.disease_id = d.disease_id
-                    LEFT JOIN Ward w ON mh.ward_id = w.ward_id
-                    WHERE (@lookInArchive = 1 AND mh.date_of_discharge IS NOT NULL)
-                       OR (@lookInArchive = 0 AND mh.date_of_discharge IS NULL)
-                    ORDER BY mh.date_of_receipt DESC;";
-            var parameters = new Dictionary<string, object>
+            string sql;
+            var parameters = new Dictionary<string, object>();
+            if (!lookInArchive)
             {
-                { "@lookInArchive", lookInArchive ? 1 : 0 }
-            };
+                sql = @"SELECT 
+                            p.patient_id,
+                            p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS ""ФИО"",
+                            mh.medical_history_id, 
+                            mh.date_of_receipt AS ""Дата поступления"",
+                            d.disease_name AS ""Диагноз"",
+                            w.number_ward AS ""№ Палаты""
+                        FROM Medical_history mh
+                        JOIN Patient p ON mh.patient_id = p.patient_id
+                        LEFT JOIN Disease d ON mh.disease_id = d.disease_id
+                        LEFT JOIN Ward w ON mh.ward_id = w.ward_id
+                        WHERE mh.date_of_discharge IS NULL
+                            AND mh.staff_worker_id = @doctorId
+                        ORDER BY mh.date_of_receipt DESC;";
+                parameters.Add("@doctorId", doctorId);
+            }
+            else
+            {
+                sql = @"SELECT 
+                            p.patient_id,
+                            p.patient_surname || ' ' || p.patient_name || ' ' || p.patient_patronymic AS ""ФИО"",
+                            MAX(mh.date_of_receipt) AS ""Последнее поступление"",
+                            COUNT(mh.medical_history_id) AS ""Кол-во госпитализаций""
+                        FROM Patient p
+                        JOIN Medical_history mh ON p.patient_id = mh.patient_id
+                        WHERE mh.date_of_discharge IS NOT NULL
+                        GROUP BY 
+                            p.patient_id, 
+                            p.patient_surname, 
+                            p.patient_name, 
+                            p.patient_patronymic
+                        ORDER BY ""Последнее поступление"" DESC;";
+            }
             return ExecuteQuery(sql, parameters);
         }
         public static bool HasHistoryInStatus(int patientId, bool lookInArchive)

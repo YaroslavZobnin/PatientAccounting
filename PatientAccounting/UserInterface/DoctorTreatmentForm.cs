@@ -9,6 +9,8 @@ namespace PatientAccounting.UserInterface
         public event Action? OnClosed;
         private readonly int _medicalHistoryId;
         private bool _isReadOnly;
+        private DataTable _treatmentsTable;
+        private HashSet<int> _assignedMedicineIds = new HashSet<int>();
         public DoctorTreatmentForm(int medicalHistoryId, bool isReadOnly)
         {
             InitializeComponent();
@@ -16,35 +18,28 @@ namespace PatientAccounting.UserInterface
             _isReadOnly = isReadOnly;
             LoadMedicalDirectories();
             LoadCurrentHistoryData();
+            LoadTreatmentsTable();
             if (_isReadOnly)
                 ApplyReadOnlyMode();
         }
         private void ApplyReadOnlyMode()
         {
-            //// 1. Прячем или отключаем кнопки сохранения/добавления данных
-            //SaveButton.Visible = false;
-            //AddAppointmentButton.Visible = false;
-            //DeleteButton.Visible = false;
-
-            //// 2. Блокируем выпадающие списки и текстовые поля (врач может смотреть, но не менять)
-            //DiseaseComboBox.Enabled = false;
-            //WardComboBox.Enabled = false;
-            //ComplaintsTextBox.ReadOnly = true;
-
-            //// Если назначения выводятся в DataGridView, запрещаем их редактировать
-            //AppointmentsGrid.ReadOnly = true;
-            //AppointmentsGrid.AllowUserToAddRows = false;
-            //AppointmentsGrid.AllowUserToDeleteRows = false;
-
-            //// 3. Кнопки навигации оставляем КОРРЕКТНО работать
-            //BackButton.Enabled = true;  // Вернуться назад к списку карт
-            //MenuButton.Enabled = true;  // Выйти в главное меню
-
             SettingReadOnlyModeForComboBox(DiseaseComboBox, true);
-            SettingReadOnlyModeForComboBox(TreatmentComboBox, true);
             SettingReadOnlyModeForComboBox(WardsComboBox, true);
+            SetButtonState(SaveButton, false);
+            SetPanelState(ChoiceTreatmentPanel, false);
         }
-        private void SettingReadOnlyModeForComboBox(ComboBox cb, bool readOnly) => cb.Enabled = readOnly;
+        private void SettingReadOnlyModeForComboBox(ComboBox cb, bool readOnly) => cb.Enabled = !readOnly;
+        private void SetButtonState(Button button, bool visible)
+        {
+            button.Visible = visible;
+            button.Enabled = visible;
+        }
+        private void SetPanelState(Panel panel, bool visible)
+        {
+            panel.Visible = visible;
+            panel.Enabled = visible;
+        }
         private void LoadMedicalDirectories()
         {
             try
@@ -59,8 +54,6 @@ namespace PatientAccounting.UserInterface
                 TreatmentComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Treatments);
                 TreatmentComboBox.SelectedIndex = -1;
 
-                WardsComboBox.MaxDropDownItems = 8;
-                WardsComboBox.IntegralHeight = true;
                 WardsComboBox.DisplayMember = "№ Палаты";
                 WardsComboBox.ValueMember = "ID";
                 WardsComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
@@ -87,9 +80,6 @@ namespace PatientAccounting.UserInterface
 
                     if (historyRow["disease_id"] != DBNull.Value)
                         DiseaseComboBox.SelectedValue = Convert.ToInt32(historyRow["disease_id"]);
-
-                    if (historyRow["treatment_id"] != DBNull.Value)
-                        TreatmentComboBox.SelectedValue = Convert.ToInt32(historyRow["treatment_id"]);
                 }
             }
             catch (Exception ex)
@@ -97,41 +87,83 @@ namespace PatientAccounting.UserInterface
                 MessageBox.Show($"Ошибка загрузки данных регистратора: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void LoadTreatmentsTable()
+        {
+            try
+            {
+                _treatmentsTable = DataBaseProcessing.GetTreatmentByHistoryId(_medicalHistoryId);
+                TreatmentDataGrid.DataSource = _treatmentsTable;
+                TreatmentDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                if (TreatmentDataGrid.Columns.Contains("medicine_id"))
+                    TreatmentDataGrid.Columns["medicine_id"].Visible = false;
+                _assignedMedicineIds.Clear();
+                foreach (DataRow row in _treatmentsTable.Rows)
+                {
+                    if (row["medicine_id"] != DBNull.Value)
+                        _assignedMedicineIds.Add(Convert.ToInt32(row["medicine_id"]));
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Не удалось загрузить таблицу лечения: {ex.Message}", "Ошибка данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
         private void SaveButton_Click(object sender, EventArgs e)
         {
-            if (DiseaseComboBox.SelectedIndex == -1 || TreatmentComboBox.SelectedIndex == -1 || WardsComboBox.SelectedIndex == -1)
+            if (DiseaseComboBox.SelectedIndex == -1 || WardsComboBox.SelectedIndex == -1)
             {
-                MessageBox.Show("Пожалуйста, выберите и диагноз, и курс лечения для пациента!",
-                                "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-            if (DiseaseComboBox.SelectedValue == null ||
-                TreatmentComboBox.SelectedValue == null ||
-                WardsComboBox.SelectedValue == null)
-            {
-                MessageBox.Show("Пожалуйста, убедитесь, что выбраны все поля: диагноз, лечение и палата!",
-                                "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Пожалуйста, убедитесь, что выбраны диагноз и палата!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
             try
             {
                 int diseaseId = Convert.ToInt32(DiseaseComboBox.SelectedValue);
-                int treatmentId = Convert.ToInt32(TreatmentComboBox.SelectedValue);
                 int wardId = Convert.ToInt32(WardsComboBox.SelectedValue);
-                DataBaseProcessing.UpdateMedicalHistory(_medicalHistoryId, diseaseId, treatmentId, wardId);
-                MessageBox.Show("Назначения успешно сохранены в историю болезни пациента!",
-                                "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                List<int> medicineIdsToSave = _assignedMedicineIds.ToList();
+                DataBaseProcessing.UpdateMedicalHistory(_medicalHistoryId, diseaseId, medicineIdsToSave, wardId);
+
+                MessageBox.Show("Все изменения и назначения успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 OnClosed?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении назначений в базу данных: {ex.ToString()}",
-                                "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show($"Ошибка при сохранении данных: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-        private void CancelButton_Click(object sender, EventArgs e)
+        private void CancelButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
+        private void AddTreatmentButton_Click(object sender, EventArgs e)
         {
-            OnClosed?.Invoke();
+            if (TreatmentComboBox.SelectedIndex == -1 || TreatmentComboBox.SelectedValue == null)
+            {
+                MessageBox.Show("Пожалуйста, выберите препарат из списка!", "Предупреждение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            int selectedMedicineId = Convert.ToInt32(TreatmentComboBox.SelectedValue);
+            if (_assignedMedicineIds.Contains(selectedMedicineId))
+            {
+                MessageBox.Show($"Препарат \"{TreatmentComboBox.Text}\" уже находится в списке назначений этой истории болезни!", 
+                                "Повторное назначение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            AddTreatmentAtTable(selectedMedicineId);
+        }
+        private void AddTreatmentAtTable(int selectedMedicineId)
+        {
+            try
+            {
+                _assignedMedicineIds.Add(selectedMedicineId);
+                DataRowView selectedRowView = (DataRowView)TreatmentComboBox.SelectedItem;
+                DataRow newRow = _treatmentsTable.NewRow();
+                newRow["medicine_id"] = selectedMedicineId;
+                newRow["Препарат"] = selectedRowView["Название препарата"];
+                newRow["Тип"] = selectedRowView.Row.Table.Columns.Contains("Тип") ? selectedRowView["Тип"] : "";
+                newRow["Описание"] = selectedRowView.Row.Table.Columns.Contains("Описание") ? selectedRowView["Описание"] : "";
+                _treatmentsTable.Rows.Add(newRow);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при локальном добавлении препарата: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
