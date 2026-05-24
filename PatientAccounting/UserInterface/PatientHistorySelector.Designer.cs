@@ -130,9 +130,9 @@
             ExitButton.FlatStyle = FlatStyle.Popup;
             ExitButton.Location = new Point(11, 469);
             ExitButton.Name = "ExitButton";
-            ExitButton.Size = new Size(69, 27);
+            ExitButton.Size = new Size(114, 27);
             ExitButton.TabIndex = 6;
-            ExitButton.Text = "Меню";
+            ExitButton.Text = "Назад";
             ExitButton.UseVisualStyleBackColor = false;
             ExitButton.Click += BackButton_Click;
             // 

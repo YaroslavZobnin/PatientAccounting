@@ -26,9 +26,19 @@ namespace PatientAccounting.UserInterface
         }
         private void OpenTreatmentForm(int historyId, int patientId, string patientName)
         {
-            var treatmentForm = new DoctorTreatmentForm(historyId, _showArchive);
-            treatmentForm.OnClosed += () => OpenHistorySelector(patientId, patientName);
-            ShowControl(treatmentForm);
+            var treatmentControl = new DoctorTreatmentForm(historyId, _showArchive);
+            treatmentControl.OnClosed += () =>
+            {
+                if (!_showArchive)
+                {
+                    Reversion();
+                }
+                else
+                {
+                    OpenHistorySelector(patientId, patientName);
+                }
+            };
+            ShowControl(treatmentControl);
         }
         public void ShowControl(IWindowClosed newControl)
         {
@@ -62,14 +72,23 @@ namespace PatientAccounting.UserInterface
         {
             try
             {
-                DataTable patientsData = DataBaseProcessing.GetPatientsByStatus(_showArchive);
+                DataTable patientsData = DataBaseProcessing.GetPatientsByStatus(_showArchive, _staff.StaffId);
                 var searchControl = new GetPersonFromList(patientsData, _showArchive);
 
                 searchControl.OnItemSelected += (patientRow) =>
                 {
                     int patientId = Convert.ToInt32(patientRow["patient_id"]);
                     string patientName = patientRow["ФИО"].ToString() ?? "Неизвестный пациент";
-                    OpenHistorySelector(patientId, patientName);
+
+                    if (!_showArchive)
+                    {
+                        int historyId = Convert.ToInt32(patientRow["medical_history_id"]);
+                        OpenTreatmentForm(historyId, patientId, patientName);
+                    }
+                    else
+                    {
+                        OpenHistorySelector(patientId, patientName);
+                    }
                 };
                 searchControl.OnClosed += () => Reversion();
                 ShowControl(searchControl);
@@ -92,7 +111,21 @@ namespace PatientAccounting.UserInterface
                 bool isCorrectStatus = DataBaseProcessing.HasHistoryInStatus(patientId, _showArchive);
 
                 if (isCorrectStatus)
-                    OpenHistorySelector(patientId, patientName);
+                {
+                    if (!_showArchive)
+                    {
+                        DataTable activeHistories = DataBaseProcessing.GetActiveHistoriesByDoctor(patientId, _staff.StaffId);
+                        if (activeHistories != null && activeHistories.Rows.Count > 0)
+                        {
+                            int historyId = Convert.ToInt32(activeHistories.Rows[0]["ID"]);
+                            OpenTreatmentForm(historyId, patientId, patientName);
+                        }
+                    }
+                    else
+                    {
+                        OpenHistorySelector(patientId, patientName);
+                    }
+                }
                 else
                 {
                     string modeName = _showArchive ? "в «Архиве»" : "среди «Текущих пациентов»";

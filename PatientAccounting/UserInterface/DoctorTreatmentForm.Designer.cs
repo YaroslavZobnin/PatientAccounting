@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             DiseaseComboBox = new ComboBox();
-            TreatmentComboBox = new ComboBox();
             SaveButton = new Button();
             WardsComboBox = new ComboBox();
             CancelButton = new Button();
@@ -37,26 +36,26 @@
             TreatmentLabel = new Label();
             WardLabel = new Label();
             DateOfReceipt = new DateTimePicker();
+            DateOfReceiptLabel = new Label();
+            TreatmentDataGrid = new DataGridView();
+            ChoiceTreatmentPanel = new Panel();
+            AddTreatmentButton = new Button();
+            TreatmenInfoLabel = new Label();
+            ChoiceTreatmentLabel = new Label();
+            TreatmentComboBox = new ComboBox();
+            ((System.ComponentModel.ISupportInitialize)TreatmentDataGrid).BeginInit();
+            ChoiceTreatmentPanel.SuspendLayout();
             SuspendLayout();
             // 
             // DiseaseComboBox
             // 
+            DiseaseComboBox.Anchor = AnchorStyles.Top;
             DiseaseComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             DiseaseComboBox.FormattingEnabled = true;
-            DiseaseComboBox.Location = new Point(52, 88);
+            DiseaseComboBox.Location = new Point(146, 14);
             DiseaseComboBox.Name = "DiseaseComboBox";
             DiseaseComboBox.Size = new Size(247, 28);
             DiseaseComboBox.TabIndex = 0;
-            // 
-            // TreatmentComboBox
-            // 
-            TreatmentComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            TreatmentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
-            TreatmentComboBox.FormattingEnabled = true;
-            TreatmentComboBox.Location = new Point(557, 88);
-            TreatmentComboBox.Name = "TreatmentComboBox";
-            TreatmentComboBox.Size = new Size(247, 28);
-            TreatmentComboBox.TabIndex = 1;
             // 
             // SaveButton
             // 
@@ -74,9 +73,10 @@
             // 
             // WardsComboBox
             // 
+            WardsComboBox.Anchor = AnchorStyles.Top;
             WardsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             WardsComboBox.FormattingEnabled = true;
-            WardsComboBox.Location = new Point(52, 159);
+            WardsComboBox.Location = new Point(146, 62);
             WardsComboBox.Name = "WardsComboBox";
             WardsComboBox.Size = new Size(247, 28);
             WardsComboBox.TabIndex = 3;
@@ -97,9 +97,10 @@
             // 
             // DiseaseLabel
             // 
+            DiseaseLabel.Anchor = AnchorStyles.Top;
             DiseaseLabel.AutoSize = true;
             DiseaseLabel.BackColor = Color.Transparent;
-            DiseaseLabel.Location = new Point(133, 65);
+            DiseaseLabel.Location = new Point(72, 17);
             DiseaseLabel.Name = "DiseaseLabel";
             DiseaseLabel.Size = new Size(68, 20);
             DiseaseLabel.TabIndex = 5;
@@ -107,10 +108,10 @@
             // 
             // TreatmentLabel
             // 
-            TreatmentLabel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            TreatmentLabel.Anchor = AnchorStyles.Bottom;
             TreatmentLabel.AutoSize = true;
             TreatmentLabel.BackColor = Color.Transparent;
-            TreatmentLabel.Location = new Point(649, 65);
+            TreatmentLabel.Location = new Point(71, 243);
             TreatmentLabel.Name = "TreatmentLabel";
             TreatmentLabel.Size = new Size(69, 20);
             TreatmentLabel.TabIndex = 6;
@@ -118,9 +119,10 @@
             // 
             // WardLabel
             // 
+            WardLabel.Anchor = AnchorStyles.Top;
             WardLabel.AutoSize = true;
             WardLabel.BackColor = Color.Transparent;
-            WardLabel.Location = new Point(133, 136);
+            WardLabel.Location = new Point(79, 65);
             WardLabel.Name = "WardLabel";
             WardLabel.Size = new Size(61, 20);
             WardLabel.TabIndex = 7;
@@ -128,17 +130,105 @@
             // 
             // DateOfReceipt
             // 
-            DateOfReceipt.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            DateOfReceipt.Anchor = AnchorStyles.Top;
             DateOfReceipt.Enabled = false;
-            DateOfReceipt.Location = new Point(557, 160);
+            DateOfReceipt.Location = new Point(146, 101);
             DateOfReceipt.Name = "DateOfReceipt";
             DateOfReceipt.Size = new Size(247, 27);
             DateOfReceipt.TabIndex = 8;
+            // 
+            // DateOfReceiptLabel
+            // 
+            DateOfReceiptLabel.Anchor = AnchorStyles.Top;
+            DateOfReceiptLabel.AutoSize = true;
+            DateOfReceiptLabel.BackColor = Color.Transparent;
+            DateOfReceiptLabel.Location = new Point(6, 103);
+            DateOfReceiptLabel.Name = "DateOfReceiptLabel";
+            DateOfReceiptLabel.Size = new Size(134, 20);
+            DateOfReceiptLabel.TabIndex = 9;
+            DateOfReceiptLabel.Text = "Дата поступления";
+            // 
+            // TreatmentDataGrid
+            // 
+            TreatmentDataGrid.AllowUserToAddRows = false;
+            TreatmentDataGrid.AllowUserToDeleteRows = false;
+            TreatmentDataGrid.Anchor = AnchorStyles.Bottom;
+            TreatmentDataGrid.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            TreatmentDataGrid.BackgroundColor = SystemColors.ButtonFace;
+            TreatmentDataGrid.BorderStyle = BorderStyle.None;
+            TreatmentDataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            TreatmentDataGrid.Location = new Point(146, 154);
+            TreatmentDataGrid.Name = "TreatmentDataGrid";
+            TreatmentDataGrid.ReadOnly = true;
+            TreatmentDataGrid.RowHeadersWidth = 51;
+            TreatmentDataGrid.Size = new Size(720, 219);
+            TreatmentDataGrid.TabIndex = 10;
+            // 
+            // ChoiceTreatmentPanel
+            // 
+            ChoiceTreatmentPanel.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            ChoiceTreatmentPanel.BackColor = Color.Transparent;
+            ChoiceTreatmentPanel.Controls.Add(AddTreatmentButton);
+            ChoiceTreatmentPanel.Controls.Add(TreatmenInfoLabel);
+            ChoiceTreatmentPanel.Controls.Add(ChoiceTreatmentLabel);
+            ChoiceTreatmentPanel.Controls.Add(TreatmentComboBox);
+            ChoiceTreatmentPanel.Location = new Point(424, 10);
+            ChoiceTreatmentPanel.Name = "ChoiceTreatmentPanel";
+            ChoiceTreatmentPanel.Size = new Size(422, 138);
+            ChoiceTreatmentPanel.TabIndex = 11;
+            // 
+            // AddTreatmentButton
+            // 
+            AddTreatmentButton.Anchor = AnchorStyles.Bottom;
+            AddTreatmentButton.Cursor = Cursors.Hand;
+            AddTreatmentButton.FlatStyle = FlatStyle.Popup;
+            AddTreatmentButton.Location = new Point(206, 101);
+            AddTreatmentButton.Name = "AddTreatmentButton";
+            AddTreatmentButton.Size = new Size(163, 37);
+            AddTreatmentButton.TabIndex = 14;
+            AddTreatmentButton.Text = "Добавить лекарство";
+            AddTreatmentButton.UseVisualStyleBackColor = true;
+            AddTreatmentButton.Click += AddTreatmentButton_Click;
+            // 
+            // TreatmenInfoLabel
+            // 
+            TreatmenInfoLabel.Anchor = AnchorStyles.Top;
+            TreatmenInfoLabel.AutoSize = true;
+            TreatmenInfoLabel.Font = new Font("Segoe UI", 7.8F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            TreatmenInfoLabel.Location = new Point(127, 78);
+            TreatmenInfoLabel.Name = "TreatmenInfoLabel";
+            TreatmenInfoLabel.Size = new Size(292, 17);
+            TreatmenInfoLabel.TabIndex = 13;
+            TreatmenInfoLabel.Text = "Выберите лекарство для внесения его в список";
+            // 
+            // ChoiceTreatmentLabel
+            // 
+            ChoiceTreatmentLabel.Anchor = AnchorStyles.Top;
+            ChoiceTreatmentLabel.AutoSize = true;
+            ChoiceTreatmentLabel.BackColor = Color.Transparent;
+            ChoiceTreatmentLabel.Location = new Point(86, 50);
+            ChoiceTreatmentLabel.Name = "ChoiceTreatmentLabel";
+            ChoiceTreatmentLabel.Size = new Size(80, 20);
+            ChoiceTreatmentLabel.TabIndex = 12;
+            ChoiceTreatmentLabel.Text = "Лекарства";
+            // 
+            // TreatmentComboBox
+            // 
+            TreatmentComboBox.Anchor = AnchorStyles.Top;
+            TreatmentComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            TreatmentComboBox.FormattingEnabled = true;
+            TreatmentComboBox.Location = new Point(172, 47);
+            TreatmentComboBox.Name = "TreatmentComboBox";
+            TreatmentComboBox.Size = new Size(247, 28);
+            TreatmentComboBox.TabIndex = 4;
             // 
             // DoctorTreatmentForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(ChoiceTreatmentPanel);
+            Controls.Add(TreatmentDataGrid);
+            Controls.Add(DateOfReceiptLabel);
             Controls.Add(DateOfReceipt);
             Controls.Add(WardLabel);
             Controls.Add(TreatmentLabel);
@@ -146,10 +236,12 @@
             Controls.Add(CancelButton);
             Controls.Add(WardsComboBox);
             Controls.Add(SaveButton);
-            Controls.Add(TreatmentComboBox);
             Controls.Add(DiseaseComboBox);
             Name = "DoctorTreatmentForm";
             Size = new Size(869, 437);
+            ((System.ComponentModel.ISupportInitialize)TreatmentDataGrid).EndInit();
+            ChoiceTreatmentPanel.ResumeLayout(false);
+            ChoiceTreatmentPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -157,7 +249,6 @@
         #endregion
 
         private ComboBox DiseaseComboBox;
-        private ComboBox TreatmentComboBox;
         private Button SaveButton;
         private ComboBox WardsComboBox;
         private Button CancelButton;
@@ -165,5 +256,12 @@
         private Label TreatmentLabel;
         private Label WardLabel;
         private DateTimePicker DateOfReceipt;
+        private Label DateOfReceiptLabel;
+        private DataGridView TreatmentDataGrid;
+        private Panel ChoiceTreatmentPanel;
+        private ComboBox TreatmentComboBox;
+        private Label ChoiceTreatmentLabel;
+        private Label TreatmenInfoLabel;
+        private Button AddTreatmentButton;
     }
 }

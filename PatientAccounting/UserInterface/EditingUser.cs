@@ -19,7 +19,7 @@ namespace PatientAccounting.UserInterface
         }
         private void InitPassportSearch()
         {
-            _passportSearching = new PassportSearching("Введите паспортные данные для редактирования");
+            _passportSearching = new PassportSearching("Введите паспортные данные для редактирования", false);
             _passportSearching.Dock = DockStyle.Fill;
 
             SearchUserByPassportPanel.Controls.Clear();

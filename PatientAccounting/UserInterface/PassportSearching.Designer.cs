@@ -105,7 +105,7 @@
             MenuButton.Name = "MenuButton";
             MenuButton.Size = new Size(95, 32);
             MenuButton.TabIndex = 5;
-            MenuButton.Text = "Меню";
+            MenuButton.Text = "Назад";
             MenuButton.UseVisualStyleBackColor = false;
             MenuButton.Click += MenuButton_Click;
             // 
