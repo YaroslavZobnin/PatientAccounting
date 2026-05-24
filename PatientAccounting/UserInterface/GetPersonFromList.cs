@@ -92,18 +92,17 @@ namespace PatientAccounting.UserInterface
         private void SearchDate_Changed(object sender, EventArgs e)
         {
             if (_unfilteredTable == null) return;
-            if (!_unfilteredTable.Columns.Contains("Последнее поступление")) return;
             if (FilterByDateCheckBox.Checked)
             {
                 DataTable filteredTable = _unfilteredTable.Clone();
                 DateOnly selectedDate = DateOnly.FromDateTime(ArchiveDatePicker.Value);
                 foreach (DataRow row in _unfilteredTable.Rows)
                 {
-                    if (row["Последнее поступление"] != DBNull.Value)
+                    if (row["Дата поступления"] != DBNull.Value)
                     {
-                        DateOnly receiptDate = row["Последнее поступление"] is DateTime dt
+                        DateOnly receiptDate = row["Дата поступления"] is DateTime dt
                             ? DateOnly.FromDateTime(dt)
-                            : (DateOnly)row["Последнее поступление"];
+                            : (DateOnly)row["Дата поступления"];
                         if (receiptDate == selectedDate)
                             filteredTable.ImportRow(row);
                     }

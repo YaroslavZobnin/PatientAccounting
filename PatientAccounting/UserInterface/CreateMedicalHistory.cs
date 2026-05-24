@@ -13,7 +13,7 @@ namespace PatientAccounting.UserInterface
         }
         private void GetPatientFromPassportRadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            var passport = new PassportSearching("Введите пациента", false);
+            var passport = new PassportSearching("Введите пациента");
             passport.OnUserFound += OnPatientSelected;
             ShowControl(passport);
         }

@@ -7,16 +7,10 @@ namespace PatientAccounting.UserInterface
     {
         public event Action? OnClosed;
         public event Action<DataRow>? OnUserFound;
-        public PassportSearching(string? comments, bool showBackButton = true)
+        public PassportSearching(string? comments)
         {
             InitializeComponent();
             CommentsLabel.Text = comments;
-            SetButtonState(MenuButton, showBackButton);
-        }
-        public void SetButtonState(Button button, bool visible)
-        {
-            button.Visible = visible;
-            button.Enabled = visible;
         }
         private void SearchButton_Click(object sender, EventArgs e)
         {

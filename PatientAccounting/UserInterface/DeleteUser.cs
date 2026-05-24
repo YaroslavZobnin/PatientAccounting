@@ -15,7 +15,7 @@ namespace PatientAccounting.UserInterface
         }
         private void InitPassportSearch()
         {
-            _passportSearching = new PassportSearching("Введите паспортные данные для УДАЛЕНИЯ пользователя", false);
+            _passportSearching = new PassportSearching("Введите паспортные данные для УДАЛЕНИЯ пользователя");
             _passportSearching.Dock = DockStyle.Fill;
             DeleteUserPanel.Controls.Clear();
             DeleteUserPanel.Controls.Add(_passportSearching);
