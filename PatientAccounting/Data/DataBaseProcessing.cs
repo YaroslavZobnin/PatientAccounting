@@ -363,7 +363,9 @@ namespace PatientAccounting.Data
             const string sql = "SELECT " +
                 "w.ward_id AS \"ID\"," +
                 "w.number_ward AS \"№ Палаты\"," +
+                "w.department_id, " +
                 "d.name_department AS \"Отделение\"," +
+                "w.type_of_ward_id, " +
                 "tw.name_type_of_ward AS \"Тип палаты\"," +
                 "w.capacity AS \"Вместимость\" " +
                 "FROM Ward w " +
@@ -377,6 +379,7 @@ namespace PatientAccounting.Data
             const string sql = "SELECT " +
                 "d.disease_id AS \"ID\"," +
                 "d.disease_name AS \"Название болезни\"," +
+                "d.category_id, " +
                 "c.category_name AS \"Категория\"," +
                 "d.treatment_duration AS \"Срок лечения (дн.)\" " +
                 "FROM Disease d " +
@@ -596,6 +599,59 @@ namespace PatientAccounting.Data
             var args = new Dictionary<string, object> { { "patientId", patientId } };
             DataTable dt = ExecuteQuery(sql, args);
             return Convert.ToInt32(dt.Rows[0][0]) > 0;
+        }
+        public static void UpdateDisease(int diseaseId, string newName, int categoryId, int? duration)
+        {
+            const string sql = @"UPDATE Disease 
+                         SET disease_name = @name, 
+                             category_id = @category, 
+                             treatment_duration = @duration 
+                         WHERE disease_id = @id;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@name", newName },
+                { "@category", categoryId },
+                { "@id", diseaseId }
+            };
+            if (duration.HasValue)
+                parameters.Add("@duration", duration.Value);
+            else
+                parameters.Add("@duration", DBNull.Value);
+            ExecuteNonQuery(sql, parameters);
+        }
+        public static void UpdateWard(int wardId, int numberWard, int typeOfWardId, int departmentId, int capacity)
+        {
+            const string sql = @"UPDATE Ward 
+                    SET number_ward = @number,
+                        type_of_ward_id = @type,
+                        department_id = @department,
+                        capacity = @capacity
+                    WHERE ward_id = @id;";
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "@number", numberWard },
+                { "@type", typeOfWardId },
+                { "@department", departmentId },
+                { "@capacity", capacity },
+                { "@id", wardId }
+            };
+            ExecuteNonQuery(sql, parameters);
+        }
+        public static DataTable GetDepartments()
+        {
+            const string sql = "SELECT department_id, name_department FROM Department ORDER BY name_department;";
+            return ExecuteQuery(sql, null);
+        }
+        public static DataTable GetWardTypes()
+        {
+            const string sql = "SELECT type_of_ward_id, name_type_of_ward FROM Type_Of_ward ORDER BY name_type_of_ward;";
+            return ExecuteQuery(sql, null);
+        }
+        public static DataTable GetDiseaseCategories()
+        {
+            const string sql = "SELECT category_id, category_name FROM Category ORDER BY category_name;";
+            return ExecuteQuery(sql, null);
         }
     }
 }

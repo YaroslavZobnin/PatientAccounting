@@ -20,6 +20,7 @@ namespace PatientAccounting
                 Staff staff when staff.Role == UserRole.SystemRegistrar => new SystemAdministrator(staff),
                 Staff staff when staff.Role == UserRole.MedicalRegistrar => new MedicalRegistrar(staff),
                 Staff staff when staff.Role == UserRole.AttendingPhysician => new DoctorWindow(staff),
+                Staff staff when staff.Role == UserRole.HeadPhysician => new HeadPhysician(staff),
                 _ => null 
             };
             if (targetWindow != null)
