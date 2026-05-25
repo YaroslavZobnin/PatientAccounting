@@ -39,11 +39,11 @@
             ChoiceEditLabel.Anchor = AnchorStyles.Top;
             ChoiceEditLabel.AutoSize = true;
             ChoiceEditLabel.BackColor = Color.Transparent;
-            ChoiceEditLabel.Location = new Point(177, 0);
+            ChoiceEditLabel.Location = new Point(99, 0);
             ChoiceEditLabel.Name = "ChoiceEditLabel";
-            ChoiceEditLabel.Size = new Size(175, 20);
+            ChoiceEditLabel.Size = new Size(374, 20);
             ChoiceEditLabel.TabIndex = 0;
-            ChoiceEditLabel.Text = "Выбор редактирования";
+            ChoiceEditLabel.Text = "Выберите над каким справочником будем работать";
             // 
             // DiseaseButton
             // 

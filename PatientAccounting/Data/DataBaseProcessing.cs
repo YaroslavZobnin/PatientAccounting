@@ -468,6 +468,17 @@ namespace PatientAccounting.Data
                 throw new Exception("Ошибка при получении списка свободных палат", ex);
             }
         }
+        public static int GetCurrentPatientsCountInWard(int wardId)
+        {
+            const string sql = "SELECT COUNT(patient_id) FROM Medical_history WHERE ward_id = @id AND date_of_discharge IS NULL;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@id", wardId }
+            };
+            DataTable dataTable = ExecuteQuery(sql, parameters);
+            if (dataTable != null && dataTable.Rows.Count > 0) return Convert.ToInt32(dataTable.Rows[0][0]);
+            return 0;
+        }
         public static DataTable GetActiveHistoriesByDoctor(int patientId, int doctorId)
         {
             const string sql = @"SELECT 
@@ -652,6 +663,34 @@ namespace PatientAccounting.Data
         {
             const string sql = "SELECT category_id, category_name FROM Category ORDER BY category_name;";
             return ExecuteQuery(sql, null);
+        }
+        public static void AddDisease(string name, int categoryId, int? duration)
+        {
+            const string sql = @"INSERT INTO Disease (disease_name, category_id, treatment_duration) 
+                         VALUES (@name, @category, @duration);";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@name", name },
+                { "@category", categoryId }
+            };
+            if (duration.HasValue)
+                parameters.Add("@duration", duration.Value);
+            else
+                parameters.Add("@duration", DBNull.Value);
+            ExecuteNonQuery(sql, parameters);
+        }
+        public static void AddWard(int numberWard, int typeOfWardId, int departmentId, int capacity)
+        {
+            const string sql = @"INSERT INTO Ward (number_ward, type_of_ward_id, department_id, capacity) 
+                         VALUES (@number, @type, @department, @capacity);";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@number", numberWard },
+                { "@type", typeOfWardId },
+                { "@department", departmentId },
+                { "@capacity", capacity }
+            };
+            ExecuteNonQuery(sql, parameters);
         }
     }
 }

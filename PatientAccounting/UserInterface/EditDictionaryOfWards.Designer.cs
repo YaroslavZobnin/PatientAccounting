@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting.UserInterface
 {
-    partial class EditWardControl
+    partial class EditDictionaryOfWards
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -34,11 +34,11 @@
             WardTypeComboBox = new ComboBox();
             CancelButton = new Button();
             SaveButton = new Button();
-            EditWardLabel = new Label();
+            EditDictionaryOfWardsLabel = new Label();
             NumberWardLabel = new Label();
-            label1 = new Label();
-            label2 = new Label();
-            label3 = new Label();
+            ChoiceCapacityLabel = new Label();
+            ChoiceDepartmentLabel = new Label();
+            ChoiceTypeOfWardLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)WardNumberNumeric).BeginInit();
             ((System.ComponentModel.ISupportInitialize)CapacityNumeric).BeginInit();
             SuspendLayout();
@@ -115,17 +115,17 @@
             SaveButton.UseVisualStyleBackColor = false;
             SaveButton.Click += SaveButton_Click;
             // 
-            // EditWardLabel
+            // EditDictionaryOfWardsLabel
             // 
-            EditWardLabel.Anchor = AnchorStyles.Top;
-            EditWardLabel.AutoSize = true;
-            EditWardLabel.BackColor = Color.Transparent;
-            EditWardLabel.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
-            EditWardLabel.Location = new Point(275, 0);
-            EditWardLabel.Name = "EditWardLabel";
-            EditWardLabel.Size = new Size(203, 23);
-            EditWardLabel.TabIndex = 6;
-            EditWardLabel.Text = "Редактирование палаты";
+            EditDictionaryOfWardsLabel.Anchor = AnchorStyles.Top;
+            EditDictionaryOfWardsLabel.AutoSize = true;
+            EditDictionaryOfWardsLabel.BackColor = Color.Transparent;
+            EditDictionaryOfWardsLabel.Font = new Font("Segoe UI Semibold", 10.2F, FontStyle.Bold, GraphicsUnit.Point, 204);
+            EditDictionaryOfWardsLabel.Location = new Point(275, 0);
+            EditDictionaryOfWardsLabel.Name = "EditDictionaryOfWardsLabel";
+            EditDictionaryOfWardsLabel.Size = new Size(203, 23);
+            EditDictionaryOfWardsLabel.TabIndex = 6;
+            EditDictionaryOfWardsLabel.Text = "Редактирование палаты";
             // 
             // NumberWardLabel
             // 
@@ -139,58 +139,59 @@
             NumberWardLabel.TabIndex = 7;
             NumberWardLabel.Text = "Введите номер палаты";
             // 
-            // label1
+            // ChoiceCapacityLabel
             // 
-            label1.Anchor = AnchorStyles.Top;
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            label1.Location = new Point(48, 90);
-            label1.Name = "label1";
-            label1.Size = new Size(231, 20);
-            label1.TabIndex = 8;
-            label1.Text = "Введите вместимость палаты";
+            ChoiceCapacityLabel.Anchor = AnchorStyles.Top;
+            ChoiceCapacityLabel.AutoSize = true;
+            ChoiceCapacityLabel.BackColor = Color.Transparent;
+            ChoiceCapacityLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            ChoiceCapacityLabel.Location = new Point(48, 90);
+            ChoiceCapacityLabel.Name = "ChoiceCapacityLabel";
+            ChoiceCapacityLabel.Size = new Size(231, 20);
+            ChoiceCapacityLabel.TabIndex = 8;
+            ChoiceCapacityLabel.Text = "Введите вместимость палаты";
             // 
-            // label2
+            // ChoiceDepartmentLabel
             // 
-            label2.Anchor = AnchorStyles.Top;
-            label2.AutoSize = true;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            label2.Location = new Point(61, 146);
-            label2.Name = "label2";
-            label2.Size = new Size(216, 20);
-            label2.TabIndex = 9;
-            label2.Text = "Выберите отделение палаты";
+            ChoiceDepartmentLabel.Anchor = AnchorStyles.Top;
+            ChoiceDepartmentLabel.AutoSize = true;
+            ChoiceDepartmentLabel.BackColor = Color.Transparent;
+            ChoiceDepartmentLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            ChoiceDepartmentLabel.Location = new Point(61, 146);
+            ChoiceDepartmentLabel.Name = "ChoiceDepartmentLabel";
+            ChoiceDepartmentLabel.Size = new Size(216, 20);
+            ChoiceDepartmentLabel.TabIndex = 9;
+            ChoiceDepartmentLabel.Text = "Выберите отделение палаты";
             // 
-            // label3
+            // ChoiceTypeOfWardLabel
             // 
-            label3.Anchor = AnchorStyles.Top;
-            label3.AutoSize = true;
-            label3.BackColor = Color.Transparent;
-            label3.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            label3.Location = new Point(106, 195);
-            label3.Name = "label3";
-            label3.Size = new Size(171, 20);
-            label3.TabIndex = 10;
-            label3.Text = "Выберите тип палаты";
+            ChoiceTypeOfWardLabel.Anchor = AnchorStyles.Top;
+            ChoiceTypeOfWardLabel.AutoSize = true;
+            ChoiceTypeOfWardLabel.BackColor = Color.Transparent;
+            ChoiceTypeOfWardLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            ChoiceTypeOfWardLabel.Location = new Point(106, 195);
+            ChoiceTypeOfWardLabel.Name = "ChoiceTypeOfWardLabel";
+            ChoiceTypeOfWardLabel.Size = new Size(171, 20);
+            ChoiceTypeOfWardLabel.TabIndex = 10;
+            ChoiceTypeOfWardLabel.Text = "Выберите тип палаты";
             // 
-            // EditWardControl
+            // EditDictionaryOfWards
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(label3);
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(ChoiceTypeOfWardLabel);
+            Controls.Add(ChoiceDepartmentLabel);
+            Controls.Add(ChoiceCapacityLabel);
             Controls.Add(NumberWardLabel);
-            Controls.Add(EditWardLabel);
+            Controls.Add(EditDictionaryOfWardsLabel);
             Controls.Add(SaveButton);
             Controls.Add(CancelButton);
             Controls.Add(WardTypeComboBox);
             Controls.Add(DepartmentComboBox);
             Controls.Add(CapacityNumeric);
             Controls.Add(WardNumberNumeric);
-            Name = "EditWardControl";
+            DoubleBuffered = true;
+            Name = "EditDictionaryOfWards";
             Size = new Size(726, 335);
             ((System.ComponentModel.ISupportInitialize)WardNumberNumeric).EndInit();
             ((System.ComponentModel.ISupportInitialize)CapacityNumeric).EndInit();
@@ -206,10 +207,10 @@
         private ComboBox WardTypeComboBox;
         private Button CancelButton;
         private Button SaveButton;
-        private Label EditWardLabel;
+        private Label EditDictionaryOfWardsLabel;
         private Label NumberWardLabel;
-        private Label label1;
-        private Label label2;
-        private Label label3;
+        private Label ChoiceCapacityLabel;
+        private Label ChoiceDepartmentLabel;
+        private Label ChoiceTypeOfWardLabel;
     }
 }

@@ -3,15 +3,17 @@ using PatientAccounting.Interfaces;
 using System.Data;
 namespace PatientAccounting.UserInterface
 {
-    public partial class EditDisease : UserControl, IWindowClosed
+    public partial class EditDictionaryOfDiseases : UserControl, IWindowClosed
     {
         public event Action? OnClosed;
         public event Action? OnDataSaved;
         private readonly int _diseaseId;
-        public EditDisease(int diseaseId, string currentName, int categoryId, object currentDuration)
+        private readonly bool _isEditMode;
+        public EditDictionaryOfDiseases(int diseaseId, string currentName, int categoryId, object currentDuration)
         {
             InitializeComponent();
             _diseaseId = diseaseId;
+            _isEditMode = true;
             LoadCategoryComboBox();
             NameTextBox.Text = currentName;
             CategoryComboBox.SelectedValue = categoryId;
@@ -22,7 +24,14 @@ namespace PatientAccounting.UserInterface
             }
             else
                 IsIncurableCheckBox.Checked = true;
-
+        }
+        public EditDictionaryOfDiseases()
+        {
+            InitializeComponent();
+            _isEditMode = false;
+            LoadCategoryComboBox();
+            IsIncurableCheckBox.Checked = true;
+            EditDictionaryOfDiseasesLabel.Text = "Добавление болезни";
         }
         private void CancelButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
         private void SaveButton_Click(object sender, EventArgs e)
@@ -36,14 +45,29 @@ namespace PatientAccounting.UserInterface
             try
             {
                 int newCategoryId = Convert.ToInt32(CategoryComboBox.SelectedValue);
-                int? newDuration = IsIncurableCheckBox.Checked
-                    ? (int?)null
-                    : Convert.ToInt32(DurationNumeric.Value);
-                DataBaseProcessing.UpdateDisease(_diseaseId, newName, newCategoryId, newDuration);
-
-                MessageBox.Show("Болезнь обновлена!");
+                int? newDuration = IsIncurableCheckBox.Checked ? (int?)null : Convert.ToInt32(DurationNumeric.Value);
+                if (_isEditMode)
+                {
+                    DataBaseProcessing.UpdateDisease(_diseaseId, newName, newCategoryId, newDuration);
+                    MessageBox.Show("Болезнь успешно обновлена!");
+                }
+                else
+                {
+                    DataBaseProcessing.AddDisease(newName, newCategoryId, newDuration);
+                    MessageBox.Show("Новая болезнь успешно добавлена!");
+                }
                 OnDataSaved?.Invoke();
                 OnClosed?.Invoke();
+            }
+            catch (Npgsql.PostgresException ex)
+            {
+                MessageBox.Show(
+                    $"Болезнь с названием «{newName}» уже существует в справочнике!\n" +
+                    "Пожалуйста, проверьте список или укажите другое название.",
+                    "Дублирование данных",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
             }
             catch (Exception ex)
             {

@@ -15,21 +15,29 @@ namespace PatientAccounting.UserInterface
             InitializeComponent();
             _currentMode = mode;
             LoadData();
+            GetAddButtonText();
+        }
+        private void GetAddButtonText()
+        {
+            if (_currentMode == ViewListMode.Diseases)
+                AddButton.Text = "Добавить новую болезнь";
+            else if (_currentMode == ViewListMode.Wards)
+                AddButton.Text = "Добавить новую палату";
         }
         private void LoadData()
         {
             if (_currentMode == ViewListMode.Diseases)
             {
                 DictionaryGrid.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Diseases);
-                HideColumnIfExists("ID");         
-                HideColumnIfExists("category_id"); 
+                HideColumnIfExists("ID");
+                HideColumnIfExists("category_id");
             }
             else if (_currentMode == ViewListMode.Wards)
             {
                 DictionaryGrid.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
-                HideColumnIfExists("ID");             
-                HideColumnIfExists("department_id");   
-                HideColumnIfExists("type_of_ward_id");  
+                HideColumnIfExists("ID");
+                HideColumnIfExists("department_id");
+                HideColumnIfExists("type_of_ward_id");
             }
         }
         private void HideColumnIfExists(string columnName)
@@ -54,10 +62,10 @@ namespace PatientAccounting.UserInterface
                 int categoryId = Convert.ToInt32(currentRow["category_id"]);
                 object duration = currentRow["Срок лечения (дн.)"];
 
-                var editDisease = new EditDisease(id, name, categoryId, duration);
+                var editDisease = new EditDictionaryOfDiseases(id, name, categoryId, duration);
                 editDisease.OnDataSaved += LoadData;
 
-                OnEditRequested?.Invoke(editDisease); 
+                OnEditRequested?.Invoke(editDisease);
             }
             else if (_currentMode == ViewListMode.Wards)
             {
@@ -67,9 +75,25 @@ namespace PatientAccounting.UserInterface
                 int deptId = Convert.ToInt32(currentRow["department_id"]);
                 int capacity = Convert.ToInt32(currentRow["Вместимость"]);
 
-                var editWard = new EditWardControl(id, number, typeId, deptId, capacity);
+                var editWard = new EditDictionaryOfWards(id, number, typeId, deptId, capacity);
                 editWard.OnDataSaved += LoadData;
                 OnEditRequested?.Invoke(editWard);
+            }
+        }
+
+        private void AddButton_Click(object sender, EventArgs e)
+        {
+            if (_currentMode == ViewListMode.Diseases)
+            {
+                var addDisease = new EditDictionaryOfDiseases();
+                addDisease.OnDataSaved += LoadData;
+                OnEditRequested?.Invoke(addDisease);
+            }
+            else if (_currentMode == ViewListMode.Wards)
+            {
+                var addWard = new EditDictionaryOfWards();
+                addWard.OnDataSaved += LoadData;
+                OnEditRequested?.Invoke(addWard);
             }
         }
     }

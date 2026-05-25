@@ -1,6 +1,6 @@
 ﻿namespace PatientAccounting.UserInterface
 {
-    partial class EditDisease
+    partial class EditDictionaryOfDiseases
     {
         /// <summary> 
         /// Обязательная переменная конструктора.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            EditDiseaseLabel = new Label();
+            EditDictionaryOfDiseasesLabel = new Label();
             NameTextBox = new TextBox();
             NewNameLabel = new Label();
             CancelButton = new Button();
@@ -36,21 +36,21 @@
             CategoryComboBox = new ComboBox();
             DurationNumeric = new NumericUpDown();
             IsIncurableCheckBox = new CheckBox();
-            label1 = new Label();
-            label2 = new Label();
+            ChoiceCategoryLabel = new Label();
+            ChoiceDurationLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)DurationNumeric).BeginInit();
             SuspendLayout();
             // 
             // EditDiseaseLabel
             // 
-            EditDiseaseLabel.Anchor = AnchorStyles.Top;
-            EditDiseaseLabel.AutoSize = true;
-            EditDiseaseLabel.BackColor = Color.Transparent;
-            EditDiseaseLabel.Location = new Point(278, 0);
-            EditDiseaseLabel.Name = "EditDiseaseLabel";
-            EditDiseaseLabel.Size = new Size(186, 20);
-            EditDiseaseLabel.TabIndex = 0;
-            EditDiseaseLabel.Text = "Редактирование болезни";
+            EditDictionaryOfDiseasesLabel.Anchor = AnchorStyles.Top;
+            EditDictionaryOfDiseasesLabel.AutoSize = true;
+            EditDictionaryOfDiseasesLabel.BackColor = Color.Transparent;
+            EditDictionaryOfDiseasesLabel.Location = new Point(278, 0);
+            EditDictionaryOfDiseasesLabel.Name = "EditDiseaseLabel";
+            EditDictionaryOfDiseasesLabel.Size = new Size(186, 20);
+            EditDictionaryOfDiseasesLabel.TabIndex = 0;
+            EditDictionaryOfDiseasesLabel.Text = "Редактирование болезни";
             // 
             // NameTextBox
             // 
@@ -133,36 +133,36 @@
             IsIncurableCheckBox.UseVisualStyleBackColor = true;
             IsIncurableCheckBox.CheckedChanged += IsIncurableCheckBox_CheckedChanged;
             // 
-            // label1
+            // ChoiceCategoryLabel
             // 
-            label1.Anchor = AnchorStyles.Top;
-            label1.AutoSize = true;
-            label1.BackColor = Color.Transparent;
-            label1.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            label1.Location = new Point(81, 112);
-            label1.Name = "label1";
-            label1.Size = new Size(159, 20);
-            label1.TabIndex = 8;
-            label1.Text = "Выберите категорию";
+            ChoiceCategoryLabel.Anchor = AnchorStyles.Top;
+            ChoiceCategoryLabel.AutoSize = true;
+            ChoiceCategoryLabel.BackColor = Color.Transparent;
+            ChoiceCategoryLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            ChoiceCategoryLabel.Location = new Point(81, 112);
+            ChoiceCategoryLabel.Name = "ChoiceCategoryLabel";
+            ChoiceCategoryLabel.Size = new Size(159, 20);
+            ChoiceCategoryLabel.TabIndex = 8;
+            ChoiceCategoryLabel.Text = "Выберите категорию";
             // 
-            // label2
+            // ChoiceDurationLabel
             // 
-            label2.Anchor = AnchorStyles.Top;
-            label2.BackColor = Color.Transparent;
-            label2.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            label2.Location = new Point(52, 160);
-            label2.Name = "label2";
-            label2.Size = new Size(236, 100);
-            label2.TabIndex = 9;
-            label2.Text = "Введите длительность лечения (в днях)\r\nЕсли же длительность лечения неизвестна поставьте галочку под вводом длительности";
-            label2.TextAlign = ContentAlignment.TopCenter;
+            ChoiceDurationLabel.Anchor = AnchorStyles.Top;
+            ChoiceDurationLabel.BackColor = Color.Transparent;
+            ChoiceDurationLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            ChoiceDurationLabel.Location = new Point(52, 160);
+            ChoiceDurationLabel.Name = "ChoiceDurationLabel";
+            ChoiceDurationLabel.Size = new Size(236, 100);
+            ChoiceDurationLabel.TabIndex = 9;
+            ChoiceDurationLabel.Text = "Введите длительность лечения (в днях)\r\nЕсли же длительность лечения неизвестна поставьте галочку под вводом длительности";
+            ChoiceDurationLabel.TextAlign = ContentAlignment.TopCenter;
             // 
-            // EditDisease
+            // EditDictionaryOfDiseases
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(label2);
-            Controls.Add(label1);
+            Controls.Add(ChoiceDurationLabel);
+            Controls.Add(ChoiceCategoryLabel);
             Controls.Add(IsIncurableCheckBox);
             Controls.Add(DurationNumeric);
             Controls.Add(CategoryComboBox);
@@ -170,8 +170,8 @@
             Controls.Add(CancelButton);
             Controls.Add(NewNameLabel);
             Controls.Add(NameTextBox);
-            Controls.Add(EditDiseaseLabel);
-            Name = "EditDisease";
+            Controls.Add(EditDictionaryOfDiseasesLabel);
+            Name = "EditDictionaryOfDiseases";
             Size = new Size(741, 347);
             ((System.ComponentModel.ISupportInitialize)DurationNumeric).EndInit();
             ResumeLayout(false);
@@ -180,7 +180,7 @@
 
         #endregion
 
-        private Label EditDiseaseLabel;
+        private Label EditDictionaryOfDiseasesLabel;
         private TextBox NameTextBox;
         private Label NewNameLabel;
         private Button CancelButton;
@@ -188,7 +188,7 @@
         private ComboBox CategoryComboBox;
         private NumericUpDown DurationNumeric;
         private CheckBox IsIncurableCheckBox;
-        private Label label1;
-        private Label label2;
+        private Label ChoiceCategoryLabel;
+        private Label ChoiceDurationLabel;
     }
 }

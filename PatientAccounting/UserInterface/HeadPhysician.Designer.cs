@@ -80,7 +80,7 @@
             // 
             GetAllListsButton.BackColor = Color.Transparent;
             GetAllListsButton.FlatStyle = FlatStyle.Popup;
-            GetAllListsButton.Location = new Point(13, 37);
+            GetAllListsButton.Location = new Point(72, 37);
             GetAllListsButton.Name = "GetAllListsButton";
             GetAllListsButton.Size = new Size(156, 53);
             GetAllListsButton.TabIndex = 5;
@@ -103,11 +103,11 @@
             // 
             EditGuideButton.BackColor = Color.Transparent;
             EditGuideButton.FlatStyle = FlatStyle.Popup;
-            EditGuideButton.Location = new Point(204, 37);
+            EditGuideButton.Location = new Point(250, 37);
             EditGuideButton.Name = "EditGuideButton";
             EditGuideButton.Size = new Size(156, 53);
             EditGuideButton.TabIndex = 7;
-            EditGuideButton.Text = "Изменение справочников";
+            EditGuideButton.Text = "Работа со справочниками";
             EditGuideButton.UseVisualStyleBackColor = false;
             EditGuideButton.Click += EditGuideButton_Click;
             // 
