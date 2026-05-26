@@ -33,6 +33,7 @@
             RoleNameLabel = new Label();
             GetAllListsButton = new Button();
             ChoiceActionPanel = new Panel();
+            ReportButton = new Button();
             EditGuideButton = new Button();
             ChoiceLabel = new Label();
             MainPanel = new Panel();
@@ -80,7 +81,7 @@
             // 
             GetAllListsButton.BackColor = Color.Transparent;
             GetAllListsButton.FlatStyle = FlatStyle.Popup;
-            GetAllListsButton.Location = new Point(72, 37);
+            GetAllListsButton.Location = new Point(83, 37);
             GetAllListsButton.Name = "GetAllListsButton";
             GetAllListsButton.Size = new Size(156, 53);
             GetAllListsButton.TabIndex = 5;
@@ -91,6 +92,7 @@
             // ChoiceActionPanel
             // 
             ChoiceActionPanel.Anchor = AnchorStyles.Top;
+            ChoiceActionPanel.Controls.Add(ReportButton);
             ChoiceActionPanel.Controls.Add(EditGuideButton);
             ChoiceActionPanel.Controls.Add(ChoiceLabel);
             ChoiceActionPanel.Controls.Add(GetAllListsButton);
@@ -99,11 +101,23 @@
             ChoiceActionPanel.Size = new Size(826, 99);
             ChoiceActionPanel.TabIndex = 6;
             // 
+            // ReportButton
+            // 
+            ReportButton.BackColor = Color.Transparent;
+            ReportButton.FlatStyle = FlatStyle.Popup;
+            ReportButton.Location = new Point(598, 37);
+            ReportButton.Name = "ReportButton";
+            ReportButton.Size = new Size(156, 53);
+            ReportButton.TabIndex = 8;
+            ReportButton.Text = "Просмотр отчётов";
+            ReportButton.UseVisualStyleBackColor = false;
+            ReportButton.Click += ReportButton_Click;
+            // 
             // EditGuideButton
             // 
             EditGuideButton.BackColor = Color.Transparent;
             EditGuideButton.FlatStyle = FlatStyle.Popup;
-            EditGuideButton.Location = new Point(250, 37);
+            EditGuideButton.Location = new Point(341, 37);
             EditGuideButton.Name = "EditGuideButton";
             EditGuideButton.Size = new Size(156, 53);
             EditGuideButton.TabIndex = 7;
@@ -158,5 +172,6 @@
         private Label ChoiceLabel;
         private Panel MainPanel;
         private Button EditGuideButton;
+        private Button ReportButton;
     }
 }

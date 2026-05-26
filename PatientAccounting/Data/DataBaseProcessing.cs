@@ -692,5 +692,65 @@ namespace PatientAccounting.Data
             };
             ExecuteNonQuery(sql, parameters);
         }
+        public static DataTable GetHospitalOccupancyReport()
+        {
+            const string sql = @"SELECT 
+                        d.name_department AS ""Отделение"",
+                        COALESCE(SUM(w_stats.capacity), 0) AS ""Всего мест"",
+                        COALESCE(SUM(w_stats.occupied), 0) AS ""Занято мест"",
+                        (COALESCE(SUM(w_stats.capacity), 0) - COALESCE(SUM(w_stats.occupied), 0)) AS ""Свободно мест""
+                    FROM Department d
+                    LEFT JOIN (
+                        SELECT 
+                            w.department_id,
+                            w.capacity,
+                            COUNT(mh.patient_id) AS occupied
+                        FROM Ward w
+                        LEFT JOIN Medical_history mh ON w.ward_id = mh.ward_id AND mh.date_of_discharge IS NULL
+                        GROUP BY w.ward_id, w.department_id, w.capacity
+                    ) w_stats ON d.department_id = w_stats.department_id
+                    GROUP BY d.department_id, d.name_department
+                    ORDER BY ""Свободно мест"" DESC;";
+            return ExecuteQuery(sql, null);
+        }
+        public static DataTable GetTopDiseasesReport(DateTime startDate, DateTime endDate)
+        {
+            const string sql = @"SELECT 
+                        di.disease_name AS ""Название болезни"",
+                        c.category_name AS ""Категория"",
+                        COUNT(mh.medical_history_id) AS ""Количество случаев""
+                    FROM Medical_history mh
+                    JOIN Disease di ON mh.disease_id = di.disease_id
+                    JOIN Category c ON di.category_id = c.category_id
+                    WHERE mh.date_of_receipt BETWEEN @start AND @end
+                    GROUP BY di.disease_id, di.disease_name, c.category_name
+                    ORDER BY ""Количество случаев"" DESC;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@start", startDate.Date },
+                { "@end", endDate.Date }
+            };
+
+            return ExecuteQuery(sql, parameters);
+        }
+        public static DataTable GetPatientMovementReport(DateTime startDate, DateTime endDate)
+        {
+            const string sql = @"SELECT 
+                        d.name_department AS ""Отделение"",
+                        COUNT(CASE WHEN mh.date_of_receipt BETWEEN @start AND @end THEN 1 END) AS ""Поступило"",
+                        COUNT(CASE WHEN mh.date_of_discharge BETWEEN @start AND @end THEN 1 END) AS ""Выписано""
+                    FROM Department d
+                    LEFT JOIN Ward w ON d.department_id = w.department_id
+                    LEFT JOIN Medical_history mh ON w.ward_id = mh.ward_id
+                    GROUP BY d.department_id, d.name_department
+                    ORDER BY d.name_department;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@start", startDate.Date },
+                { "@end", endDate.Date } 
+            };
+            return ExecuteQuery(sql, parameters);
+        }
     }
+
 }

@@ -77,5 +77,14 @@ namespace PatientAccounting.UserInterface
             };
             ShowControl(dictionaryList);
         }
+
+        private void ReportButton_Click(object sender, EventArgs e)
+        {
+            var reportsControl = new ReportsSelectionControl();
+            SetPanelState(ChoiceActionPanel, false);
+            SetPanelState(MainPanel, true);
+            reportsControl.OnClosed += Reversion;
+            ShowControl(reportsControl);
+        }
     }
 }
