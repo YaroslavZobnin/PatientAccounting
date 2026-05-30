@@ -58,6 +58,7 @@ namespace PatientAccounting.UserInterface
                 {
                     data.Columns["ID"].ColumnName = nameRole;
                     SetColumnsState(UniversalGrid, nameRole, false);
+                    HideColumn(UniversalGrid, nameRole);
                 }
                 ApplyColumnsVisibility(nameRole);
             }
@@ -71,6 +72,7 @@ namespace PatientAccounting.UserInterface
             HideColumn(UniversalGrid, nameRole);
             HideColumn(UniversalGrid, "medical_history_id");
             HideColumn(UniversalGrid, "patient_id");
+            HideColumn(UniversalGrid, "role_name");
         }
         private void HideColumn(DataGridView dgv, string name)
         {

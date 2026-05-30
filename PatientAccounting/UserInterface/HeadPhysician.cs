@@ -1,13 +1,12 @@
 ﻿using PatientAccounting.Interfaces;
 using PatientAccounting.Models;
 using PatientAccounting.Services;
-using System;
-
 namespace PatientAccounting.UserInterface
 {
     public partial class HeadPhysician : UserControl, IPresenter
     {
         private Staff _headPhysician;
+        private bool _showArchive = false;
         public HeadPhysician(Staff headPhysician)
         {
             InitializeComponent();
@@ -16,7 +15,6 @@ namespace PatientAccounting.UserInterface
         }
         private void InitializeFullName()
             => FullNameLabel.Text = GeneralMethods.GetFullName(_headPhysician);
-
         private void GetAllListsButton_Click(object sender, EventArgs e)
         {
             var outputList = new GeneralListView("Главврач");
@@ -47,7 +45,6 @@ namespace PatientAccounting.UserInterface
             SetPanelState(ChoiceActionPanel, true);
             SetPanelState(MainPanel, false);
         }
-
         private void EditGuideButton_Click(object sender, EventArgs e)
         {
             OpenDictionarySelection();

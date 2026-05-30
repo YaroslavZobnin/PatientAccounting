@@ -21,13 +21,25 @@ namespace PatientAccounting.UserInterface
             if (PatientsDataGridView.CurrentRow == null) return;
             int historyId = Convert.ToInt32(PatientsDataGridView.CurrentRow.Cells["ID"].Value);
             string patientName = PatientsDataGridView.CurrentRow.Cells["ФИО Пациента"].Value.ToString();
-            var result = MessageBox.Show($"Выписать пациента {patientName}?", "Выписка",
-                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (!DataBaseProcessing.HasPrescribedTreatments(historyId))
+            {
+                MessageBox.Show(
+                    $"Невозможно выписать пациента {patientName}!\nВ его истории болезни нет записей о лечении.",
+                    "Отказ системы",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+            var result = MessageBox.Show(
+                $"Выписать пациента {patientName}?",
+                "Подтверждение выписки",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
                 if (DataBaseProcessing.DischargePatient(historyId))
                 {
-                    MessageBox.Show("Пациент успешно выписан.");
+                    MessageBox.Show("Пациент успешно выписан.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     InitializeDataGrid();
                 }
             }

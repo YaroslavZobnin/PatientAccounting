@@ -97,9 +97,9 @@
             // 
             // ContentPanel
             // 
-            ContentPanel.Location = new Point(32, 106);
+            ContentPanel.Location = new Point(11, 106);
             ContentPanel.Name = "ContentPanel";
-            ContentPanel.Size = new Size(816, 395);
+            ContentPanel.Size = new Size(855, 437);
             ContentPanel.TabIndex = 3;
             // 
             // CancelButton
@@ -107,11 +107,11 @@
             CancelButton.BackColor = Color.Transparent;
             CancelButton.Cursor = Cursors.Hand;
             CancelButton.FlatStyle = FlatStyle.Popup;
-            CancelButton.Location = new Point(3, 507);
+            CancelButton.Location = new Point(3, 3);
             CancelButton.Name = "CancelButton";
-            CancelButton.Size = new Size(93, 36);
+            CancelButton.Size = new Size(93, 51);
             CancelButton.TabIndex = 4;
-            CancelButton.Text = "Меню";
+            CancelButton.Text = "Вернуться в меню";
             CancelButton.UseVisualStyleBackColor = false;
             CancelButton.Click += CancelButton_Click;
             // 

@@ -43,6 +43,7 @@
             TreatmenInfoLabel = new Label();
             ChoiceTreatmentLabel = new Label();
             TreatmentComboBox = new ComboBox();
+            DischargeCheckBox = new CheckBox();
             ((System.ComponentModel.ISupportInitialize)TreatmentDataGrid).BeginInit();
             ChoiceTreatmentPanel.SuspendLayout();
             SuspendLayout();
@@ -75,6 +76,7 @@
             // 
             WardsComboBox.Anchor = AnchorStyles.Top;
             WardsComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            WardsComboBox.DropDownWidth = 450;
             WardsComboBox.FormattingEnabled = true;
             WardsComboBox.Location = new Point(146, 62);
             WardsComboBox.Name = "WardsComboBox";
@@ -222,10 +224,23 @@
             TreatmentComboBox.Size = new Size(247, 28);
             TreatmentComboBox.TabIndex = 4;
             // 
+            // DischargeCheckBox
+            // 
+            DischargeCheckBox.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            DischargeCheckBox.AutoSize = true;
+            DischargeCheckBox.BackColor = Color.Transparent;
+            DischargeCheckBox.Location = new Point(702, 397);
+            DischargeCheckBox.Name = "DischargeCheckBox";
+            DischargeCheckBox.Size = new Size(144, 24);
+            DischargeCheckBox.TabIndex = 12;
+            DischargeCheckBox.Text = "Готов к выписке";
+            DischargeCheckBox.UseVisualStyleBackColor = false;
+            // 
             // DoctorTreatmentForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(DischargeCheckBox);
             Controls.Add(ChoiceTreatmentPanel);
             Controls.Add(TreatmentDataGrid);
             Controls.Add(DateOfReceiptLabel);
@@ -263,5 +278,6 @@
         private Label ChoiceTreatmentLabel;
         private Label TreatmenInfoLabel;
         private Button AddTreatmentButton;
+        private CheckBox DischargeCheckBox;
     }
 }

@@ -17,10 +17,26 @@ namespace PatientAccounting.Services
         public static string GetAnyInfo(string firstComms, string addInfo) => $"{firstComms}{addInfo}";
         public static string GetPatientFullName(DataRow row)
         {
-            string name = row["patient_surname"].ToString() + ' ' 
-                + row["patient_name"].ToString() + ' ' 
-                + row["patient_patronymic"].ToString();
-            return name.Trim();
+            if (row.Table.Columns.Contains("ФИО"))
+                return row["ФИО"].ToString();
+
+            string surname = "";
+            if (row.Table.Columns.Contains("Фамилия")) 
+                surname = row["Фамилия"].ToString();
+
+            string name = "";
+            if (row.Table.Columns.Contains("Имя")) 
+                name = row["Имя"].ToString();
+
+            string patronymic = "";
+            if (row.Table.Columns.Contains("Отчество")) 
+                patronymic = row["Отчество"].ToString();
+
+            string fullName = $"{surname} {name} {patronymic}".Trim();
+            if (string.IsNullOrWhiteSpace(fullName))
+                return "Неизвестный Пациент (Ошибка колонок БД)";
+
+            return fullName;
         }
     }
 }

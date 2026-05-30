@@ -11,13 +11,15 @@ namespace PatientAccounting.UserInterface
         private bool _isReadOnly;
         private DataTable _treatmentsTable;
         private HashSet<int> _assignedMedicineIds = new HashSet<int>();
+        private int? _currentWardId;
+        private int? _currentDiseaseId;
         public DoctorTreatmentForm(int medicalHistoryId, bool isReadOnly)
         {
             InitializeComponent();
             _medicalHistoryId = medicalHistoryId;
             _isReadOnly = isReadOnly;
-            LoadMedicalDirectories();
             LoadCurrentHistoryData();
+            LoadMedicalDirectories();
             LoadTreatmentsTable();
             if (_isReadOnly)
                 ApplyReadOnlyMode();
@@ -28,6 +30,7 @@ namespace PatientAccounting.UserInterface
             SettingReadOnlyModeForComboBox(WardsComboBox, true);
             SetButtonState(SaveButton, false);
             SetPanelState(ChoiceTreatmentPanel, false);
+            DischargeCheckBox.Enabled = false;
         }
         private void SettingReadOnlyModeForComboBox(ComboBox cb, bool readOnly) => cb.Enabled = !readOnly;
         private void SetButtonState(Button button, bool visible)
@@ -56,8 +59,12 @@ namespace PatientAccounting.UserInterface
 
                 WardsComboBox.DisplayMember = "№ Палаты";
                 WardsComboBox.ValueMember = "ID";
-                WardsComboBox.DataSource = DataBaseProcessing.GetListByMode(ViewListMode.Wards);
+                WardsComboBox.DataSource = DataBaseProcessing.GetAvailableWards(_currentWardId);
                 WardsComboBox.SelectedIndex = -1;
+                if (_currentDiseaseId.HasValue)
+                    DiseaseComboBox.SelectedValue = _currentDiseaseId.Value;
+                if (_currentWardId.HasValue)
+                    WardsComboBox.SelectedValue = _currentWardId.Value;
             }
             catch (Exception ex)
             {
@@ -76,10 +83,15 @@ namespace PatientAccounting.UserInterface
 
                     DateOfReceipt.Value = receiptDate.ToDateTime(TimeOnly.MinValue);
                     if (historyRow["ward_id"] != DBNull.Value)
-                        WardsComboBox.SelectedValue = Convert.ToInt32(historyRow["ward_id"]);
+                        _currentWardId = Convert.ToInt32(historyRow["ward_id"]);
 
                     if (historyRow["disease_id"] != DBNull.Value)
-                        DiseaseComboBox.SelectedValue = Convert.ToInt32(historyRow["disease_id"]);
+                        _currentDiseaseId = Convert.ToInt32(historyRow["disease_id"]);
+
+                    if (historyRow.Table.Columns.Contains("is_ready_for_discharge") && historyRow["is_ready_for_discharge"] != DBNull.Value)
+                    {
+                        DischargeCheckBox.Checked = Convert.ToBoolean(historyRow["is_ready_for_discharge"]);
+                    }
                 }
             }
             catch (Exception ex)
@@ -121,7 +133,7 @@ namespace PatientAccounting.UserInterface
                 int wardId = Convert.ToInt32(WardsComboBox.SelectedValue);
                 List<int> medicineIdsToSave = _assignedMedicineIds.ToList();
                 DataBaseProcessing.UpdateMedicalHistory(_medicalHistoryId, diseaseId, medicineIdsToSave, wardId);
-
+                DataBaseProcessing.UpdateDischargeStatus(_medicalHistoryId, DischargeCheckBox.Checked);
                 MessageBox.Show("Все изменения и назначения успешно сохранены!", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 OnClosed?.Invoke();
             }
@@ -141,7 +153,7 @@ namespace PatientAccounting.UserInterface
             int selectedMedicineId = Convert.ToInt32(TreatmentComboBox.SelectedValue);
             if (_assignedMedicineIds.Contains(selectedMedicineId))
             {
-                MessageBox.Show($"Препарат \"{TreatmentComboBox.Text}\" уже находится в списке назначений этой истории болезни!", 
+                MessageBox.Show($"Препарат \"{TreatmentComboBox.Text}\" уже находится в списке назначений этой истории болезни!",
                                 "Повторное назначение", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }

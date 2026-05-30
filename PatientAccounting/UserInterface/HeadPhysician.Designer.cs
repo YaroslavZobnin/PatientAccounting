@@ -33,6 +33,7 @@
             RoleNameLabel = new Label();
             GetAllListsButton = new Button();
             ChoiceActionPanel = new Panel();
+            TreatmentButton = new Button();
             ReportButton = new Button();
             EditGuideButton = new Button();
             ChoiceLabel = new Label();
@@ -81,17 +82,19 @@
             // 
             GetAllListsButton.BackColor = Color.Transparent;
             GetAllListsButton.FlatStyle = FlatStyle.Popup;
+            GetAllListsButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
             GetAllListsButton.Location = new Point(83, 37);
             GetAllListsButton.Name = "GetAllListsButton";
             GetAllListsButton.Size = new Size(156, 53);
             GetAllListsButton.TabIndex = 5;
-            GetAllListsButton.Text = "Просмотреть списки людей";
+            GetAllListsButton.Text = "Просмотреть основные справочники";
             GetAllListsButton.UseVisualStyleBackColor = false;
             GetAllListsButton.Click += GetAllListsButton_Click;
             // 
             // ChoiceActionPanel
             // 
             ChoiceActionPanel.Anchor = AnchorStyles.Top;
+            ChoiceActionPanel.Controls.Add(TreatmentButton);
             ChoiceActionPanel.Controls.Add(ReportButton);
             ChoiceActionPanel.Controls.Add(EditGuideButton);
             ChoiceActionPanel.Controls.Add(ChoiceLabel);
@@ -101,11 +104,23 @@
             ChoiceActionPanel.Size = new Size(826, 99);
             ChoiceActionPanel.TabIndex = 6;
             // 
+            // TreatmentButton
+            // 
+            TreatmentButton.Anchor = AnchorStyles.Top;
+            TreatmentButton.BackColor = Color.Transparent;
+            TreatmentButton.FlatStyle = FlatStyle.Popup;
+            TreatmentButton.Location = new Point(652, 37);
+            TreatmentButton.Name = "TreatmentButton";
+            TreatmentButton.Size = new Size(156, 53);
+            TreatmentButton.TabIndex = 9;
+            TreatmentButton.Text = "Лечение своих пациентов";
+            TreatmentButton.UseVisualStyleBackColor = false;
+            // 
             // ReportButton
             // 
             ReportButton.BackColor = Color.Transparent;
             ReportButton.FlatStyle = FlatStyle.Popup;
-            ReportButton.Location = new Point(598, 37);
+            ReportButton.Location = new Point(466, 37);
             ReportButton.Name = "ReportButton";
             ReportButton.Size = new Size(156, 53);
             ReportButton.TabIndex = 8;
@@ -117,7 +132,7 @@
             // 
             EditGuideButton.BackColor = Color.Transparent;
             EditGuideButton.FlatStyle = FlatStyle.Popup;
-            EditGuideButton.Location = new Point(341, 37);
+            EditGuideButton.Location = new Point(277, 37);
             EditGuideButton.Name = "EditGuideButton";
             EditGuideButton.Size = new Size(156, 53);
             EditGuideButton.TabIndex = 7;
@@ -173,5 +188,6 @@
         private Panel MainPanel;
         private Button EditGuideButton;
         private Button ReportButton;
+        private Button TreatmentButton;
     }
 }

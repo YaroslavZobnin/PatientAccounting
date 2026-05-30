@@ -36,12 +36,6 @@ namespace PatientAccounting.UserInterface
             DisplayData(DataBaseProcessing.GetListByMode(_currentMode));
             SetPanelState(OutputListPanel, true);
         }
-        private void DisplayData(DataTable dataTable)
-        {
-            OutputInfoDataGridView.DataSource = dataTable;
-            if (OutputInfoDataGridView.Columns.Contains("ID"))
-                OutputInfoDataGridView.Columns["ID"].Visible = false;
-        }
         private void DefinitionMode(string currentRadioButton)
         {
             switch (currentRadioButton)
@@ -69,6 +63,15 @@ namespace PatientAccounting.UserInterface
                     break;
             }
         }
+        private void DisplayData(DataTable dataTable)
+        {
+            OutputInfoDataGridView.DataSource = dataTable;
+            HideColumnIfExists("ID");
+            HideColumnIfExists("department_id");
+            HideColumnIfExists("type_of_ward_id");
+            HideColumnIfExists("category_id");
+            HideColumnIfExists("role_name");
+        }
         private void SetRadioButtonState(RadioButton radioButton, bool visible)
         {
             radioButton.Visible = visible;
@@ -78,6 +81,13 @@ namespace PatientAccounting.UserInterface
         {
             panel.Visible = visible;
             panel.Enabled = visible;
+        }
+        private void HideColumnIfExists(string columnName)
+        {
+            if (OutputInfoDataGridView.Columns.Contains(columnName))
+            {
+                OutputInfoDataGridView.Columns[columnName].Visible = false;
+            }
         }
         private void ExitToMenuButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
     }

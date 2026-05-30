@@ -411,7 +411,7 @@ namespace PatientAccounting.Data
                 "JOIN Patient p ON mh.patient_id = p.patient_id " +
                 "JOIN Disease d ON mh.disease_id = d.disease_id " +
                 "JOIN Ward w ON mh.ward_id = w.ward_id " +
-                "WHERE mh.date_of_discharge IS NULL " +
+                "WHERE mh.date_of_discharge IS NULL AND mh.is_ready_for_discharge = true " +
                 "ORDER BY mh.date_of_receipt";
             return ExecuteQuery(sql, null);
         }
@@ -426,8 +426,7 @@ namespace PatientAccounting.Data
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при выписке: {ex.Message}");
-                return false;
+                throw new Exception("Не удалось выписать пациента", ex);
             }
         }
         public static bool InsertMedicalHistory(int patientId, int staffWorkerId, int wardId, DateTime dateOfReceipt)
@@ -449,23 +448,28 @@ namespace PatientAccounting.Data
                 throw new Exception("Не удалось создать запись истории болезни в базе данных.", ex);
             }
         }
-        public static DataTable GetAvailableWards()
+        public static DataTable GetAvailableWards(int? currentWardId = null)
         {
-            const string sql = @"SELECT 
-                    w.ward_id AS ""ID"",
-                    'Палата №' || w.number_ward || ' (Свободно мест: ' || (w.capacity - COUNT(mh.patient_id)) || ')' AS ""№ Палаты""
+            const string sql = @"SELECT w.ward_id AS ""ID"",
+                        'Палата №' || w.number_ward || ' (' || d.name_department || ') - Свободно мест: ' || (w.capacity - COUNT(mh.patient_id)) AS ""№ Палаты""
                     FROM Ward w
+                    JOIN Department d ON w.department_id = d.department_id
                     LEFT JOIN Medical_history mh ON w.ward_id = mh.ward_id AND mh.date_of_discharge IS NULL
-                    GROUP BY w.ward_id, w.number_ward, w.capacity
-                    HAVING COUNT(mh.patient_id) < w.capacity
-                    ORDER BY w.number_ward";
+                    GROUP BY w.ward_id, w.number_ward, w.capacity, d.name_department
+                    HAVING COUNT(mh.patient_id) < w.capacity OR w.ward_id = @currentId
+                    ORDER BY d.name_department, w.number_ward;";
+
+            var parameters = new Dictionary<string, object>
+            {
+                { "@currentId", currentWardId ?? (object)DBNull.Value }
+            };
             try
             {
-                return ExecuteQuery(sql, null);
+                return ExecuteQuery(sql, parameters);
             }
             catch (Exception ex)
             {
-                throw new Exception("Ошибка при получении списка свободных палат", ex);
+                throw new Exception("Ошибка при получении списка свободных палат с отделениями", ex);
             }
         }
         public static int GetCurrentPatientsCountInWard(int wardId)
@@ -611,6 +615,23 @@ namespace PatientAccounting.Data
             DataTable dt = ExecuteQuery(sql, args);
             return Convert.ToInt32(dt.Rows[0][0]) > 0;
         }
+        public static bool HasPrescribedTreatments(int medicalHistoryId)
+        {
+            const string sql = @"SELECT COUNT(treatment_id) 
+                    FROM Treatment 
+                    WHERE medical_history_id = @id;";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@id", medicalHistoryId }
+            };
+            DataTable dt = ExecuteQuery(sql, parameters);
+            if (dt.Rows.Count > 0)
+            {
+                int treatmentCount = Convert.ToInt32(dt.Rows[0][0]);
+                return treatmentCount > 0;
+            }
+            return false;
+        }
         public static void UpdateDisease(int diseaseId, string newName, int categoryId, int? duration)
         {
             const string sql = @"UPDATE Disease 
@@ -750,6 +771,18 @@ namespace PatientAccounting.Data
                 { "@end", endDate.Date } 
             };
             return ExecuteQuery(sql, parameters);
+        }
+        public static void UpdateDischargeStatus(int historyId, bool isReady)
+        {
+            const string query = @"UPDATE Medical_history 
+                        SET is_ready_for_discharge = @isReady 
+                        WHERE medical_history_id = @historyId";
+            var parameters = new Dictionary<string, object>
+            {
+                { "@isReady", isReady },
+                { "@historyId", historyId },
+            };
+            ExecuteNonQuery(query, parameters);
         }
     }
 

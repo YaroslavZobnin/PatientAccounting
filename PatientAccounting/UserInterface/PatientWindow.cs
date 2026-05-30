@@ -4,7 +4,7 @@ namespace PatientAccounting
 {
     public partial class PatientWindow : UserControl
     {
-        private Patient? patient;
+        private Patient patient;
         public PatientWindow(Patient patient)
         {
             InitializeComponent();
@@ -28,13 +28,20 @@ namespace PatientAccounting
             try
             {
                 MedicalHistoryDataGrid.DataSource = DataBaseProcessing.GetMedicalHistory(patient.PatientId);
-                if (MedicalHistoryDataGrid.Columns.Contains("medical_history_id"))
-                    MedicalHistoryDataGrid.Columns["medical_history_id"].Visible = false;
+                HideColumnIfExists(MedicalHistoryDataGrid,"medical_history_id");
+                
             }
             catch(Exception ex)
             {
                 MessageBox.Show($"Не удалось загрузить историю болезни: {ex.Message}",
                         "Ошибка данных", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+        private void HideColumnIfExists(DataGridView dgv, string columnName)
+        {
+            if (dgv.Columns.Contains(columnName))
+            {
+                dgv.Columns[columnName].Visible = false;
             }
         }
         private void MedicalHistoryDataGrid_SelectionChanged(object sender, EventArgs e)
@@ -43,6 +50,7 @@ namespace PatientAccounting
             {
                 int historyId = Convert.ToInt32(MedicalHistoryDataGrid.SelectedRows[0].Cells["medical_history_id"].Value);
                 UpdateTreatmentTable(historyId);
+                HideColumnIfExists(TreatmentDataGrid, "medicine_id");
             }
         }
         private void UpdateTreatmentTable(int historyId)

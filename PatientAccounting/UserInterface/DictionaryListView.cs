@@ -47,7 +47,6 @@ namespace PatientAccounting.UserInterface
                 DictionaryGrid.Columns[columnName].Visible = false;
             }
         }
-
         private void CancelButton_Click(object sender, EventArgs e) => OnClosed?.Invoke();
 
         private void EditButton_Click(object sender, EventArgs e)

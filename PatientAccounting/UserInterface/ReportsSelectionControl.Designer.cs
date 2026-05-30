@@ -39,6 +39,9 @@
             PatientMovementButton = new Button();
             ChoiceReportsLabel = new Label();
             ReportGrid = new DataGridView();
+            InformationAboutReportLabel = new Label();
+            ViewToggleCheckBox = new CheckBox();
+            ChartPanel = new Panel();
             ((System.ComponentModel.ISupportInitialize)ReportGrid).BeginInit();
             SuspendLayout();
             // 
@@ -175,11 +178,49 @@
             ReportGrid.Size = new Size(643, 278);
             ReportGrid.TabIndex = 10;
             // 
+            // InformationAboutReportLabel
+            // 
+            InformationAboutReportLabel.Anchor = AnchorStyles.Bottom;
+            InformationAboutReportLabel.BackColor = Color.Transparent;
+            InformationAboutReportLabel.Font = new Font("Segoe UI", 9F, FontStyle.Italic, GraphicsUnit.Point, 204);
+            InformationAboutReportLabel.Location = new Point(182, 364);
+            InformationAboutReportLabel.Name = "InformationAboutReportLabel";
+            InformationAboutReportLabel.Size = new Size(643, 43);
+            InformationAboutReportLabel.TabIndex = 11;
+            InformationAboutReportLabel.Text = "текст об отчёте";
+            InformationAboutReportLabel.TextAlign = ContentAlignment.TopCenter;
+            // 
+            // ViewToggleCheckBox
+            // 
+            ViewToggleCheckBox.Anchor = AnchorStyles.Left;
+            ViewToggleCheckBox.AutoSize = true;
+            ViewToggleCheckBox.BackColor = Color.Transparent;
+            ViewToggleCheckBox.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
+            ViewToggleCheckBox.Location = new Point(12, 275);
+            ViewToggleCheckBox.Name = "ViewToggleCheckBox";
+            ViewToggleCheckBox.Size = new Size(154, 21);
+            ViewToggleCheckBox.TabIndex = 12;
+            ViewToggleCheckBox.Text = "Показать диаграмму";
+            ViewToggleCheckBox.UseVisualStyleBackColor = false;
+            ViewToggleCheckBox.CheckedChanged += ViewToggleCheckBox_CheckedChanged;
+            // 
+            // ChartPanel
+            // 
+            ChartPanel.Anchor = AnchorStyles.Top;
+            ChartPanel.BackColor = Color.Transparent;
+            ChartPanel.Enabled = false;
+            ChartPanel.Location = new Point(178, 83);
+            ChartPanel.Name = "ChartPanel";
+            ChartPanel.Size = new Size(665, 278);
+            ChartPanel.TabIndex = 13;
+            ChartPanel.Visible = false;
+            // 
             // ReportsSelectionControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(ReportGrid);
+            Controls.Add(ViewToggleCheckBox);
+            Controls.Add(InformationAboutReportLabel);
             Controls.Add(ChoiceReportsLabel);
             Controls.Add(PatientMovementButton);
             Controls.Add(PopularDiseasesButton);
@@ -190,6 +231,8 @@
             Controls.Add(FromDatePicker);
             Controls.Add(CancelButton);
             Controls.Add(WorkWithInformationLabel);
+            Controls.Add(ChartPanel);
+            Controls.Add(ReportGrid);
             Name = "ReportsSelectionControl";
             Size = new Size(860, 412);
             ((System.ComponentModel.ISupportInitialize)ReportGrid).EndInit();
@@ -210,5 +253,8 @@
         private Button PatientMovementButton;
         private Label ChoiceReportsLabel;
         private DataGridView ReportGrid;
+        private Label InformationAboutReportLabel;
+        private CheckBox ViewToggleCheckBox;
+        private Panel ChartPanel;
     }
 }
