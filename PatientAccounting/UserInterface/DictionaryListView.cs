@@ -51,7 +51,11 @@ namespace PatientAccounting.UserInterface
 
         private void EditButton_Click(object sender, EventArgs e)
         {
-            if (DictionaryGrid.SelectedRows.Count == 0) return;
+            if (DictionaryGrid.SelectedRows.Count == 0)
+            {
+                MessageBox.Show("Выберите запись!");
+                return;
+            }
 
             DataRow currentRow = ((DataRowView)DictionaryGrid.SelectedRows[0].DataBoundItem).Row;
             if (_currentMode == ViewListMode.Diseases)

@@ -147,7 +147,7 @@ namespace PatientAccounting.UserInterface
 
             DataTable topDiseases = (DataTable)ReportGrid.DataSource;
 
-            foreach (System.Data.DataRow row in topDiseases.Rows)
+            foreach (DataRow row in topDiseases.Rows)
             {
                 string label = row["Название болезни"].ToString();
                 double value = Convert.ToDouble(row["Количество случаев"]);

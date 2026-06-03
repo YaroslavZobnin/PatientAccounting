@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace PatientAccounting.Services
+namespace PatientAccounting.Models
 {
     internal static class GeneralMethods
     {

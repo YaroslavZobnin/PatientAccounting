@@ -1,5 +1,5 @@
 ﻿using PatientAccounting.Interfaces;
-using PatientAccounting.Services;
+using PatientAccounting.Models;
 namespace PatientAccounting.UserInterface
 {
     public partial class MedicalRegistrar : UserControl, IPresenter

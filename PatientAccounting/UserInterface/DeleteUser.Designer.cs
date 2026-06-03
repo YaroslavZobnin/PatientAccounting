@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             BackToMenuButton = new Button();
-            CancelButton = new Button();
             DeleteUserPanel = new Panel();
             SuspendLayout();
             // 
@@ -40,28 +39,13 @@
             BackToMenuButton.Cursor = Cursors.Hand;
             BackToMenuButton.FlatStyle = FlatStyle.Popup;
             BackToMenuButton.Font = new Font("Sylfaen", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            BackToMenuButton.Location = new Point(124, 478);
+            BackToMenuButton.Location = new Point(0, 476);
             BackToMenuButton.Name = "BackToMenuButton";
             BackToMenuButton.Size = new Size(110, 32);
             BackToMenuButton.TabIndex = 24;
             BackToMenuButton.Text = "Меню";
             BackToMenuButton.UseVisualStyleBackColor = false;
             BackToMenuButton.Click += BackToMenuButton_Click;
-            // 
-            // CancelButton
-            // 
-            CancelButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            CancelButton.BackColor = Color.Transparent;
-            CancelButton.Cursor = Cursors.Hand;
-            CancelButton.FlatStyle = FlatStyle.Popup;
-            CancelButton.Font = new Font("Sylfaen", 10.2F, FontStyle.Italic, GraphicsUnit.Point, 204);
-            CancelButton.Location = new Point(12, 478);
-            CancelButton.Name = "CancelButton";
-            CancelButton.Size = new Size(106, 32);
-            CancelButton.TabIndex = 23;
-            CancelButton.Text = "Отменить";
-            CancelButton.UseVisualStyleBackColor = false;
-            CancelButton.Click += CancelButton_Click;
             // 
             // DeleteUserPanel
             // 
@@ -77,7 +61,6 @@
             BackColor = Color.Transparent;
             Controls.Add(DeleteUserPanel);
             Controls.Add(BackToMenuButton);
-            Controls.Add(CancelButton);
             DoubleBuffered = true;
             Name = "DeleteUser";
             Size = new Size(876, 523);
@@ -86,7 +69,6 @@
 
         #endregion
         private Button BackToMenuButton;
-        private Button CancelButton;
         private Panel DeleteUserPanel;
     }
 }

@@ -1,5 +1,5 @@
 ﻿using PatientAccounting.Data;
-using PatientAccounting.Services;
+using PatientAccounting.Models;
 namespace PatientAccounting
 {
     public partial class PatientWindow : UserControl

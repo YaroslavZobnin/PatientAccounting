@@ -8,9 +8,11 @@ namespace PatientAccounting.UserInterface
         public event Action? OnClosed;
         private PassportSearching? _passportSearching;
         private DataRow? _foundUserRow;
-        public DeleteUser()
+        private string _adminPassport;
+        public DeleteUser(string adminPassportData)
         {
             InitializeComponent();
+            _adminPassport = adminPassportData;
             InitPassportSearch();
         }
         private void InitPassportSearch()
@@ -29,6 +31,17 @@ namespace PatientAccounting.UserInterface
         {
             if (_foundUserRow == null) return;
             string? passport = _foundUserRow["customer_passport_data"].ToString();
+            if (passport == _adminPassport)
+            {
+                MessageBox.Show(
+                    "Вы не можете удалить собственный аккаунт из системы!",
+                    "Защита от удаления",
+                    MessageBoxButtons.OK,MessageBoxIcon.Stop
+                );
+                _foundUserRow = null;
+                Cancel();
+                return;
+            }
             string fullName = GetUserFullName(_foundUserRow);
             if (ConfirmDelete(fullName, passport) != DialogResult.Yes)
             {
@@ -72,6 +85,5 @@ namespace PatientAccounting.UserInterface
             => MessageBox.Show($"Вы уверены, что хотите БЕЗВОЗВРАТНО удалить пользователя?\n\nФИО: {name}\nПаспорт: {passport}",
                 "Подтверждение удаления", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
         private void BackToMenuButton_Click(object sender, EventArgs e) => ExitToMenu();
-        private void CancelButton_Click(object sender, EventArgs e) => Cancel();
     }
 }

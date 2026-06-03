@@ -80,7 +80,7 @@
             AddButton.BackColor = Color.Transparent;
             AddButton.FlatStyle = FlatStyle.Popup;
             AddButton.Font = new Font("Segoe UI", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 204);
-            AddButton.Location = new Point(696, 479);
+            AddButton.Location = new Point(696, 464);
             AddButton.Name = "AddButton";
             AddButton.Size = new Size(144, 60);
             AddButton.TabIndex = 3;

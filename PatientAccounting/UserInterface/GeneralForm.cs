@@ -1,4 +1,4 @@
-﻿using PatientAccounting.Services;
+﻿using PatientAccounting.Models;
 using PatientAccounting.UserInterface;
 
 namespace PatientAccounting

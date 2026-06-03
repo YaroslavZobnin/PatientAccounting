@@ -1,6 +1,6 @@
 ﻿using PatientAccounting.Interfaces;
 using PatientAccounting.Models;
-using PatientAccounting.Services;
+using PatientAccounting.Models;
 namespace PatientAccounting.UserInterface
 {
     public partial class HeadPhysician : UserControl, IPresenter

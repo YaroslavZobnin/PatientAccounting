@@ -222,6 +222,11 @@ namespace PatientAccounting.UserInterface
                         MessageBox.Show("Для врачей обязательно указание специализации!");
                         return false;
                     }
+                    if(WorkExperiencenumericUpDown.Value < 0 || WorkExperiencenumericUpDown.Value > 70)
+                    {
+                        MessageBox.Show("Несуществующий стаж работы.");
+                        return false;
+                    }
                 }
             }
             return true;

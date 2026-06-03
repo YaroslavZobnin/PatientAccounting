@@ -57,6 +57,7 @@ namespace PatientAccounting.UserInterface
                 int capacity = Convert.ToInt32(CapacityNumeric.Value);
                 int deptId = Convert.ToInt32(DepartmentComboBox.SelectedValue);
                 int typeId = Convert.ToInt32(WardTypeComboBox.SelectedValue);
+
                 if (_isEditMode)
                 {
                     int currentPatients = DataBaseProcessing.GetCurrentPatientsCountInWard(_wardId);
@@ -78,15 +79,25 @@ namespace PatientAccounting.UserInterface
                     MessageBox.Show("Новая палата успешно добавлена.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
                 OnDataSaved?.Invoke();
-                OnClosed?.Invoke();   
-            }
-            catch (Npgsql.PostgresException ex)
-            {
-                MessageBox.Show("Палата с таким номером уже существует!", "Ошибка уникальности", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                OnClosed?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                string errorText = ex.Message.ToLower();
+                if ((errorText.Contains("ward") || errorText.Contains("number") || errorText.Contains("палат")) &&
+                    (errorText.Contains("unique") || errorText.Contains("duplicate") || errorText.Contains("уникальн")))
+                {
+                    MessageBox.Show(
+                        "Палата с таким номером уже существует!\nПожалуйста, укажите другой номер.",
+                        "Ошибка уникальности",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                    );
+                }
+                else
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
     }

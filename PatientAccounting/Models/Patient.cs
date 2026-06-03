@@ -1,5 +1,5 @@
 ﻿using System.Data.Common;
-namespace PatientAccounting.Services
+namespace PatientAccounting.Models
 {
     public class Patient:User
     {

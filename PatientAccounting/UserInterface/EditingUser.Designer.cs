@@ -368,7 +368,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.Gainsboro;
+            BackColor = Color.Transparent;
             Controls.Add(SearchUserByPassportPanel);
             Controls.Add(SaveEditedUser);
             Controls.Add(BackToMenuButton);

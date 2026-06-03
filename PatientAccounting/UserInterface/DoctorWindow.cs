@@ -1,7 +1,7 @@
 ﻿using PatientAccounting.Data;
 using PatientAccounting.Interfaces;
 using PatientAccounting.Models;
-using PatientAccounting.Services;
+using PatientAccounting.Models;
 using System.Data;
 namespace PatientAccounting.UserInterface
 {

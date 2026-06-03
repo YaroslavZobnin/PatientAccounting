@@ -15,6 +15,7 @@ namespace PatientAccounting.UserInterface
             InitializeComponent();
             SetPanelState(EditingUserPanel, false);
             SetButtonState(CancelButton, false);
+            SetButtonState(SaveEditedUser, false);
             InitPassportSearch();
         }
         private void InitPassportSearch()
@@ -41,6 +42,7 @@ namespace PatientAccounting.UserInterface
             SetPanelState(SearchUserByPassportPanel, false);
             SetPanelState(EditingUserPanel, true);
             SetButtonState(CancelButton, true);
+            SetButtonState(SaveEditedUser, true);
             MapUserDataToUI(_originalRow);
         }
 
@@ -132,12 +134,34 @@ namespace PatientAccounting.UserInterface
                     DataBaseProcessing.UpdateStaffDetails(_currentUserId, SurnameTextBox.Text, NameTextBox.Text,
                         PatronymicTextBox.Text, specId, (int)WorkExperienceNumericUpDown.Value);
                 }
-                MessageBox.Show("Данные успешно сохранены.");
+                MessageBox.Show("Данные успешно сохранены.", "Успех", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 OnClosed?.Invoke();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении: {ex.Message}");
+                string errorText = ex.ToString().ToLower();
+                if (errorText.Contains("unique"))
+                {
+                    if (errorText.Contains("login"))
+                    {
+                        MessageBox.Show("Этот логин уже занят другим пользователем!\nПожалуйста, придумайте другой.",
+                                        "Ошибка изменения данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else if (errorText.Contains("passport"))
+                    {
+                        MessageBox.Show("Пользователь с такими паспортными данными уже существует в системе!",
+                                        "Ошибка изменения данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Логин или паспортные данные уже заняты другим пользователем!",
+                                        "Ошибка изменения данных", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
         }
         public void Cancel()

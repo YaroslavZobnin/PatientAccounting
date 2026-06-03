@@ -1,5 +1,5 @@
 ﻿using PatientAccounting.Interfaces;
-using PatientAccounting.Services;
+using PatientAccounting.Models;
 using PatientAccounting.UserInterface;
 using System.Windows.Forms;
 namespace PatientAccounting
@@ -29,7 +29,7 @@ namespace PatientAccounting
         private void DeleteUserButton_Click(object sender, EventArgs e)
         {
             ActionLabel.Text = "Удаление пользователя";
-            var deleteUser = new DeleteUser();
+            var deleteUser = new DeleteUser(staff.PassportData);
             deleteUser.OnClosed += Reversion;
             ShowControl(deleteUser);
             currentActiveControl = deleteUser;

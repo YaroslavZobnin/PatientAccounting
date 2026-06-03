@@ -1,6 +1,5 @@
 ﻿using Npgsql;
 using PatientAccounting.Models;
-using PatientAccounting.Services;
 using System.Configuration;
 using System.Data;
 using System.Data.Common;
@@ -91,81 +90,83 @@ namespace PatientAccounting.Data
             string sqlQuery = "SELECT role_id, role_name FROM User_role";
             return ExecuteQuery(sqlQuery, null);
         }
-        private static int CreateCustomer(NpgsqlConnection connection, string login, string password, string passport, int roleId)
+        private static int CreateCustomer(string login, string password, string passport, int roleId)
         {
-            const string sql = @"
-                INSERT INTO Customer (customer_login, customer_password, customer_passport_data, customer_role_id) 
-                VALUES (@login, @pass, @passport, @role) 
-                RETURNING customer_id";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            const string sql = @"INSERT INTO Customer (customer_login, customer_password, customer_passport_data, customer_role_id) 
+                    VALUES (@login, @pass, @passport, @role) RETURNING customer_id";
+            var arguments = new Dictionary<string, object>
             {
-                cmd.Parameters.AddWithValue("login", login);
-                cmd.Parameters.AddWithValue("pass", BCrypt.Net.BCrypt.HashPassword(password));
-                cmd.Parameters.AddWithValue("passport", passport);
-                cmd.Parameters.AddWithValue("role", roleId);
-                return Convert.ToInt32(cmd.ExecuteScalar());
-            }
+                { "login", login },
+                { "pass", BCrypt.Net.BCrypt.HashPassword(password) },
+                { "passport", passport },
+                { "role", roleId }
+            };
+            DataTable resultTable = ExecuteQuery(sql, arguments);
+            return Convert.ToInt32(resultTable.Rows[0][0]);
         }
         public static bool RegisterStaff(string login, string password, string passport, int roleId,
-    string surname, string name, string patronymic, int? specId, int experience)
+            string surname, string name, string patronymic, int? specId, int experience)
         {
             try
             {
-                using (var connection = GetConnection())
-                {
-                    connection.Open();
-                    int customerId = CreateCustomer(connection, login, password, passport, roleId);
-                    const string sqlStaff = @"
-                        INSERT INTO Staff_worker (staff_worker_surname, staff_worker_name, staff_worker_patronymic, 
-                                                specialization_id, staff_worker_work_experience, customer_id) 
+                int customerId = CreateCustomer(login, password, passport, roleId);
+                const string sqlStaff = @"INSERT INTO Staff_worker (staff_worker_surname, staff_worker_name, staff_worker_patronymic, 
+                                     specialization_id, staff_worker_work_experience, customer_id) 
                         VALUES (@surname, @name, @patronymic, @specId, @exp, @customerId)";
-                    using (var cmd = new NpgsqlCommand(sqlStaff, connection))
-                    {
-                        cmd.Parameters.AddWithValue("surname", surname);
-                        cmd.Parameters.AddWithValue("name", name);
-                        cmd.Parameters.AddWithValue("patronymic", patronymic);
-                        cmd.Parameters.AddWithValue("specId", specId.HasValue ? specId.Value : DBNull.Value);
-                        cmd.Parameters.AddWithValue("exp", experience);
-                        cmd.Parameters.AddWithValue("customerId", customerId);
-                        cmd.ExecuteNonQuery();
-                    }
-                    return true;
-                }
+
+                var parameters = new Dictionary<string, object>
+                {
+                    { "surname", surname },
+                    { "name", name },
+                    { "patronymic", patronymic },
+                    { "specId", (object)specId ?? DBNull.Value },
+                    { "exp", experience },
+                    { "customerId", customerId }
+                };
+                ExecuteQuery(sqlStaff, parameters);
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception("Не удалось зарегистрировать сотрудника. Проверьте уникальность логина или паспорта.", ex);
+                string errorText = ex.Message.ToLower();
+                if (errorText.Contains("login"))
+                    throw new Exception("Этот логин уже занят. Пожалуйста, придумайте другой.");
+                if (errorText.Contains("passport"))
+                    throw new Exception("Пользователь с такими паспортными данными уже существует.");
+
+                throw new Exception("Не удалось зарегистрировать пользователя. Проверьте введенные данные.", ex);
             }
         }
         public static bool RegisterPatient(string login, string password, string passport,
-    string surname, string name, string patronymic, DateTime birthDate, string address)
+            string surname, string name, string patronymic, DateTime birthDate, string address)
         {
             try
             {
-                using (var connection = GetConnection())
-                {
-                    connection.Open();
-                    int customerId = CreateCustomer(connection, login, password, passport, 1);
-                    const string sqlPatient = @"
-                        INSERT INTO Patient (patient_surname, patient_name, patient_patronymic, 
-                                           patient_birth_date, patient_address, customer_id) 
+                int customerId = CreateCustomer(login, password, passport, 1);
+                const string sqlPatient = @"INSERT INTO Patient (patient_surname, patient_name, patient_patronymic, 
+                                 patient_birth_date, patient_address, customer_id) 
                         VALUES (@surname, @name, @patronymic, @birth, @address, @customerId)";
-                    using (var cmd = new NpgsqlCommand(sqlPatient, connection))
-                    {
-                        cmd.Parameters.AddWithValue("surname", surname);
-                        cmd.Parameters.AddWithValue("name", name);
-                        cmd.Parameters.AddWithValue("patronymic", patronymic);
-                        cmd.Parameters.AddWithValue("birth", birthDate);
-                        cmd.Parameters.AddWithValue("address", address);
-                        cmd.Parameters.AddWithValue("customerId", customerId);
-                        cmd.ExecuteNonQuery();
-                    }
-                    return true;
-                }
+                var parameters = new Dictionary<string, object>
+                {
+                    { "surname", surname },
+                    { "name", name },
+                    { "patronymic", patronymic },
+                    { "birth", birthDate },
+                    { "address", address },
+                    { "customerId", customerId }
+                };
+                ExecuteQuery(sqlPatient, parameters);
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception("Не удалось зарегистрировать пациента. Перепроверьте все данные", ex);
+                string errorText = ex.Message.ToLower();
+                if (errorText.Contains("login"))
+                    throw new Exception("Этот логин уже занят. Пожалуйста, придумайте другой.");
+                if (errorText.Contains("passport"))
+                    throw new Exception("Пользователь с такими паспортными данными уже существует.");
+
+                throw new Exception("Не удалось зарегистрировать пациента. Проверьте введенные данные.", ex);
             }
         }
         public static void DeleteUserByPassport(string passportData)
@@ -173,10 +174,10 @@ namespace PatientAccounting.Data
             using (var connection = GetConnection())
             {
                 connection.Open();
-                int? id = GetCustomerIdByPassport(passportData, connection);
+                int? id = GetCustomerIdByPassport(passportData);
                 if (id == null)
                     throw new Exception("Пользователь с таким паспортом не зарегистрирован в системе.");
-                DeleteUserDependencies(id.Value, connection);
+                DeleteUserDependencies(id.Value);
             }
         }
         private static void PrepareParameters(NpgsqlCommand command, Dictionary<string, object>? parameters)
@@ -202,7 +203,7 @@ namespace PatientAccounting.Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Ошибка при чтении из БД", ex);
+                throw new Exception($"Ошибка при чтении из БД: {ex.Message}", ex);
             }
         }
         private static void ExecuteNonQuery(string sql, Dictionary<string, object>? parameters)
@@ -217,43 +218,39 @@ namespace PatientAccounting.Data
             }
             catch (Exception ex)
             {
-                throw new Exception("Ошибка при записи в БД", ex);
+                throw new Exception($"Ошибка при записи в БД: {ex.Message}", ex);
             }
         }
-        private static int? GetCustomerIdByPassport(string passport, NpgsqlConnection connection)
+        private static int? GetCustomerIdByPassport(string passport)
         {
             const string sql = "SELECT customer_id FROM Customer WHERE customer_passport_data = @p";
-            using (var cmd = new NpgsqlCommand(sql, connection))
+            var parameters = new Dictionary<string, object>
             {
-                cmd.Parameters.AddWithValue("p", passport);
-                var result = cmd.ExecuteScalar();
-                return result != null ? Convert.ToInt32(result) : null;
-            }
-        }
-        private static void DeleteUserDependencies(int customerId, NpgsqlConnection connection)
-        {
-            string[] deleteQueries =
-            {
-            @"DELETE FROM Treatment WHERE medical_history_id IN (
-                SELECT medical_history_id FROM Medical_history 
-                WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
-                OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id)
-            )",
-            @"DELETE FROM Medical_history 
-              WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
-              OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id)",
-            "DELETE FROM Staff_worker WHERE customer_id = @id",
-            "DELETE FROM Patient WHERE customer_id = @id",
-            "DELETE FROM Customer WHERE customer_id = @id"
+                { "p", passport }
             };
-            foreach (var sql in deleteQueries)
+            DataTable result = ExecuteQuery(sql, parameters);
+            if (result.Rows.Count == 0)
+                return null;
+            return Convert.ToInt32(result.Rows[0]["customer_id"]);
+        }
+        private static void DeleteUserDependencies(int customerId)
+        {
+            const string sql = @" DELETE FROM Treatment WHERE medical_history_id IN (
+            SELECT medical_history_id FROM Medical_history 
+            WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
+               OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id)
+               );
+                DELETE FROM Medical_history 
+                WHERE patient_id = (SELECT patient_id FROM Patient WHERE customer_id = @id)
+                   OR staff_worker_id = (SELECT staff_worker_id FROM Staff_worker WHERE customer_id = @id);
+                DELETE FROM Staff_worker WHERE customer_id = @id;
+                DELETE FROM Patient WHERE customer_id = @id;
+                DELETE FROM Customer WHERE customer_id = @id;";
+            var parameters = new Dictionary<string, object>
             {
-                using (var cmd = new NpgsqlCommand(sql, connection))
-                {
-                    cmd.Parameters.AddWithValue("id", customerId);
-                    cmd.ExecuteNonQuery();
-                }
-            }
+                { "id", customerId }
+            };
+            ExecuteQuery(sql, parameters);
         }
         public static void UpdateCustomerBase(int id, string login, string passport)
         {
@@ -436,7 +433,7 @@ namespace PatientAccounting.Data
                  VALUES (@patientId, @staffId, @wardId, @dateReceipt)";
             var args = new Dictionary<string, object>
             {
-                    { "patientId", patientId },{ "staffId", staffWorkerId },{ "wardId", wardId },{ "dateReceipt", dateOfReceipt }
+               { "patientId", patientId },{ "staffId", staffWorkerId },{ "wardId", wardId },{ "dateReceipt", dateOfReceipt }
             };
             try
             {

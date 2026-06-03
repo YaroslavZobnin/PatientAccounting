@@ -42,6 +42,11 @@ namespace PatientAccounting.UserInterface
                 MessageBox.Show("Название болезни не может быть пустым!");
                 return;
             }
+            if(DurationNumeric.Value < 0)
+            {
+                MessageBox.Show("Лечение не может быть отрицательным");
+                return;
+            }
             try
             {
                 int newCategoryId = Convert.ToInt32(CategoryComboBox.SelectedValue);
